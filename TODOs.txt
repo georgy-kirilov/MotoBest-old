@@ -21,3 +21,5 @@ Common Advertisement Properties
 + Last Modification Date
 + Images
 + Views
+
+SmartDealer -> searches for the best offers based on the user's preferences. Automatically sends emails or notifications

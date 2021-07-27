@@ -3,9 +3,9 @@
     using System;
     using System.Collections.Generic;
 
-    public class AdvertisementScrapeModel
+    public class AdvertScrapeModel
     {
-        public AdvertisementScrapeModel()
+        public AdvertScrapeModel()
         {
             ImageUrls = new HashSet<string>();
         }
