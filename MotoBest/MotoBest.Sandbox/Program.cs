@@ -29,7 +29,7 @@
                     string url = anchorTag.GetAttribute("href").Trim();
                     var advertisementDocument = await context.OpenAsync($"https:{url}");
                     var inputModel = MobileBgAdvertScraper.Scrape(advertisementDocument, url);
-                    Console.WriteLine(inputModel.RemoteId);
+                    Console.WriteLine(inputModel.Title);
                 }
             }
         }
