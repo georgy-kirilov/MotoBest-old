@@ -1,0 +1,25 @@
++ Source sites: mobile.bg, cars.bg, carmarket.bg
+
+Common Advertisement Properties
++ Remote Id
++ Title
++ Description
++ Brand
++ Model
++ Transmission Type
++ Engine Type
++ Body Style
++ Euro Standard
++ Color
++ Region
++ Town*
++ Kilometrage
++ Price
++ Horse Powers
++ Date of Manufacturing
++ Condition
++ Last Modification Date
++ Images
++ Views
+
+SmartDealer -> searches for the best offers based on the user's preferences. Automatically sends emails or notifications
