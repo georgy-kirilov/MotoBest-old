@@ -46,12 +46,12 @@
 
         public static void ParseRemoteId(string advertisementUrl, AdvertScrapeModel scrapeModel)
         {
-            scrapeModel.RemoteId = advertisementUrl.Split("?")[1].Split("&")[1].Split("=")[1];
+            scrapeModel.RemoteId = advertisementUrl.Split("?")[1].Split("&")[1].Split("=")[1].Trim();
         }
 
         public static void ScrapeTitle(IDocument document, AdvertScrapeModel scrapeModel)
         {
-            scrapeModel.Title = document.QuerySelector("h1")?.TextContent;
+            scrapeModel.Title = document.QuerySelector("h1")?.TextContent.Trim();
         }
 
         public static void ScrapeDescription(IDocument document, AdvertScrapeModel scrapeModel)
@@ -59,7 +59,8 @@
             scrapeModel.Description = document
                                         .QuerySelectorAll("form[name='search'] > table")[2]
                                         .QuerySelector("tbody > tr > td")?
-                                        .TextContent;
+                                        .TextContent
+                                        .Trim();
         }
 
         public static void ScrapePrice(IDocument document, AdvertScrapeModel scrapeModel)

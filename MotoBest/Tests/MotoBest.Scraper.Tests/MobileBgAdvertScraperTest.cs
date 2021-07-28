@@ -1,7 +1,6 @@
 ﻿namespace MotoBest.Scraper.Tests
 {
     using System.IO;
-    using System.Linq;
     using System.Text.Json;
     using System.Threading.Tasks;
     using System.Collections.Generic;
@@ -17,7 +16,9 @@
         private const string BmwPath = "./Resources/MobileBg/Bmw";
         private const string RenaultPath = "./Resources/MobileBg/Renault";
         private const string HondaPath = "./Resources/MobileBg/Honda";
-
+        
+        private const string BmwUrl = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv=11621683976577130";
+        private const string RenaultUrl = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv=11611649732391832&slink=kxervf";
         private const string HondaUrl = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv=11607256624769900";
 
         private readonly HashSet<string> paths = new()
@@ -29,7 +30,14 @@
 
         private readonly Dictionary<string, IDocument> pathDocumentPairs = new();
         private readonly Dictionary<string, AdvertScrapeModel> pathScrapeModelPairs = new();
-        private readonly AdvertScrapeModel originalScrapeModel = new();
+
+        private AdvertScrapeModel originalScrapeModel;
+
+        [SetUp]
+        public void InitializeOriginalScrapeModel()
+        {
+            originalScrapeModel = new AdvertScrapeModel();
+        }
 
         [OneTimeSetUp]
         public async Task InitializePathDocumentPairsAsync()
@@ -56,6 +64,8 @@
             }
         }
 
+        [TestCase(BmwPath)]
+        [TestCase(RenaultPath)]
         [TestCase(HondaPath)]
         public void ScrapeTitle_Should_Work_Correctly(string path)
         {
@@ -63,6 +73,8 @@
             Assert.AreEqual(pathScrapeModelPairs[path].Title, originalScrapeModel.Title);
         }
 
+        [TestCase(BmwPath)]
+        [TestCase(RenaultPath)]
         [TestCase(HondaPath)]
         public void ScrapeDescription_Should_Work_Correctly(string path)
         {
@@ -70,6 +82,8 @@
             Assert.AreEqual(pathScrapeModelPairs[path].Description, originalScrapeModel.Description);
         }
 
+        [TestCase(BmwPath)]
+        [TestCase(RenaultPath)]
         [TestCase(HondaPath)]
         public void ScrapePrice_Should_Work_Correctly(string path)
         {
@@ -77,6 +91,8 @@
             Assert.AreEqual(pathScrapeModelPairs[path].Price, originalScrapeModel.Price);
         }
 
+        [TestCase(BmwPath)]
+        [TestCase(RenaultPath)]
         [TestCase(HondaPath)]
         public void ScrapeTechnicalCharacteristics_Should_WorkCorrectly(string path)
         {
@@ -93,6 +109,8 @@
             Assert.AreEqual(scrapeModel.EuroStandardType, originalScrapeModel.EuroStandardType);
         }
 
+        [TestCase(BmwPath)]
+        [TestCase(RenaultPath)]
         [TestCase(HondaPath)]
         public void ScrapeViews_Should_Work_Correctly(string path)
         {
@@ -100,6 +118,8 @@
             Assert.AreEqual(pathScrapeModelPairs[path].Views, originalScrapeModel.Views);
         }
 
+        [TestCase(BmwPath)]
+        [TestCase(RenaultPath)]
         [TestCase(HondaPath)]
         public void ScrapeBrandAndModelName_Should_Work_Correctly(string path)
         {
@@ -108,6 +128,8 @@
             Assert.AreEqual(pathScrapeModelPairs[path].ModelName, originalScrapeModel.ModelName);
         }
 
+        [TestCase(BmwPath)]
+        [TestCase(RenaultPath)]
         [TestCase(HondaPath)]
         public void ScrapeLastModifiedOn_Should_Work_Correctly(string path)
         {
@@ -115,6 +137,8 @@
             Assert.AreEqual(pathScrapeModelPairs[path].LastModifiedOn, originalScrapeModel.LastModifiedOn);
         }
 
+        [TestCase(BmwPath, BmwUrl)]
+        [TestCase(RenaultPath, RenaultUrl)]
         [TestCase(HondaPath, HondaUrl)]
         public void ParseRemoteId_Should_Work_Correctly(string path, string url)
         {
@@ -122,6 +146,8 @@
             Assert.AreEqual(pathScrapeModelPairs[path].RemoteId, originalScrapeModel.RemoteId);
         }
 
+        [TestCase(BmwPath)]
+        [TestCase(RenaultPath)]
         [TestCase(HondaPath)]
         public void ScrapeRegionAndTownName_Should_Work_Correctly(string path)
         {
@@ -130,11 +156,14 @@
             Assert.AreEqual(pathScrapeModelPairs[path].TownName, originalScrapeModel.TownName);
         }
 
+        [TestCase(BmwPath)]
+        [TestCase(RenaultPath)]
         [TestCase(HondaPath)]
         public void ScrapeImageUrls_Should_Work_Correctly(string path)
         {
             MobileBgAdvertScraper.ScrapeImageUrls(pathDocumentPairs[path], originalScrapeModel);
             Assert.IsTrue(pathScrapeModelPairs[path].ImageUrls.SetEquals(originalScrapeModel.ImageUrls));
+            originalScrapeModel.ImageUrls.Clear();
         }
     }
 }
