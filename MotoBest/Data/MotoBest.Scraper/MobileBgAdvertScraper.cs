@@ -26,7 +26,7 @@
         {
             var scrapeModel = new AdvertScrapeModel();
 
-            ScrapeRemoteId(advertisementUrl, scrapeModel);
+            ParseRemoteId(advertisementUrl, scrapeModel);
             ScrapeLastModifiedOn(document, scrapeModel);
 
             ScrapeTitle(document, scrapeModel);
@@ -44,7 +44,7 @@
             return scrapeModel;
         }
 
-        public static void ScrapeRemoteId(string advertisementUrl, AdvertScrapeModel scrapeModel)
+        public static void ParseRemoteId(string advertisementUrl, AdvertScrapeModel scrapeModel)
         {
             scrapeModel.RemoteId = advertisementUrl.Split("?")[1].Split("&")[1].Split("=")[1];
         }

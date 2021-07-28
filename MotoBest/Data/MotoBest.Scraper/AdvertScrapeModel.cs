@@ -46,6 +46,6 @@
 
         public string TownName { get; set; }
 
-        public ICollection<string> ImageUrls { get; set; }
+        public HashSet<string> ImageUrls { get; set; }
     }
 }
