@@ -13,9 +13,9 @@
     [TestFixture]
     public class MobileBgAdvertScraperTest
     {
-        private const string BmwPath = "./Resources/Bmw";
-        private const string RenaultPath = "./Resources/Renault";
-        private const string HondaPath = "./Resources/Honda";
+        private const string BmwPath = "./Resources/MobileBg/Bmw";
+        private const string RenaultPath = "./Resources/MobileBg/Renault";
+        private const string HondaPath = "./Resources/MobileBg/Honda";
 
         private readonly HashSet<string> paths = new()
         {
