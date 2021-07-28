@@ -15,6 +15,7 @@
 
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
+            
             var address = "https://www.mobile.bg/pcgi/mobile.cgi?act=3&slink=kvo3k4&f1=";
             var query = "a.mmm";
 

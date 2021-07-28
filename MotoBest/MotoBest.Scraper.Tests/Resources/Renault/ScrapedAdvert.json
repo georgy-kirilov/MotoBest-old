@@ -1,0 +1,21 @@
+{
+  "remoteId": null,
+  "title": null,
+  "description": null,
+  "price": null,
+  "horsePowers": 0,
+  "kilometrage": 0,
+  "views": 0,
+  "manufacturingDate": "0001-01-01T00:00:00",
+  "lastModifiedOn": "0001-01-01T00:00:00",
+  "brandName": null,
+  "modelName": null,
+  "transmissionType": null,
+  "engineType": null,
+  "bodyStyleName": null,
+  "euroStandardType": null,
+  "colorName": null,
+  "regionName": null,
+  "townName": null,
+  "imageUrls": []
+}
