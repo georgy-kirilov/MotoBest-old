@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using Models.Common;
+    using Common;
 
     public class Region : NameableBaseModel
     {

@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using Models.Common;
+    using Common;
 
     public class Advert : BaseModel<Guid>
     {
@@ -32,6 +32,10 @@
         public int Kilometrage { get; set; }
 
         public int Views { get; set; }
+
+        public int AdvertProviderId { get; set; }
+
+        public AdvertProvider AdvertProvider { get; set; }
 
         public int BodyStyleId { get; set; }
 

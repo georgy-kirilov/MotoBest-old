@@ -1,6 +1,6 @@
 ﻿namespace MotoBest.Models
 {
-    using Models.Common;
+    using Common;
 
     public class Model : NameableBaseModel
     {

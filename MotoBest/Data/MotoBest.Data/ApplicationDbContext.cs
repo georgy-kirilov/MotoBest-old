@@ -35,6 +35,7 @@
                         .OnDelete(DeleteBehavior.Restrict);
 
             SetUniqueConstraints(modelBuilder,
+                                    typeof(AdvertProvider),
                                     typeof(BodyStyle),
                                     typeof(Brand),
                                     typeof(Color),
@@ -49,6 +50,8 @@
         }
 
         public DbSet<Advert> Advertisements { get; set; }
+
+        public DbSet<AdvertProvider> AdvertProviders { get; set; }
 
         public DbSet<BodyStyle> BodyStyles { get; set; }
 

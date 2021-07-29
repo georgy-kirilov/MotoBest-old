@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    using Models.Common;
+    using Common;
 
     public class Image : BaseModel<int>
     {
