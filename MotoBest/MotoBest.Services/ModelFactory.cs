@@ -3,6 +3,7 @@
     using Data;
     using Models;
     using Scraper;
+    using System;
     using System.Linq;
 
     internal class ModelFactory
@@ -84,12 +85,10 @@
                 ?? new EuroStandard { Type = scrapeModel.EuroStandardType };
         }
 
-        public void AddImagesToAdvertisement(AdvertScrapeModel scrapeModel, Advert advert)
+        public Image CreateImage(string url, Advert advert)
         {
-            foreach (string imageUrl in scrapeModel.ImageUrls)
-            {
-                advert.Images.Add(new Image { Url = imageUrl });
-            }
+            return dbContext.Images.FirstOrDefault(i => i.Url == url && advert.Id == i.AdvertId) 
+                ?? new Image { Advert = advert, Url = url };
         }
     }
 }

@@ -65,7 +65,11 @@
             advert.Price = scrapeModel.Price;
             advert.ManufacturingDate = scrapeModel.ManufacturingDate;
 
-            modelFactory.AddImagesToAdvertisement(scrapeModel, advert);
+            foreach (string imageUrl in scrapeModel.ImageUrls)
+            {
+                Image image = modelFactory.CreateImage(imageUrl, advert);
+                advert.Images.Add(image);
+            }
 
             if (isAdvertNew)
             {

@@ -19,13 +19,11 @@
             DatabaseConfig.IsDatabaseLocal = false;
 
             var dbContext = new ApplicationDbContext();
+            //await dbContext.Database.EnsureDeletedAsync();
             await dbContext.Database.EnsureCreatedAsync();
 
-            foreach (Advert advert in dbContext.Adverts.OrderByDescending(a => a.Price).ToList())
-            {
-                Console.WriteLine($"{advert.Price:f0} -> {advert.Brand.Name} {advert.Model.Name}");
-            }
-
+            string s = string.Join("", dbContext.Images.Select(x => x.Url).ToList());
+            Console.WriteLine(s);
             var advertsService = new AdvertsService(dbContext);
 
             var config = Configuration.Default.WithDefaultLoader();
@@ -35,7 +33,7 @@
             var query = "a.mmm";
 
             var mobileBgProvider = new AdvertProvider
-            { 
+            {
                 Name = "mobile.bg",
                 AdvertUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv={0}",
             };
@@ -59,7 +57,10 @@
                 }
             }
 
-            
+            foreach (Advert advert in dbContext.Adverts.OrderByDescending(a => a.Price).ToList())
+            {
+                Console.WriteLine($"{advert.Price:f0} -> {advert.Brand.Name} {advert.Model.Name}");
+            }
         }
     }
 }
