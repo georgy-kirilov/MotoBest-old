@@ -21,7 +21,7 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Advert>()
-                        .HasIndex(a => a.RemoteId)
+                        .HasIndex(a => new { a.AdvertProviderId, a.RemoteId })
                         .IsUnique();
 
             modelBuilder.Entity<Brand>()
@@ -49,7 +49,7 @@
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Advert> Advertisements { get; set; }
+        public DbSet<Advert> Adverts { get; set; }
 
         public DbSet<AdvertProvider> AdvertProviders { get; set; }
 

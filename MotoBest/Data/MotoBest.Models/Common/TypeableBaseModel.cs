@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public abstract class TypeableBaseModel : BaseModel<int>
+    public abstract class TypeableBaseModel : OneToManyAdvertsBaseModel
     {
         [Required]
         public string Type { get; set; }

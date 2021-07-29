@@ -10,6 +10,8 @@
             ImageUrls = new HashSet<string>();
         }
 
+        public string AdvertProviderName { get; set; }
+
         public string RemoteId { get; set; }
 
         public string Title { get; set; }
