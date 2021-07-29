@@ -16,12 +16,15 @@
         public static async Task Main()
         {
             Console.OutputEncoding = Encoding.UTF8;
-            DatabaseConfig.IsDatabaseLocal = true;
+            DatabaseConfig.IsDatabaseLocal = false;
 
             var dbContext = new ApplicationDbContext();
-
-            await dbContext.Database.EnsureDeletedAsync();
             await dbContext.Database.EnsureCreatedAsync();
+
+            foreach (Advert advert in dbContext.Adverts.OrderByDescending(a => a.Price).ToList())
+            {
+                Console.WriteLine($"{advert.Price:f0} -> {advert.Brand.Name} {advert.Model.Name}");
+            }
 
             var advertsService = new AdvertsService(dbContext);
 
@@ -37,8 +40,8 @@
                 AdvertUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv={0}",
             };
 
-            await dbContext.AdvertProviders.AddAsync(mobileBgProvider);
-            await dbContext.SaveChangesAsync();
+            //await dbContext.AdvertProviders.AddAsync(mobileBgProvider);
+            //await dbContext.SaveChangesAsync();
 
             for (int page = 1; page <= 5; page++)
             {
@@ -56,10 +59,7 @@
                 }
             }
 
-            foreach (Advert advert in dbContext.Adverts.OrderByDescending(a => a.Price).ToList())
-            {
-                Console.WriteLine($"{advert.Brand.Name} {advert.Model.Name} -> {advert.Price:f0} -> {advert.RemoteId}");
-            }
+            
         }
     }
 }

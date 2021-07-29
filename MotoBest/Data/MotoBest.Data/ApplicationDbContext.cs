@@ -12,7 +12,7 @@
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(DatabaseConfig.ConnectionString);
+                optionsBuilder.UseLazyLoadingProxies().UseSqlServer(DatabaseConfig.ConnectionString);
             }
 
             base.OnConfiguring(optionsBuilder);

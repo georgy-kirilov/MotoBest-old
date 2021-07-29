@@ -6,6 +6,6 @@
     {
         public int RegionId { get; set; }
 
-        public Region Region { get; set; }
+        public virtual Region Region { get; set; }
     }
 }

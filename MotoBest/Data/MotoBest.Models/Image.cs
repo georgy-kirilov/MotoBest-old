@@ -12,6 +12,6 @@
 
         public Guid AdvertId { get; set; }
 
-        public Advert Advert { get; set; }
+        public virtual Advert Advert { get; set; }
     }
 }

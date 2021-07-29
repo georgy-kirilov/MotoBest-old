@@ -23,6 +23,6 @@
 
         private const string LocalConnectionStringFormat = "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog={0};Integrated Security=True;";
 
-        private const string RemoteConnectionStringFormat = "Server=.\\SQLEXPRESS;Database={0};Integrated Security=True;";
+        private const string RemoteConnectionStringFormat = "Server=.;Database={0};Integrated Security=True;";
     }
 }

@@ -28,8 +28,14 @@
 
             AdvertProvider advertProvider = modelFactory.CreateAdvertProvider(scrapeModel);
 
-            Advert advert = advertProvider.Adverts.FirstOrDefault(a => a.RemoteId == scrapeModel.RemoteId) 
-                ?? new Advert { RemoteId = scrapeModel.RemoteId };
+            Advert advert = advertProvider.Adverts.FirstOrDefault(a => a.RemoteId == scrapeModel.RemoteId);
+            bool isAdvertNew = false;
+
+            if (advert == null)
+            {
+                advert = new Advert { RemoteId = scrapeModel.RemoteId };
+                isAdvertNew = true;
+            }
 
             Brand brand = modelFactory.CreateBrand(scrapeModel);
             Model model = modelFactory.CreateModel(scrapeModel, brand);
@@ -61,7 +67,11 @@
 
             modelFactory.AddImagesToAdvertisement(scrapeModel, advert);
 
-            await dbContext.Adverts.AddAsync(advert);
+            if (isAdvertNew)
+            {
+                await dbContext.Adverts.AddAsync(advert);
+            }
+
             await dbContext.SaveChangesAsync();
         }
     }
