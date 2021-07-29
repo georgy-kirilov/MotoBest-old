@@ -22,8 +22,6 @@
             //await dbContext.Database.EnsureDeletedAsync();
             await dbContext.Database.EnsureCreatedAsync();
 
-            string s = string.Join("", dbContext.Images.Select(x => x.Url).ToList());
-            Console.WriteLine(s);
             var advertsService = new AdvertsService(dbContext);
 
             var config = Configuration.Default.WithDefaultLoader();
@@ -41,7 +39,7 @@
             //await dbContext.AdvertProviders.AddAsync(mobileBgProvider);
             //await dbContext.SaveChangesAsync();
 
-            for (int page = 1; page <= 5; page++)
+            for (int page = 6; page <= 10; page++)
             {
                 var document = await context.OpenAsync($"{address}{page}");
                 var anchorTags = document.QuerySelectorAll(query);
@@ -55,11 +53,6 @@
                     await advertsService.AddAdvertAsync(scrapeModel);
                     dbContext.SaveChanges();
                 }
-            }
-
-            foreach (Advert advert in dbContext.Adverts.OrderByDescending(a => a.Price).ToList())
-            {
-                Console.WriteLine($"{advert.Price:f0} -> {advert.Brand.Name} {advert.Model.Name}");
             }
         }
     }

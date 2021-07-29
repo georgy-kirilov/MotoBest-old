@@ -3,7 +3,7 @@
     using Data;
     using Models;
     using Scraper;
-    using System;
+
     using System.Linq;
 
     internal class ModelFactory
@@ -35,13 +35,7 @@
 
         public Color CreateColor(AdvertScrapeModel scrapeModel)
         {
-            if (scrapeModel.ColorName == null)
-            {
-                return null;
-            }
-
-            return dbContext.Colors.FirstOrDefault(c => c.Name == scrapeModel.ColorName)
-                ?? new Color { Name = scrapeModel.ColorName };
+            return dbContext.Colors.FirstOrDefault(c => c.Name == scrapeModel.ColorName);
         }
 
         public Engine CreateEngine(AdvertScrapeModel scrapeModel)
@@ -76,13 +70,7 @@
 
         public EuroStandard CreateEuroStandard(AdvertScrapeModel scrapeModel)
         {
-            if (scrapeModel.EuroStandardType == null)
-            {
-                return null;
-            }
-
-            return dbContext.EuroStandards.FirstOrDefault(es => es.Type == scrapeModel.EuroStandardType)
-                ?? new EuroStandard { Type = scrapeModel.EuroStandardType };
+            return dbContext.EuroStandards.FirstOrDefault(es => es.Type == scrapeModel.EuroStandardType);
         }
 
         public Image CreateImage(string url, Advert advert)

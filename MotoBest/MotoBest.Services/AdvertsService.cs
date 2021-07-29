@@ -64,6 +64,7 @@
             advert.Description = scrapeModel.Description;
             advert.Price = scrapeModel.Price;
             advert.ManufacturingDate = scrapeModel.ManufacturingDate;
+            advert.LastModifiedOn = scrapeModel.LastModifiedOn;
 
             foreach (string imageUrl in scrapeModel.ImageUrls)
             {
