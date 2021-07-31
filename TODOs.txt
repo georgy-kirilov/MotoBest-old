@@ -23,3 +23,6 @@ Common Advertisement Properties
 + Views
 
 SmartDealer -> searches for the best offers based on the user's preferences. Automatically sends emails or notifications
+
+1) implement ScrapeByBrandAndModelName(brand, model, Action<AdvertScrapeModel>)
+2) Download all adverts from mobile.bg
