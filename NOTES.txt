@@ -1,0 +1,6 @@
+How to scrape the websites?
+
+1) cars.bg
+   a) newest adverts -> the website loads the latest adverts by making ajax requests with the following url:
+      https://www.cars.bg/carslist.php?conditions%5B0%5D=4&conditions%5B1%5D=1&filterOrderBy=1&ajax=1&page=3&time=1627902648425
+      The time parameter requires the current date time in milliseconds (utcNow + 1 min is relatively accurate") 

@@ -16,6 +16,17 @@
         public static async Task Main()
         {
             Console.OutputEncoding = Encoding.UTF8;
+
+            var config = Configuration.Default.WithDefaultLoader();
+            var context = BrowsingContext.New(config);
+            var scraper = new CarsBgWebScraper(context, "https://www.cars.bg/offer/");
+            var advert = await scraper.ScrapeAdvertAsync("60b625e5825a3804f942f222");
+
+            
+        }
+
+        public static async Task OldStuff()
+        {
             DatabaseConfig.IsDatabaseLocal = false;
 
             var dbContext = new ApplicationDbContext();
@@ -26,7 +37,7 @@
 
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
-            
+
             var address = "https://www.mobile.bg/pcgi/mobile.cgi?act=3&slink=kvo3k4&f1=";
             var query = "a.mmm";
 
