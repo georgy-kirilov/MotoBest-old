@@ -39,9 +39,9 @@
                                     typeof(BodyStyle),
                                     typeof(Brand),
                                     typeof(Color),
+                                    typeof(Condition),
                                     typeof(Engine),
                                     typeof(EuroStandard),
-                                    typeof(Model),
                                     typeof(Region),
                                     typeof(Town),
                                     typeof(Transmission));
@@ -58,6 +58,8 @@
         public DbSet<Brand> Brands { get; set; }
 
         public DbSet<Color> Colors { get; set; }
+
+        public DbSet<Condition> Conditions { get; set; }
 
         public DbSet<Engine> Engines { get; set; }
 

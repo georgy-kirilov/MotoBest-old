@@ -31,6 +31,8 @@
 
         public int Kilometrage { get; set; }
 
+        public bool IsNewImport { get; set; }
+
         public int Views { get; set; }
 
         public int AdvertProviderId { get; set; }
@@ -48,6 +50,10 @@
         public int? ColorId { get; set; }
 
         public virtual Color Color { get; set; }
+
+        public int ConditionId { get; set; }
+
+        public virtual Condition Condition { get; set; }
 
         public int EngineId { get; set; }
 
