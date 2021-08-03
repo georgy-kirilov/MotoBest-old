@@ -44,9 +44,13 @@
 
         public string ColorName { get; set; }
 
+        public string Condition { get; set; }
+
         public string RegionName { get; set; }
 
         public string TownName { get; set; }
+
+        public bool IsNewImport { get; set; }
 
         public HashSet<string> ImageUrls { get; set; }
     }

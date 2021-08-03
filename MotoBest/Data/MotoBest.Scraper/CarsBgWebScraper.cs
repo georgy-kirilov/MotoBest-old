@@ -4,8 +4,9 @@
     using AngleSharp.Dom;
 
     using System;
-    using System.Text.Json;
+    using System.Text;
     using System.Net.Http;
+    using System.Text.Json;
     using System.Threading.Tasks;
     using System.Text.Json.Serialization;
 
@@ -30,6 +31,7 @@
 
             var advert = new AdvertScrapeModel
             {
+                RemoteId = remoteId,
                 Title = ScrapeTitle(document),
                 Description = ScrapeDescription(document),
                 Views = await ScrapeViewsAsync(remoteId),
@@ -37,14 +39,18 @@
             };
 
             var characteristics = ScrapeTechnicalCharacteristics(document);
+
             advert.ManufacturingDate = ParseManufacturingDate(characteristics[0]);
             advert.BodyStyleName = ParseBodyStyleName(characteristics[1]);
-            advert.EngineType = ParseEngineType(characteristics[5]);
-            advert.Kilometrage = ParseKilometrage(characteristics[6]);
-            advert.TransmissionType = ParseTransmissionType(characteristics[7]);
-            advert.HorsePowers = ParseHorsePowers(characteristics[8]);
-            advert.EuroStandardType = ParseEuroStandardType(characteristics[9]);
+            advert.EngineType = ParseEngineType(characteristics[2]);
+            advert.Kilometrage = ParseKilometrage(characteristics[3]);
+            advert.TransmissionType = ParseTransmissionType(characteristics[4]);
+            advert.HorsePowers = ParseHorsePowers(characteristics[5]);
 
+            string euroStandard = ParseEuroStandardType(characteristics[6]);
+            advert.EuroStandardType = euroStandard.StartsWith("EURO") ? euroStandard : null;
+
+            advert.ColorName = ParseColorName(characteristics[characteristics.Length - 1]);
             return advert;
         }
 
@@ -71,12 +77,12 @@
             return JsonSerializer.Deserialize<ViewsInfo>(content).ViewsCount;
         }
 
-        public string ScrapeDescription(IDocument document)
+        public static string ScrapeDescription(IDocument document)
         {
             return document.QuerySelector("div.offer-notes")?.TextContent.Trim();
         }
 
-        public decimal? ScrapePrice(IDocument document)
+        public static decimal? ScrapePrice(IDocument document)
         {
             string input = document.QuerySelector("div.offer-price > strong")?.TextContent.Replace("лв.", string.Empty).Trim();
 
@@ -88,9 +94,25 @@
             return decimal.Parse(input);
         }
 
-        public string[] ScrapeTechnicalCharacteristics(IDocument document)
+        public static string[] ScrapeTechnicalCharacteristics(IDocument document)
         {
-            return document.QuerySelector("div.text-copy > div.text-copy")?.TextContent.Split(",");
+            var stringsToReplace = new string[]
+            {
+                "Употребяван автомобил,",
+                "нов внос,",
+                "В добро състояние,",
+                "2/3 врати,",
+                "4/5 врати,",
+            };
+
+            var builder = new StringBuilder(document.QuerySelector("div.text-copy > div.text-copy")?.TextContent);
+
+            foreach (string stringToReplace in stringsToReplace)
+            {
+                builder.Replace(stringToReplace, string.Empty);
+            }
+
+            return builder.ToString().Split(",", StringSplitOptions.RemoveEmptyEntries);
         }
 
         public static DateTime ParseManufacturingDate(string input)

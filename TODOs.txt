@@ -18,6 +18,7 @@ Common Advertisement Properties
 + Horse Powers
 + Date of Manufacturing
 + Condition
++ IsNewImport
 + Last Modification Date
 + Images
 + Views

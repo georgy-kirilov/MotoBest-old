@@ -20,7 +20,7 @@
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
             var scraper = new CarsBgWebScraper(context);
-            var advert = await scraper.ScrapeAdvertAsync("60b625e5825a3804f942f222");
+            var advert = await scraper.ScrapeAdvertAsync("609e9400a16863169200a7b2");
         }
 
         public static async Task OldStuff()
