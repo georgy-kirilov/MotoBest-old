@@ -3,10 +3,10 @@
     using System;
     using System.Threading.Tasks;
 
-    using AngleSharp.Dom;
-
     public interface IWebScraper
     {
+        string AdvertUrlFormat { get; }
+
         Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId);
 
         Task ScrapeLatestAdvertsAsync(Action<AdvertScrapeModel> action);
