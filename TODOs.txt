@@ -24,3 +24,8 @@ Common Advertisement Properties
 + Views
 
 SmartDealer -> searches for the best offers based on the user's preferences. Automatically sends emails or notifications
+
+- I need to create data seeder that takes care of populating all of the known data: brands, models, 
+engines, euro standards, transmissions, conditions and so on
+
+- Then I need normalizer that converts the input data from the scrape models to database models
