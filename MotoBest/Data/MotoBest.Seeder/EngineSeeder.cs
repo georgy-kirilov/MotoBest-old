@@ -10,8 +10,8 @@
         {
             var engines = new Engine[]
             {
-                new Engine { Type = "Бензинов" },
-                new Engine { Type = "Дизелов" },
+                new Engine { Type = "Бензин" },
+                new Engine { Type = "Дизел" },
                 new Engine { Type = "Хибриден" },
                 new Engine { Type = "Електрически" },
             };

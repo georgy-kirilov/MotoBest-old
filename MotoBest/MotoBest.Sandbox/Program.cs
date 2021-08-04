@@ -10,6 +10,8 @@
     using MotoBest.Services;
     using Models;
     using System.Linq;
+    using System.IO;
+    using System.Collections.Generic;
 
     public class Program
     {
@@ -17,10 +19,52 @@
         {
             Console.OutputEncoding = Encoding.UTF8;
 
-            var config = Configuration.Default.WithDefaultLoader();
+            var lines = (await File.ReadAllLinesAsync("./Output/colors.txt")).ToHashSet().Select(x =>
+            {
+                return $"new Color {{ Name = \"{x}\" }},";
+            });
+
+            await File.WriteAllLinesAsync("./Output/colors.txt", lines);
+
+            /*var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
-            var scraper = new CarsBgWebScraper(context);
-            var advert = await scraper.ScrapeAdvertAsync("609e9400a16863169200a7b2");
+
+            var list = new List<string>();
+            list.AddRange(await GetMobileBgColorsAsync(context));
+            list.AddRange(await GetCarsBgColorsAsync(context));
+            list.AddRange(await GetCarmarketColorsAsync(context));
+
+            var set = list.ToHashSet().OrderBy(x => x);
+            await File.WriteAllLinesAsync("./Output/colors.txt", set);
+            */
+            //var scraper = new CarsBgWebScraper(context);
+            //var advert = await scraper.ScrapeAdvertAsync("609e9400a16863169200a7b2");
+        }
+
+        public static async Task<HashSet<string>> GetMobileBgColorsAsync(IBrowsingContext context)
+        {
+            string text = await File.ReadAllTextAsync("./Resources/mobile-colors.html");
+            var dom = await context.OpenAsync(x => x.Content(text));
+
+            return dom.QuerySelectorAll("select > option").Select(o => o.GetAttribute("value").Trim().ToLower()).ToHashSet();
+        }
+
+        public static async Task<HashSet<string>> GetCarsBgColorsAsync(IBrowsingContext context)
+        {
+            string text = await File.ReadAllTextAsync("./Resources/cars.bg-colors.html");
+            var dom = await context.OpenAsync(x => x.Content(text));
+
+            return dom.QuerySelectorAll("div.mdc-chip-set mdc-chip-set--choice > label")
+               .Select(l => l.QuerySelector("span > label").TextContent.Trim().ToLower())
+               .ToHashSet();
+        }
+
+        public static async Task<HashSet<string>> GetCarmarketColorsAsync(IBrowsingContext context)
+        {
+            string text = await File.ReadAllTextAsync("./Resources/carmarket-colors.html");
+            var dom = await context.OpenAsync(x => x.Content(text));
+
+            return dom.QuerySelectorAll("select > option").Select(o => o.TextContent.Trim().ToLower()).ToHashSet();
         }
 
         public static async Task OldStuff()
