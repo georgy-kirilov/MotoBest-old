@@ -6,7 +6,7 @@
 
     public class ConditionSeeder : ISeeder
     {
-        public async Task Seed(ApplicationDbContext dbContext)
+        public async Task SeedAsync(ApplicationDbContext dbContext)
         {
             var conditions = new Condition[]
             {

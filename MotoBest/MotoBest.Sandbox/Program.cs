@@ -17,17 +17,19 @@
     {
         public static async Task Main()
         {
-            Console.OutputEncoding = Encoding.UTF8;
-
-            var lines = (await File.ReadAllLinesAsync("./Output/colors.txt")).ToHashSet().Select(x =>
-            {
-                return $"new Color {{ Name = \"{x}\" }},";
-            });
-
-            await File.WriteAllLinesAsync("./Output/colors.txt", lines);
-
-            /*var config = Configuration.Default.WithDefaultLoader();
+            var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
+            var l = await GetCarsBgColorsAsync(context);
+            //Console.OutputEncoding = Encoding.UTF8;
+
+            //var lines = (await File.ReadAllLinesAsync("./Output/colors.txt")).ToHashSet().Select(x =>
+            //{
+            //    return $"new Color {{ Name = \"{x}\" }},";
+            //});
+
+            //await File.WriteAllLinesAsync("./Output/colors.txt", lines);
+
+            /*
 
             var list = new List<string>();
             list.AddRange(await GetMobileBgColorsAsync(context));

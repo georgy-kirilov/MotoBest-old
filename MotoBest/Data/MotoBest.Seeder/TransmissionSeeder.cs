@@ -6,7 +6,7 @@
 
     public class TransmissionSeeder : ISeeder
     {
-        public async Task Seed(ApplicationDbContext dbContext)
+        public async Task SeedAsync(ApplicationDbContext dbContext)
         {
             var transmissions = new Transmission[]
             {

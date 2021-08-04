@@ -6,7 +6,7 @@
 
     public class ColorSeeder : ISeeder
     {
-        public async Task Seed(ApplicationDbContext dbContext)
+        public async Task SeedAsync(ApplicationDbContext dbContext)
         {
             var colors = new Color[]
             {
