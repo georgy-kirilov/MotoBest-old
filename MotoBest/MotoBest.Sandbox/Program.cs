@@ -17,6 +17,11 @@
     {
         public static async Task Main()
         {
+            var db = new ApplicationDbContext();
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
+
+            /*
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
             var l = await GetCarsBgColorsAsync(context);

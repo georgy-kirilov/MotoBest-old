@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -7,6 +7,15 @@
   <ItemGroup>
     <ProjectReference Include="..\MotoBest.Data\MotoBest.Data.csproj" />
     <ProjectReference Include="..\MotoBest.Models\MotoBest.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\brands.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\colors.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

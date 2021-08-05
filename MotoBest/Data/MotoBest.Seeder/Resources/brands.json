@@ -1,0 +1,238 @@
+[
+  {
+    "BrandName": "Abarth",
+    "Models": [
+      {
+        "Name": "124",
+        "Variations": []
+      },
+      {
+        "Name": "595",
+        "Variations": []
+      }
+    ]
+  },
+  {
+    "BrandName": "Acura",
+    "Models": [
+      {
+        "Name": "CL",
+        "Variations": []
+      },
+      {
+        "Name": "ILX",
+        "Variations": []
+      },
+      {
+        "Name": "Integra",
+        "Variations": []
+      },
+      {
+        "Name": "MDX",
+        "Variations": []
+      },
+      {
+        "Name": "NSX",
+        "Variations": []
+      },
+      {
+        "Name": "RDX",
+        "Variations": []
+      },
+      {
+        "Name": "RL",
+        "Variations": []
+      },
+      {
+        "Name": "RSX",
+        "Variations": []
+      },
+      {
+        "Name": "SLX",
+        "Variations": []
+      },
+      {
+        "Name": "TL",
+        "Variations": []
+      },
+      {
+        "Name": "TSX",
+        "Variations": []
+      }
+    ]
+  },
+  {
+    "BrandName": "Aixam",
+    "Models": [
+      {
+        "Name": "400",
+        "Variations": []
+      },
+      {
+        "Name": "505",
+        "Variations": []
+      },
+      {
+        "Name": "600",
+        "Variations": []
+      },
+      {
+        "Name": "City",
+        "Variations": []
+      },
+      {
+        "Name": "Crossline",
+        "Variations": []
+      },
+      {
+        "Name": "Mega",
+        "Variations": []
+      },
+      {
+        "Name": "Roadline",
+        "Variations": []
+      },
+      {
+        "Name": "Scouty R",
+        "Variations": []
+      }
+    ]
+  },
+  {
+    "BrandName": "Alfa Romeo",
+    "Models": [
+      {
+        "Name": "145",
+        "Variations": []
+      },
+      {
+        "Name": "146",
+        "Variations": []
+      },
+      {
+        "Name": "147",
+        "Variations": []
+      },
+      {
+        "Name": "149",
+        "Variations": []
+      },
+      {
+        "Name": "155",
+        "Variations": []
+      },
+      {
+        "Name": "156",
+        "Variations": []
+      },
+      {
+        "Name": "156 sportwagon",
+        "Variations": []
+      },
+      {
+        "Name": "159",
+        "Variations": []
+      },
+      {
+        "Name": "159 sportwagon",
+        "Variations": [ "159 SW" ]
+      },
+      {
+        "Name": "164",
+        "Variations": []
+      },
+      {
+        "Name": "166",
+        "Variations": []
+      },
+      {
+        "Name": "33",
+        "Variations": []
+      },
+      {
+        "Name": "4C",
+        "Variations": []
+      },
+      {
+        "Name": "75",
+        "Variations": []
+      },
+      {
+        "Name": "76",
+        "Variations": []
+      },
+      {
+        "Name": "8C Competizione",
+        "Variations": ["8C"]
+      },
+      {
+        "Name": "90",
+        "Variations": []
+      },
+      {
+        "Name": "Alfetta",
+        "Variations": []
+      },
+      {
+        "Name": "Berlina",
+        "Variations": []
+      },
+      {
+        "Name": "Brera",
+        "Variations": []
+      },
+      {
+        "Name": "Crosswagon Q4",
+        "Variations": [ "Crosswagon" ]
+      },
+      {
+        "Name": "Giulia",
+        "Variations": []
+      },
+      {
+        "Name": "Giulietta",
+        "Variations": []
+      },
+      {
+        "Name": "GT",
+        "Variations": []
+      },
+      {
+        "Name": "GTV",
+        "Variations": []
+      },
+      {
+        "Name": "MiTo",
+        "Variations": []
+      },
+      {
+        "Name": "Spider",
+        "Variations": []
+      },
+      {
+        "Name": "Sprint",
+        "Variations": []
+      },
+      {
+        "Name": "Stelvio",
+        "Variations": []
+      },
+      {
+        "Name": "Sud",
+        "Variations": ["Alfasud"]
+      },
+      {
+        "Name": "Arna",
+        "Variations": []
+      },
+      {
+        "Name": "Junior",
+        "Variations": []
+      },
+      {
+        "Name": "RZ/SZ",
+        "Variations": []
+      }
+    ]
+  }
+]
