@@ -22,7 +22,7 @@
             var context = BrowsingContext.New(config);
 
             var scraper = new CarmarketBgAdvertScraper(context);
-            var advert = await scraper.ScrapeAdvertAsync("vw-touareg-3.0dizel-245-ko-3032099");
+            var advert = await scraper.ScrapeAdvertAsync("alfa-romeo-156-sportwagon-1.9-jtd-3013090");
 
             Console.WriteLine();
             //Console.OutputEncoding = Encoding.UTF8;

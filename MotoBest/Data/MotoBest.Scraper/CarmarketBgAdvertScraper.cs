@@ -1,6 +1,7 @@
 ﻿namespace MotoBest.Scraper
 {
     using AngleSharp;
+    using AngleSharp.Dom;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -30,20 +31,6 @@
             { "цвят", ParseColorName },
         };
 
-        
-
-        private static string SanitizeInput(string input, params string[] stringsToSanitize)
-        {
-            var builder = new StringBuilder(input);
-
-            foreach (string stringToSanitize in stringsToSanitize)
-            {
-                builder.Replace(stringToSanitize, string.Empty);
-            }
-
-            return builder.ToString();
-        }
-
         public CarmarketBgAdvertScraper(IBrowsingContext browsingContext) : base(CarmarketBgAdvertUrlFormat)
         {
             this.browsingContext = browsingContext;
@@ -51,12 +38,15 @@
 
         public override async Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId)
         {
+            var document = await browsingContext.OpenAsync(GetAdvertUrl(remoteId));
             var advert = new AdvertScrapeModel
             {
                 RemoteId = remoteId,
+                Title = ScrapeTitle(document),
+                Description = ScrapeDescription(document),
+                LastModifiedOn = ScrapeLastModifiedOn(document),
+                RegionName = ScrapeRegionName(document),
             };
-
-            var document = await browsingContext.OpenAsync(GetAdvertUrl(remoteId));
 
             var pairs = document
                 .QuerySelectorAll("div.cmOfferMoreInfo > div.cmOfferMoreInfoRow")
@@ -84,6 +74,38 @@
         public override Task ScrapeLatestAdvertsAsync(Action<AdvertScrapeModel> action)
         {
             throw new NotImplementedException();
+        }
+
+        public static string ScrapeTitle(IDocument document)
+        {
+            return document.QuerySelector("h1[itemprop='name']")?.TextContent.Trim();
+        }
+
+        public static string ScrapeDescription(IDocument document)
+        {
+            return document.QuerySelector("section.cmOfferAddInfo > p")?.TextContent.Trim();
+        }
+
+        public static int ScrapeViews(IDocument document)
+        {
+            string viewsAsText = SanitizeInput(document.QuerySelector("p.cmOfferSeen > span")?.TextContent, Whitespace);
+            return int.Parse(viewsAsText);
+        }
+
+        public static string ScrapeRegionName(IDocument document)
+        {
+            return SanitizeInput(document.QuerySelector("span.cmOfferRegion")?.TextContent, "Регион:").Trim();
+        }
+
+        public static DateTime ScrapeLastModifiedOn(IDocument document)
+        {
+            var dateTimeTag = document.QuerySelector("div.cmOfferStatus > time");
+            var date = DateTime.ParseExact(dateTimeTag.GetAttribute("datetime"), "yyyy-MM-dd", BulgarianCultureInfo);
+            var args = dateTimeTag.TextContent.Split(Whitespace, StringSplitOptions.RemoveEmptyEntries);
+            var timeArgs = args[2].Split(":");
+            int hour = int.Parse(timeArgs[0]);
+            int minute = int.Parse(timeArgs[1]);
+            return new DateTime(date.Year, date.Month, date.Day, hour, minute, 0);
         }
 
         public static void ParsePrice(string input, AdvertScrapeModel model)
@@ -141,6 +163,18 @@
         public static void ParseColorName(string input, AdvertScrapeModel model)
         {
             model.ColorName = input;
+        }
+
+        private static string SanitizeInput(string input, params string[] stringsToSanitize)
+        {
+            var builder = new StringBuilder(input);
+
+            foreach (string stringToSanitize in stringsToSanitize)
+            {
+                builder.Replace(stringToSanitize, string.Empty);
+            }
+
+            return builder.ToString();
         }
     }
 }
