@@ -46,6 +46,7 @@
                 Description = ScrapeDescription(document),
                 LastModifiedOn = ScrapeLastModifiedOn(document),
                 RegionName = ScrapeRegionName(document),
+                ImageUrls = ScrapeImageUrls(document)
             };
 
             var pairs = document
@@ -106,6 +107,19 @@
             int hour = int.Parse(timeArgs[0]);
             int minute = int.Parse(timeArgs[1]);
             return new DateTime(date.Year, date.Month, date.Day, hour, minute, 0);
+        }
+
+        public static HashSet<string> ScrapeImageUrls(IDocument document)
+        {
+            string bigImageUrl = document.QuerySelector("section.cmOffer > a").GetAttribute("href");
+
+            var imageUrls = document
+                                .QuerySelectorAll("ul.cmOfferSmallImages > li")
+                                .Select(x => x.QuerySelector("a").GetAttribute("href"))
+                                .ToHashSet();
+
+            imageUrls.Add(bigImageUrl);
+            return imageUrls;
         }
 
         public static void ParsePrice(string input, AdvertScrapeModel model)
