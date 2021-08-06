@@ -17,14 +17,14 @@
     {
         public static async Task Main()
         {
-            var db = new ApplicationDbContext();
-            db.Database.EnsureDeleted();
-            db.Database.EnsureCreated();
-
-            /*
+            
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
-            var l = await GetCarsBgColorsAsync(context);
+
+            var scraper = new CarmarketBgAdvertScraper(context);
+            var advert = await scraper.ScrapeAdvertAsync("vw-touareg-3.0dizel-245-ko-3032099");
+
+            Console.WriteLine();
             //Console.OutputEncoding = Encoding.UTF8;
 
             //var lines = (await File.ReadAllLinesAsync("./Output/colors.txt")).ToHashSet().Select(x =>

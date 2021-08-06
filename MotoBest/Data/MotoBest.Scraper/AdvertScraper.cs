@@ -5,9 +5,9 @@
 
     using Common;
 
-    public abstract class WebScraper : IWebScraper
+    public abstract class AdvertScraper : IWebScraper
     {
-        protected WebScraper(string advertUrlFormat)
+        protected AdvertScraper(string advertUrlFormat)
         {
             Validator.ThrowIfNullOrEmpty(advertUrlFormat, nameof(advertUrlFormat));
             AdvertUrlFormat = advertUrlFormat;

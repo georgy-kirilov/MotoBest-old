@@ -50,6 +50,8 @@
 
         public string TownName { get; set; }
 
+        public string DoorsAsText { get; set; }
+
         public bool IsNewImport { get; set; }
 
         public HashSet<string> ImageUrls { get; set; }

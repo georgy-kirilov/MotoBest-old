@@ -12,7 +12,7 @@
 
     using static Utilities;
 
-    public class CarsBgWebScraper : WebScraper
+    public class CarsBgWebScraper : AdvertScraper
     {
         private const string CarsBgAdvertUrlFormat = "https://www.cars.bg/offer/{0}";
 

@@ -7,5 +7,7 @@
         public static readonly CultureInfo BulgarianCultureInfo = new("bg-BG");
 
         public const string FullMonthNameDateFormat = "MMMM";
+
+        public const string Whitespace = " ";
     }
 }
