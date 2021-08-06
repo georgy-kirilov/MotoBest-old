@@ -46,7 +46,8 @@
                 Description = ScrapeDescription(document),
                 LastModifiedOn = ScrapeLastModifiedOn(document),
                 RegionName = ScrapeRegionName(document),
-                ImageUrls = ScrapeImageUrls(document)
+                ImageUrls = ScrapeImageUrls(document),
+                IsNewImport = ScrapeIsNewImportValue(document),
             };
 
             var pairs = document
@@ -113,13 +114,25 @@
         {
             string bigImageUrl = document.QuerySelector("section.cmOffer > a").GetAttribute("href");
 
-            var imageUrls = document
-                                .QuerySelectorAll("ul.cmOfferSmallImages > li")
-                                .Select(x => x.QuerySelector("a").GetAttribute("href"))
-                                .ToHashSet();
-
+            var imageUrls = new HashSet<string>();
             imageUrls.Add(bigImageUrl);
+
+            foreach (var item in document.QuerySelectorAll("ul.cmOfferSmallImages > li"))
+            {
+                string url = item.QuerySelector("a")?.GetAttribute("href");
+
+                if (url != null)
+                {
+                    imageUrls.Add(url);
+                }
+            }
+
             return imageUrls;
+        }
+
+        public static bool ScrapeIsNewImportValue(IDocument document)
+        {
+            return document.QuerySelectorAll("section.cmOfferFeatures > ul > li").Any(x => x.TextContent.Trim() == "Нов внос");
         }
 
         public static void ParsePrice(string input, AdvertScrapeModel model)
