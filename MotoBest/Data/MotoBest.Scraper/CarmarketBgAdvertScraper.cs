@@ -66,20 +66,23 @@
                                     firstPageDocument.QuerySelector("span.foundOffers > strong")?
                                             .TextContent
                                             .Replace(Whitespace, string.Empty));
-
-            for (int advertIndex = 1; advertIndex < advertsCount; advertIndex++)
+            int index = 1;
+            for (int advertIndex = 1; advertIndex < advertsCount / 15; advertIndex++)
             {
                 string url = string.Format(AdvertSearchUrlFormat, advertIndex);
                 var document = await browsingContext.OpenAsync(url);
 
                 var ids = document.QuerySelectorAll("div.cmOffersList > div.cmOffersListItem")
                                   .Select(x => x.QuerySelector("a").GetAttribute("href").Split("?")[0].Split("/")[^1]);
-
+                Console.WriteLine(advertIndex);
                 foreach (string id in ids)
                 {
+                    Console.WriteLine(advertIndex + " " + index);
+                    index++;
                     AdvertScrapeModel model = await ScrapeAdvertAsync(id);
                     action.Invoke(model);
                 }
+                index = 1;
             }
         }
 
@@ -122,9 +125,15 @@
 
         public static HashSet<string> ScrapeImageUrls(IDocument document)
         {
-            string bigImageUrl = document.QuerySelector("section.cmOffer > a").GetAttribute("href");
+            var bigImageTag = document.QuerySelector("section.cmOffer > a") ?? document.QuerySelector("section.cmOffer > img");
+            string bigImageUrl = bigImageTag.HasAttribute("href") ? bigImageTag.GetAttribute("href") : bigImageTag.GetAttribute("src");
 
-            var imageUrls = new HashSet<string>() { bigImageUrl };
+            var imageUrls = new HashSet<string>();
+
+            if (bigImageUrl != null)
+            {
+                imageUrls.Add(bigImageUrl);
+            }
 
             foreach (var item in document.QuerySelectorAll("ul.cmOfferSmallImages > li"))
             {
@@ -172,7 +181,7 @@
 
         public static void ParsePrice(string input, AdvertScrapeModel model)
         {
-            input = SanitizeInput(input, "лв.", "bgn", Whitespace);
+            input = SanitizeInput(input, "лв.", "bgn", "eur", Whitespace);
             model.Price = decimal.Parse(input);
         }
 
