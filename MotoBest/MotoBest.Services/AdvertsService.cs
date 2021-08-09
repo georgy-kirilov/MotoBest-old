@@ -37,26 +37,16 @@
                 isAdvertNew = true;
             }
 
-            Brand brand = modelFactory.CreateBrand(scrapeModel);
-            Model model = modelFactory.CreateModel(scrapeModel, brand);
-            Color color = modelFactory.CreateColor(scrapeModel);
-            Engine engine = modelFactory.CreateEngine(scrapeModel);
-            Transmission transmission = modelFactory.CreateTransmission(scrapeModel);
-            BodyStyle bodyStyle = modelFactory.CreateBodyStyle(scrapeModel);
-            Region region = modelFactory.CreateRegion(scrapeModel);
-            Town town = modelFactory.CreateTown(scrapeModel, region);
-            EuroStandard euroStandard = modelFactory.CreateEuroStandard(scrapeModel);
-
             advert.AdvertProvider = advertProvider;
-            advert.Brand = brand;
-            advert.Model = model;
-            advert.Color = color;
-            advert.Engine = engine;
-            advert.Transmission = transmission;
-            advert.BodyStyle = bodyStyle;
-            advert.Region = region;
-            advert.Town = town;
-            advert.EuroStandard = euroStandard;
+            advert.Brand = modelFactory.CreateBrand(scrapeModel);
+            advert.Model = modelFactory.CreateModel(scrapeModel, advert.Brand);
+            advert.Color = modelFactory.CreateColor(scrapeModel);
+            advert.Engine = modelFactory.CreateEngine(scrapeModel);
+            advert.Transmission = modelFactory.CreateTransmission(scrapeModel);
+            advert.BodyStyle = modelFactory.CreateBodyStyle(scrapeModel);
+            advert.Region = modelFactory.CreateRegion(scrapeModel);
+            advert.Town = modelFactory.CreateTown(scrapeModel, advert.Region);
+            advert.EuroStandard = modelFactory.CreateEuroStandard(scrapeModel);
             advert.Views = scrapeModel.Views;
             advert.Kilometrage = scrapeModel.Kilometrage;
             advert.HorsePowers = scrapeModel.HorsePowers;

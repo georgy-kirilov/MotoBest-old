@@ -66,7 +66,7 @@
                                     firstPageDocument.QuerySelector("span.foundOffers > strong")?
                                             .TextContent
                                             .Replace(Whitespace, string.Empty));
-            int index = 1;
+
             for (int advertIndex = 1; advertIndex < advertsCount / 15; advertIndex++)
             {
                 string url = string.Format(AdvertSearchUrlFormat, advertIndex);
@@ -74,20 +74,18 @@
 
                 var ids = document.QuerySelectorAll("div.cmOffersList > div.cmOffersListItem")
                                   .Select(x => x.QuerySelector("a").GetAttribute("href").Split("?")[0].Split("/")[^1]);
-                Console.WriteLine(advertIndex);
+
                 foreach (string id in ids)
                 {
-                    Console.WriteLine(advertIndex + " " + index);
-                    index++;
                     AdvertScrapeModel model = await ScrapeAdvertAsync(id);
                     action.Invoke(model);
                 }
-                index = 1;
             }
         }
 
         public override Task ScrapeLatestAdvertsAsync(Action<AdvertScrapeModel> action)
         {
+            //TODO: Implement ScrapeLatestAdvertsAsync
             throw new NotImplementedException();
         }
 
