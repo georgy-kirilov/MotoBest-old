@@ -14,12 +14,13 @@
 
     public class CarsBgWebScraper : AdvertScraper
     {
-        private const string CarsBgAdvertUrlFormat = "https://www.cars.bg/offer/{0}";
+        public const string CarsBgAdvertUrlFormat = "https://www.cars.bg/offer/{0}";
+        public const string CarsBgAdvertProviderName = "cars.bg";
 
         private readonly IBrowsingContext browsingContext;
         private readonly HttpClient httpClient;
 
-        public CarsBgWebScraper(IBrowsingContext browsingContext) : base(CarsBgAdvertUrlFormat)
+        public CarsBgWebScraper(IBrowsingContext browsingContext) : base(CarsBgAdvertUrlFormat, CarsBgAdvertProviderName)
         {
             httpClient = new HttpClient();
             this.browsingContext = browsingContext;
@@ -31,6 +32,7 @@
 
             var advert = new AdvertScrapeModel
             {
+                AdvertProviderName = AdvertProviderName,
                 RemoteId = remoteId,
                 Title = ScrapeTitle(document),
                 Description = ScrapeDescription(document),

@@ -12,9 +12,9 @@
 
     public class CarmarketBgAdvertScraper : AdvertScraper
     {
-
-
         public const string CarmarketBgAdvertUrlFormat = "https://www.carmarket.bg/{0}";
+        public const string CarmarketBgAdvertProviderName = "carmarket.bg";
+
         private readonly IBrowsingContext browsingContext;
 
         private static readonly Dictionary<string, Action<string, AdvertScrapeModel>> ParsingTable = new()
@@ -31,7 +31,7 @@
             { "цвят", ParseColorName },
         };
 
-        public CarmarketBgAdvertScraper(IBrowsingContext browsingContext) : base(CarmarketBgAdvertUrlFormat)
+        public CarmarketBgAdvertScraper(IBrowsingContext browsingContext) : base(CarmarketBgAdvertUrlFormat, CarmarketBgAdvertProviderName)
         {
             this.browsingContext = browsingContext;
         }
@@ -39,8 +39,10 @@
         public override async Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId)
         {
             var document = await browsingContext.OpenAsync(GetAdvertUrl(remoteId));
+
             var advert = new AdvertScrapeModel
             {
+                AdvertProviderName = AdvertProviderName,
                 RemoteId = remoteId,
                 Title = ScrapeTitle(document),
                 Description = ScrapeDescription(document),
@@ -48,18 +50,21 @@
                 RegionName = ScrapeRegionName(document),
                 ImageUrls = ScrapeImageUrls(document),
                 IsNewImport = ScrapeIsNewImportValue(document),
+                Views = ScrapeViews(document),
             };
 
+            ScrapeBrandAndModelName(document, advert);
+
             var pairs = document
-                .QuerySelectorAll("div.cmOfferMoreInfo > div.cmOfferMoreInfoRow")
-                .ToDictionary(x => x.QuerySelector("span")?.TextContent.Trim().ToLower(), 
-                              x => x.QuerySelector("strong")?.TextContent.Trim().ToLower());
+                            .QuerySelectorAll("div.cmOfferMoreInfo > div.cmOfferMoreInfoRow")
+                            .ToDictionary(x => x.QuerySelector("span")?.TextContent.Trim().ToLower(), 
+                                          x => x.QuerySelector("strong")?.TextContent.Trim().ToLower());
 
             foreach (var pair in pairs)
             {
                 if (!ParsingTable.ContainsKey(pair.Key))
                 {
-                    continue;   
+                    continue;
                 }
 
                 ParsingTable[pair.Key].Invoke(pair.Value, advert);
@@ -133,6 +138,14 @@
         public static bool ScrapeIsNewImportValue(IDocument document)
         {
             return document.QuerySelectorAll("section.cmOfferFeatures > ul > li").Any(x => x.TextContent.Trim() == "Нов внос");
+        }
+
+        public static void ScrapeBrandAndModelName(IDocument document, AdvertScrapeModel model)
+        {
+            var args = document.QuerySelector("img").GetAttribute("alt").Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            string modelName = args[^1], brandName = args[^2];
+            model.BrandName = brandName;
+            model.ModelName = modelName;
         }
 
         public static void ParsePrice(string input, AdvertScrapeModel model)

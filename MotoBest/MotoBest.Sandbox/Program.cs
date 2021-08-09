@@ -22,7 +22,7 @@
             var context = BrowsingContext.New(config);
 
             var scraper = new CarmarketBgAdvertScraper(context);
-            var advert = await scraper.ScrapeAdvertAsync("fiat-idea-klima-evro-4-3032172");
+            var advert = await scraper.ScrapeAdvertAsync("mercedes-c220-220-cdi-3033852");
 
             Console.WriteLine();
             //Console.OutputEncoding = Encoding.UTF8;

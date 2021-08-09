@@ -7,10 +7,12 @@
 
     public abstract class AdvertScraper : IWebScraper
     {
-        protected AdvertScraper(string advertUrlFormat)
+        protected AdvertScraper(string advertUrlFormat, string advertProviderName)
         {
             Validator.ThrowIfNullOrEmpty(advertUrlFormat, nameof(advertUrlFormat));
+            Validator.ThrowIfNullOrEmpty(advertProviderName, nameof(advertProviderName));
             AdvertUrlFormat = advertUrlFormat;
+            AdvertProviderName = advertProviderName;
         }
 
         protected string GetAdvertUrl(string remoteId)
@@ -19,6 +21,8 @@
         }
 
         public string AdvertUrlFormat { get; }
+
+        public string AdvertProviderName { get; }
 
         public abstract Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId);
 
