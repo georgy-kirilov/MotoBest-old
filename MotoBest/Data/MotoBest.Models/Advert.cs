@@ -33,6 +33,8 @@
 
         public bool IsNewImport { get; set; }
 
+        public bool HasFourDoors { get; set; }
+
         public int Views { get; set; }
 
         public int AdvertProviderId { get; set; }

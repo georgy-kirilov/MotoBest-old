@@ -30,6 +30,7 @@
             {
                 RemoteId = remoteId,
                 AdvertProviderName = AdvertProviderName,
+                AdvertUrlFormat = AdvertUrlFormat,
             };
         }
 

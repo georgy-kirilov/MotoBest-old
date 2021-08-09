@@ -12,18 +12,39 @@
     using System.Linq;
     using System.IO;
     using System.Collections.Generic;
+    using System.Text.Json;
 
     public class Program
     {
         public static async Task Main()
         {
+            int counter = 1;
+
+            var db = new ApplicationDbContext();
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.EnsureCreatedAsync();
+
+            Console.WriteLine("Database created");
+
+            var service = new AdvertsService(db);
+
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
-            var scraper = new CarmarketBgAdvertScraper(context);
-            await scraper.ScrapeAllAdvertsAsync((model) => { });
+            var exceptions = new List<Exception>();
 
-            Console.WriteLine();
+            var scraper = new CarmarketBgAdvertScraper(context);
+            await scraper.ScrapeAllAdvertsAsync((model) =>
+            {
+                Console.WriteLine($"{counter} - {model.BrandName} {model.ModelName}");
+                service.AddAdvertAsync(model).GetAwaiter().GetResult();
+                counter++;
+            });
+
+            string path = @"C:\Users\georg\OneDrive\Desktop\exceptions.txt";
+            string json = JsonSerializer.Serialize(exceptions);
+            await File.WriteAllTextAsync(path, json);
+
             //Console.OutputEncoding = Encoding.UTF8;
 
             //var lines = (await File.ReadAllLinesAsync("./Output/colors.txt")).ToHashSet().Select(x =>

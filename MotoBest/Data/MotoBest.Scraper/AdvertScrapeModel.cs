@@ -10,6 +10,8 @@
             ImageUrls = new HashSet<string>();
         }
 
+        public string AdvertUrlFormat { get; set; }
+
         public string AdvertProviderName { get; set; }
 
         public string RemoteId { get; set; }
@@ -50,7 +52,7 @@
 
         public string TownName { get; set; }
 
-        public string DoorsAsText { get; set; }
+        public bool HasFourDoors { get; set; }
 
         public bool IsNewImport { get; set; }
 

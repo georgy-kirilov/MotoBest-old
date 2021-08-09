@@ -226,7 +226,7 @@
 
         public static void ParseDoorsAsText(string input, AdvertScrapeModel model)
         {
-            model.DoorsAsText = SanitizeInput(input, "врати").Trim();
+            model.HasFourDoors = SanitizeInput(input, "врати").Trim() == "4(5)";
         }
 
         public static void ParseColorName(string input, AdvertScrapeModel model)
