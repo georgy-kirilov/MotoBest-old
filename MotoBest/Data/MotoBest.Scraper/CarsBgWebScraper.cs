@@ -29,16 +29,12 @@
         public override async Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId)
         {
             var document = await browsingContext.OpenAsync(GetAdvertUrl(remoteId));
+            var advert = await base.ScrapeAdvertAsync(remoteId);
 
-            var advert = new AdvertScrapeModel
-            {
-                AdvertProviderName = AdvertProviderName,
-                RemoteId = remoteId,
-                Title = ScrapeTitle(document),
-                Description = ScrapeDescription(document),
-                Views = await ScrapeViewsAsync(remoteId),
-                Price = ScrapePrice(document),
-            };
+            advert.Title = ScrapeTitle(document);
+            advert.Description = ScrapeDescription(document);
+            advert.Views = await ScrapeViewsAsync(remoteId);
+            advert.Price = ScrapePrice(document);
 
             var characteristics = ScrapeTechnicalCharacteristics(document);
 
@@ -50,9 +46,10 @@
             advert.HorsePowers = ParseHorsePowers(characteristics[5]);
 
             string euroStandard = ParseEuroStandardType(characteristics[6]);
-            advert.EuroStandardType = euroStandard.StartsWith("EURO") ? euroStandard : null;
 
-            advert.ColorName = ParseColorName(characteristics[characteristics.Length - 1]);
+            advert.EuroStandardType = euroStandard.StartsWith("EURO") ? euroStandard : null;
+            advert.ColorName = ParseColorName(characteristics[^1]);
+
             return advert;
         }
 

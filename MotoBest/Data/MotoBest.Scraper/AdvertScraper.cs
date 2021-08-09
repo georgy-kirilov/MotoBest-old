@@ -1,11 +1,11 @@
 ﻿namespace MotoBest.Scraper
 {
+    using Common;
+
     using System;
     using System.Threading.Tasks;
 
-    using Common;
-
-    public abstract class AdvertScraper : IWebScraper
+    public abstract class AdvertScraper : IAdvertScraper
     {
         protected AdvertScraper(string advertUrlFormat, string advertProviderName)
         {
@@ -24,7 +24,14 @@
 
         public string AdvertProviderName { get; }
 
-        public abstract Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId);
+        public virtual async Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId)
+        {
+            return new AdvertScrapeModel
+            {
+                RemoteId = remoteId,
+                AdvertProviderName = AdvertProviderName,
+            };
+        }
 
         public abstract Task ScrapeAllAdvertsAsync(string brandName, string modelName, Action<AdvertScrapeModel> action);
 

@@ -2,11 +2,12 @@
 {
     using AngleSharp;
     using AngleSharp.Dom;
+
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using System.Collections.Generic;
 
     using static Utilities;
 
@@ -39,38 +40,20 @@
         public override async Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId)
         {
             var document = await browsingContext.OpenAsync(GetAdvertUrl(remoteId));
+            var model = await base.ScrapeAdvertAsync(remoteId);
 
-            var advert = new AdvertScrapeModel
-            {
-                AdvertProviderName = AdvertProviderName,
-                RemoteId = remoteId,
-                Title = ScrapeTitle(document),
-                Description = ScrapeDescription(document),
-                LastModifiedOn = ScrapeLastModifiedOn(document),
-                RegionName = ScrapeRegionName(document),
-                ImageUrls = ScrapeImageUrls(document),
-                IsNewImport = ScrapeIsNewImportValue(document),
-                Views = ScrapeViews(document),
-            };
+            model.Title = ScrapeTitle(document);
+            model.Description = ScrapeDescription(document);
+            model.LastModifiedOn = ScrapeLastModifiedOn(document);
+            model.RegionName = ScrapeRegionName(document);
+            model.ImageUrls = ScrapeImageUrls(document);
+            model.IsNewImport = ScrapeIsNewImportValue(document);
+            model.Views = ScrapeViews(document);
 
-            ScrapeBrandAndModelName(document, advert);
+            ScrapeBrandAndModelName(document, model);
+            ScrapeTechnicalCharacteristics(document, model);
 
-            var pairs = document
-                            .QuerySelectorAll("div.cmOfferMoreInfo > div.cmOfferMoreInfoRow")
-                            .ToDictionary(x => x.QuerySelector("span")?.TextContent.Trim().ToLower(), 
-                                          x => x.QuerySelector("strong")?.TextContent.Trim().ToLower());
-
-            foreach (var pair in pairs)
-            {
-                if (!ParsingTable.ContainsKey(pair.Key))
-                {
-                    continue;
-                }
-
-                ParsingTable[pair.Key].Invoke(pair.Value, advert);
-            }
-
-            return advert;
+            return model;
         }
 
         public override Task ScrapeAllAdvertsAsync(string brandName, string modelName, Action<AdvertScrapeModel> action)
@@ -119,8 +102,7 @@
         {
             string bigImageUrl = document.QuerySelector("section.cmOffer > a").GetAttribute("href");
 
-            var imageUrls = new HashSet<string>();
-            imageUrls.Add(bigImageUrl);
+            var imageUrls = new HashSet<string>() { bigImageUrl };
 
             foreach (var item in document.QuerySelectorAll("ul.cmOfferSmallImages > li"))
             {
@@ -146,6 +128,24 @@
             string modelName = args[^1], brandName = args[^2];
             model.BrandName = brandName;
             model.ModelName = modelName;
+        }
+
+        public static void ScrapeTechnicalCharacteristics(IDocument document, AdvertScrapeModel model)
+        {
+            var pairs = document
+                            .QuerySelectorAll("div.cmOfferMoreInfo > div.cmOfferMoreInfoRow")
+                            .ToDictionary(x => x.QuerySelector("span")?.TextContent.Trim().ToLower(),
+                                          x => x.QuerySelector("strong")?.TextContent.Trim().ToLower());
+
+            foreach (var pair in pairs)
+            {
+                if (!ParsingTable.ContainsKey(pair.Key))
+                {
+                    continue;
+                }
+
+                ParsingTable[pair.Key].Invoke(pair.Value, model);
+            }
         }
 
         public static void ParsePrice(string input, AdvertScrapeModel model)

@@ -3,7 +3,7 @@
     using System;
     using System.Threading.Tasks;
 
-    public interface IWebScraper
+    public interface IAdvertScraper
     {
         string AdvertUrlFormat { get; }
 
