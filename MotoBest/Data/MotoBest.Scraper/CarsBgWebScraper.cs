@@ -53,7 +53,7 @@
             return advert;
         }
 
-        public override async Task ScrapeAllAdvertsAsync(string brandName, string modelName, Action<AdvertScrapeModel> action)
+        public override async Task ScrapeAllAdvertsAsync(Action<AdvertScrapeModel> action)
         {
             throw new NotImplementedException();
         }

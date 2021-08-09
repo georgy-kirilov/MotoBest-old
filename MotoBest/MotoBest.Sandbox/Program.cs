@@ -17,12 +17,11 @@
     {
         public static async Task Main()
         {
-            
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
             var scraper = new CarmarketBgAdvertScraper(context);
-            var advert = await scraper.ScrapeAdvertAsync("mercedes-c220-220-cdi-3033852");
+            await scraper.ScrapeAllAdvertsAsync((model) => { });
 
             Console.WriteLine();
             //Console.OutputEncoding = Encoding.UTF8;

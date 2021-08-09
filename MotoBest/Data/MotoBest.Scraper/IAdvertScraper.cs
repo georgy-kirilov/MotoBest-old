@@ -11,6 +11,6 @@
 
         Task ScrapeLatestAdvertsAsync(Action<AdvertScrapeModel> action);
 
-        Task ScrapeAllAdvertsAsync(string brandName, string modelName, Action<AdvertScrapeModel> action);
+        Task ScrapeAllAdvertsAsync(Action<AdvertScrapeModel> action);
     }
 }

@@ -6,7 +6,7 @@
     {
         public ModelJsonModel()
         {
-            Variations = new HashSet<string>()
+            Variations = new HashSet<string>();
         }
 
         public string Name { get; set; }

@@ -33,7 +33,7 @@
             };
         }
 
-        public abstract Task ScrapeAllAdvertsAsync(string brandName, string modelName, Action<AdvertScrapeModel> action);
+        public abstract Task ScrapeAllAdvertsAsync(Action<AdvertScrapeModel> action);
 
         public abstract Task ScrapeLatestAdvertsAsync(Action<AdvertScrapeModel> action);
     }

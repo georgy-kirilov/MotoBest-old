@@ -15,6 +15,7 @@
     {
         public const string CarmarketBgAdvertUrlFormat = "https://www.carmarket.bg/{0}";
         public const string CarmarketBgAdvertProviderName = "carmarket.bg";
+        public const string AdvertSearchUrlFormat = "https://www.carmarket.bg/obiavi/{0}?sort=1";
 
         private readonly IBrowsingContext browsingContext;
 
@@ -56,9 +57,30 @@
             return model;
         }
 
-        public override Task ScrapeAllAdvertsAsync(string brandName, string modelName, Action<AdvertScrapeModel> action)
+        public override async Task ScrapeAllAdvertsAsync(Action<AdvertScrapeModel> action)
         {
-            throw new NotImplementedException();
+            string firstPageUrl = string.Format(AdvertSearchUrlFormat, string.Empty);
+            var firstPageDocument = await browsingContext.OpenAsync(firstPageUrl);
+
+            int advertsCount = int.Parse(
+                                    firstPageDocument.QuerySelector("span.foundOffers > strong")?
+                                            .TextContent
+                                            .Replace(Whitespace, string.Empty));
+
+            for (int advertIndex = 1; advertIndex < advertsCount; advertIndex++)
+            {
+                string url = string.Format(AdvertSearchUrlFormat, advertIndex);
+                var document = await browsingContext.OpenAsync(url);
+
+                var ids = document.QuerySelectorAll("div.cmOffersList > div.cmOffersListItem")
+                                  .Select(x => x.QuerySelector("a").GetAttribute("href").Split("?")[0].Split("/")[^1]);
+
+                foreach (string id in ids)
+                {
+                    AdvertScrapeModel model = await ScrapeAdvertAsync(id);
+                    action.Invoke(model);
+                }
+            }
         }
 
         public override Task ScrapeLatestAdvertsAsync(Action<AdvertScrapeModel> action)
