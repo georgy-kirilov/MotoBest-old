@@ -45,7 +45,7 @@
 
             model.Title = ScrapeTitle(document);
             model.Description = ScrapeDescription(document);
-            model.LastModifiedOn = ScrapeLastModifiedOn(document);
+            model.LastModifiedOn = ScrapeLastModifiedOn(document, remoteId);
             model.RegionName = ScrapeRegionName(document);
             model.ImageUrls = ScrapeImageUrls(document);
             model.IsNewImport = ScrapeIsNewImportValue(document);
@@ -110,15 +110,24 @@
             return SanitizeInput(document.QuerySelector("span.cmOfferRegion")?.TextContent, "Регион:").Trim();
         }
 
-        public static DateTime ScrapeLastModifiedOn(IDocument document)
+        public static DateTime ScrapeLastModifiedOn(IDocument document, string remoteId)
         {
-            var dateTimeTag = document.QuerySelector("div.cmOfferStatus > time");
-            var date = DateTime.ParseExact(dateTimeTag.GetAttribute("datetime"), "yyyy-MM-dd", BulgarianCultureInfo);
-            var args = dateTimeTag.TextContent.Split(Whitespace, StringSplitOptions.RemoveEmptyEntries);
-            var timeArgs = args[2].Split(":");
-            int hour = int.Parse(timeArgs[0]);
-            int minute = int.Parse(timeArgs[1]);
-            return new DateTime(date.Year, date.Month, date.Day, hour, minute, 0);
+            try
+            {
+                var dateTimeTag = document.QuerySelector("div.cmOfferStatus > time");
+                var date = DateTime.ParseExact(dateTimeTag.GetAttribute("datetime"), "yyyy-MM-dd", BulgarianCultureInfo);
+                var args = dateTimeTag.TextContent.Split(Whitespace, StringSplitOptions.RemoveEmptyEntries);
+                var timeArgs = args[2].Split(":");
+                int hour = int.Parse(timeArgs[0]);
+                int minute = int.Parse(timeArgs[1]);
+                return new DateTime(date.Year, date.Month, date.Day, hour, minute, 0);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(remoteId);
+                Console.WriteLine(e.Message);
+                return DateTime.Now;
+            }
         }
 
         public static HashSet<string> ScrapeImageUrls(IDocument document)
