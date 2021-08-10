@@ -95,5 +95,11 @@
             return dbContext.Images.FirstOrDefault(i => i.Url == url && advert.Id == i.AdvertId) 
                 ?? new Image { Advert = advert, Url = url };
         }
+
+        public Condition CreateCondition(AdvertScrapeModel scrapeModel)
+        {
+            return dbContext.Conditions.FirstOrDefault(c => c.Type == scrapeModel.Condition) 
+                ?? new Condition { Type = scrapeModel.Condition };
+        }
     }
 }

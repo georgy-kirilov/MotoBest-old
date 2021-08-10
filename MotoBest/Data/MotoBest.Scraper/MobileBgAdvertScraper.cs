@@ -143,7 +143,7 @@
             int hour = int.Parse(timeArgs[0]);
             int minute = int.Parse(timeArgs[1]);
             int day = int.Parse(args[5]);
-            int month = DateTime.ParseExact(args[6], Utilities.FullMonthNameDateFormat, Utilities.BulgarianCultureInfo).Month;
+            int month = DateTime.ParseExact(args[6], Utilities.MonthNameDateFormat, Utilities.BulgarianCultureInfo).Month;
             int year = int.Parse(args[7]);
 
             scrapeModel.LastModifiedOn = new DateTime(year, month, day, hour, minute, 0);
@@ -159,7 +159,7 @@
             string rawDateInput = input.Replace("г.", string.Empty);
             string[] rawDateInputArgs = rawDateInput.Split(" ");
 
-            int month = DateTime.ParseExact(rawDateInputArgs[0], Utilities.FullMonthNameDateFormat, Utilities.BulgarianCultureInfo).Month;
+            int month = DateTime.ParseExact(rawDateInputArgs[0], Utilities.MonthNameDateFormat, Utilities.BulgarianCultureInfo).Month;
             int year = int.Parse(rawDateInputArgs[1]);
 
             scrapeModel.ManufacturingDate = new DateTime(year, month, 1);

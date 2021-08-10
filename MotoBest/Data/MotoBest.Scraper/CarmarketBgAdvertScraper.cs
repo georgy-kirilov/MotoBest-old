@@ -153,10 +153,11 @@
 
         public static void ScrapeBrandAndModelName(IDocument document, AdvertScrapeModel model)
         {
-            var args = document.QuerySelector("img").GetAttribute("alt").Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            string modelName = args[^1], brandName = args[^2];
-            model.BrandName = brandName;
-            model.ModelName = modelName;
+            string query = "div[style='margin-top: 10px;'] > script";
+            var args = document.QuerySelector(query)?.TextContent.Split(NewLine)[7].Split("=")[1].Split(", ");
+
+            model.BrandName = SanitizeInput(args[0], "'");
+            model.ModelName = args[1].Trim();
         }
 
         public static void ScrapeTechnicalCharacteristics(IDocument document, AdvertScrapeModel model)
@@ -187,7 +188,7 @@
         {
             input = SanitizeInput(input, "г.")?.Trim();
             var rawDateArgs = input.Split(Whitespace, StringSplitOptions.RemoveEmptyEntries);
-            int month = DateTime.ParseExact(rawDateArgs[0], FullMonthNameDateFormat, BulgarianCultureInfo).Month;
+            int month = DateTime.ParseExact(rawDateArgs[0], MonthNameDateFormat, BulgarianCultureInfo).Month;
             int year = int.Parse(rawDateArgs[1]);
             model.ManufacturingDate = new DateTime(year, month, 1);
         }

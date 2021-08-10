@@ -3,7 +3,6 @@
     using System;
     using Scraper;
     using AngleSharp;
-    using System.Text;
     using AngleSharp.Dom;
     using System.Threading.Tasks;
     using MotoBest.Data;
@@ -13,13 +12,12 @@
     using System.IO;
     using System.Collections.Generic;
     using System.Text.Json;
+    using System.Diagnostics;
 
     public class Program
     {
         public static async Task Main()
         {
-            int counter = 1;
-
             var db = new ApplicationDbContext();
             await db.Database.EnsureDeletedAsync();
             await db.Database.EnsureCreatedAsync();
@@ -31,41 +29,25 @@
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
+            var scraper = new CarmarketBgAdvertScraper(context);
             var exceptions = new List<Exception>();
 
-            var scraper = new CarmarketBgAdvertScraper(context);
-            await scraper.ScrapeAllAdvertsAsync((model) =>
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            await scraper.ScrapeAllAdvertsAsync(async (model) =>
             {
-                Console.WriteLine($"{counter} - {model.BrandName} {model.ModelName}");
-                service.AddAdvertAsync(model).GetAwaiter().GetResult();
-                counter++;
+                using var dbContext = new ApplicationDbContext();
+                service = new AdvertsService(dbContext);
+                await service.AddAdvertAsync(model);
             });
+
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.Elapsed);
 
             string path = @"C:\Users\georg\OneDrive\Desktop\exceptions.txt";
             string json = JsonSerializer.Serialize(exceptions);
             await File.WriteAllTextAsync(path, json);
-
-            //Console.OutputEncoding = Encoding.UTF8;
-
-            //var lines = (await File.ReadAllLinesAsync("./Output/colors.txt")).ToHashSet().Select(x =>
-            //{
-            //    return $"new Color {{ Name = \"{x}\" }},";
-            //});
-
-            //await File.WriteAllLinesAsync("./Output/colors.txt", lines);
-
-            /*
-
-            var list = new List<string>();
-            list.AddRange(await GetMobileBgColorsAsync(context));
-            list.AddRange(await GetCarsBgColorsAsync(context));
-            list.AddRange(await GetCarmarketColorsAsync(context));
-
-            var set = list.ToHashSet().OrderBy(x => x);
-            await File.WriteAllLinesAsync("./Output/colors.txt", set);
-            */
-            //var scraper = new CarsBgWebScraper(context);
-            //var advert = await scraper.ScrapeAdvertAsync("609e9400a16863169200a7b2");
         }
 
         public static async Task<HashSet<string>> GetMobileBgColorsAsync(IBrowsingContext context)

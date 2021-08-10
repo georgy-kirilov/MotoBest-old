@@ -117,7 +117,7 @@
         public static DateTime ParseManufacturingDate(string input)
         {
             string[] args = input.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            int month = DateTime.ParseExact(args[0], FullMonthNameDateFormat, BulgarianCultureInfo).Month;
+            int month = DateTime.ParseExact(args[0], MonthNameDateFormat, BulgarianCultureInfo).Month;
             int year = int.Parse(args[1]);
             return new DateTime(year, month, 1);
         }

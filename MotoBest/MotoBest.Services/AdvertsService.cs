@@ -47,6 +47,7 @@
             advert.Region = modelFactory.CreateRegion(scrapeModel);
             advert.Town = modelFactory.CreateTown(scrapeModel, advert.Region);
             advert.EuroStandard = modelFactory.CreateEuroStandard(scrapeModel);
+            advert.Condition = modelFactory.CreateCondition(scrapeModel);
             advert.Views = scrapeModel.Views;
             advert.Kilometrage = scrapeModel.Kilometrage;
             advert.HorsePowers = scrapeModel.HorsePowers;
