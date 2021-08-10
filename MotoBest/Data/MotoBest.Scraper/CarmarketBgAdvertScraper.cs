@@ -67,7 +67,7 @@
                                             .TextContent
                                             .Replace(Whitespace, string.Empty));
 
-            for (int advertIndex = 1; advertIndex < advertsCount / 15; advertIndex++)
+            for (int advertIndex = 200; advertIndex < advertsCount / 15; advertIndex++)
             {
                 string url = string.Format(AdvertSearchUrlFormat, advertIndex);
                 var document = await browsingContext.OpenAsync(url);
@@ -153,11 +153,33 @@
 
         public static void ScrapeBrandAndModelName(IDocument document, AdvertScrapeModel model)
         {
-            string query = "div[style='margin-top: 10px;'] > script";
-            var args = document.QuerySelector(query)?.TextContent.Split(NewLine)[7].Split("=")[1].Split(", ");
+            string stringToReplace = "Вижте всички снимки за";
 
-            model.BrandName = SanitizeInput(args[0], "'");
-            model.ModelName = args[1].Trim();
+            string rawImageTagBrandAndModel = SanitizeInput(
+                                                document.QuerySelector("img").GetAttribute("alt"), stringToReplace).Trim();
+
+            var imageTagArgs = rawImageTagBrandAndModel.Split(Whitespace, StringSplitOptions.RemoveEmptyEntries);
+
+            if (imageTagArgs.Length != 2)
+            {
+                string query = "div[style='margin-top: 10px;'] > script";
+                var scriptTagVariableArgs = document.QuerySelector(query)?.TextContent.Split(NewLine)[7].Split("=")[1].Split(", ");
+
+                string brandName = SanitizeInput(scriptTagVariableArgs[0], "'").Trim();
+                string modelName = scriptTagVariableArgs[1].Trim();
+
+                if (rawImageTagBrandAndModel == $"{brandName}{Whitespace}{modelName}")
+                {
+                    imageTagArgs = new string[] { brandName, modelName };
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            model.BrandName = imageTagArgs[0];
+            model.ModelName = imageTagArgs[1];
         }
 
         public static void ScrapeTechnicalCharacteristics(IDocument document, AdvertScrapeModel model)

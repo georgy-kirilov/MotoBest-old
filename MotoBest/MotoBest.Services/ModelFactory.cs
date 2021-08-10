@@ -23,12 +23,22 @@
 
         public Brand CreateBrand(AdvertScrapeModel scrapeModel)
         {
+            if (scrapeModel.BrandName == null)
+            {
+                return null;
+            }
+
             return dbContext.Brands.FirstOrDefault(b => b.Name == scrapeModel.BrandName)
                 ?? new Brand { Name = scrapeModel.BrandName };
         }
 
         public Model CreateModel(AdvertScrapeModel scrapeModel, Brand brand)
         {
+            if (scrapeModel.ModelName == null)
+            {
+                return null;
+            }
+
             return brand.Models.FirstOrDefault(m => m.Name == scrapeModel.ModelName)
                 ?? new Model { Name = scrapeModel.ModelName, Brand = brand };
         }
