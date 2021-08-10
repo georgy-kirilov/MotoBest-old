@@ -19,7 +19,7 @@
 
         private readonly IBrowsingContext browsingContext;
 
-        private static readonly Dictionary<string, Action<string, AdvertScrapeModel>> ParsingTable = new()
+        private static readonly Dictionary<string, Action<string, AdvertScrapeModel>> TechnicalParsingTable = new()
         {
             { "цена", ParsePrice },
             { "дата на производство", ParseManufacturingDate },
@@ -169,19 +169,27 @@
 
             foreach (var pair in pairs)
             {
-                if (!ParsingTable.ContainsKey(pair.Key))
+                if (!TechnicalParsingTable.ContainsKey(pair.Key))
                 {
                     continue;
                 }
 
-                ParsingTable[pair.Key].Invoke(pair.Value, model);
+                TechnicalParsingTable[pair.Key].Invoke(pair.Value, model);
             }
         }
 
         public static void ParsePrice(string input, AdvertScrapeModel model)
         {
-            input = SanitizeInput(input, "лв.", "bgn", "eur", Whitespace);
-            model.Price = decimal.Parse(input);
+            if (input == null)
+            {
+                model.Price = null;
+            }
+            else
+            {
+                decimal currencyExchangeRate = input.Contains("eur") ? EuroToBgnExchangeRate : 1;
+                input = SanitizeInput(input, "лв.", "bgn", "eur", Whitespace);
+                model.Price = decimal.Parse(input) * currencyExchangeRate;
+            }
         }
 
         public static void ParseManufacturingDate(string input, AdvertScrapeModel model)

@@ -11,5 +11,7 @@
         public const string Whitespace = " ";
 
         public const string NewLine = "\n";
+
+        public const decimal EuroToBgnExchangeRate = 1.95583M;
     }
 }
