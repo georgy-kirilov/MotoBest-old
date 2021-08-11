@@ -5,7 +5,6 @@
 
     using System;
     using System.Linq;
-    using System.Text;
     using System.Threading.Tasks;
     using System.Collections.Generic;
 
@@ -29,8 +28,18 @@
             { "категория", ParseBodyStyleName },
             { "пробег", ParseKilometrage },
             { "тип", ParseCondition },
-            { "врати", ParseDoorsAsText },
+            { "врати", ParseDoors },
             { "цвят", ParseColorName },
+        };
+
+        private static readonly SortedDictionary<DateTime, string> EuroStandardsByDateTable = new()
+        {
+            { new DateTime(1992, 12, 31), "Евро 1" },
+            { new DateTime(1997, 1, 1), "Евро 2" },
+            { new DateTime(2001, 1, 1), "Евро 3" },
+            { new DateTime(2006, 1, 1), "Евро 4" },
+            { new DateTime(2011, 1, 1), "Евро 5" },
+            { new DateTime(2015, 9, 1), "Евро 6" },
         };
 
         public CarmarketBgAdvertScraper(IBrowsingContext browsingContext) : base(CarmarketBgAdvertUrlFormat, CarmarketBgAdvertProviderName)
@@ -48,11 +57,12 @@
             model.LastModifiedOn = ScrapeLastModifiedOn(document, remoteId);
             model.RegionName = ScrapeRegionName(document);
             model.ImageUrls = ScrapeImageUrls(document);
-            model.IsNewImport = ScrapeIsNewImportValue(document);
+            model.IsNewImport = ScrapeImportValue(document);
             model.Views = ScrapeViews(document);
 
             ScrapeBrandAndModelName(document, model);
             ScrapeTechnicalCharacteristics(document, model);
+            ParseEuroStandard(model);
 
             return model;
         }
@@ -73,8 +83,10 @@
                 var document = await browsingContext.OpenAsync(url);
 
                 var ids = document.QuerySelectorAll("div.cmOffersList > div.cmOffersListItem")
-                                  .Select(x => x.QuerySelector("a").GetAttribute("href").Split("?")[0].Split("/")[^1]);
-
+                                  .Select(x => x.QuerySelector("a")
+                                                .GetAttribute("href")
+                                                .Split("?")[0]
+                                                .Split("/")[^1]);
                 foreach (string id in ids)
                 {
                     AdvertScrapeModel model = await ScrapeAdvertAsync(id);
@@ -101,13 +113,13 @@
 
         public static int ScrapeViews(IDocument document)
         {
-            string viewsAsText = SanitizeInput(document.QuerySelector("p.cmOfferSeen > span")?.TextContent, Whitespace);
+            string viewsAsText = SanitizeText(document.QuerySelector("p.cmOfferSeen > span")?.TextContent, Whitespace);
             return int.Parse(viewsAsText);
         }
 
         public static string ScrapeRegionName(IDocument document)
         {
-            return SanitizeInput(document.QuerySelector("span.cmOfferRegion")?.TextContent, "Регион:").Trim();
+            return SanitizeText(document.QuerySelector("span.cmOfferRegion")?.TextContent, "Регион:").Trim();
         }
 
         public static DateTime ScrapeLastModifiedOn(IDocument document, string remoteId)
@@ -155,7 +167,7 @@
             return imageUrls;
         }
 
-        public static bool ScrapeIsNewImportValue(IDocument document)
+        public static bool ScrapeImportValue(IDocument document)
         {
             return document.QuerySelectorAll("section.cmOfferFeatures > ul > li").Any(x => x.TextContent.Trim() == "Нов внос");
         }
@@ -164,8 +176,8 @@
         {
             string stringToReplace = "Вижте всички снимки за";
 
-            string rawImageTagBrandAndModel = SanitizeInput(
-                                                document.QuerySelector("img").GetAttribute("alt"), stringToReplace).Trim();
+            string rawImageTagBrandAndModel = SanitizeText(
+                                                document.QuerySelector("img").GetAttribute("alt"), stringToReplace)?.Trim();
 
             var imageTagArgs = rawImageTagBrandAndModel.Split(Whitespace, StringSplitOptions.RemoveEmptyEntries);
 
@@ -174,7 +186,7 @@
                 string query = "div[style='margin-top: 10px;'] > script";
                 var scriptTagVariableArgs = document.QuerySelector(query)?.TextContent.Split(NewLine)[7].Split("=")[1].Split(", ");
 
-                string brandName = SanitizeInput(scriptTagVariableArgs[0], "'").Trim();
+                string brandName = SanitizeText(scriptTagVariableArgs[0], "'").Trim();
                 string modelName = scriptTagVariableArgs[1].Trim();
 
                 if (rawImageTagBrandAndModel == $"{brandName}{Whitespace}{modelName}")
@@ -193,20 +205,38 @@
 
         public static void ScrapeTechnicalCharacteristics(IDocument document, AdvertScrapeModel model)
         {
-            var pairs = document
-                            .QuerySelectorAll("div.cmOfferMoreInfo > div.cmOfferMoreInfoRow")
-                            .ToDictionary(x => x.QuerySelector("span")?.TextContent.Trim().ToLower(),
-                                          x => x.QuerySelector("strong")?.TextContent.Trim().ToLower());
+            var technicalPairs = document
+                                    .QuerySelectorAll("div.cmOfferMoreInfo > div.cmOfferMoreInfoRow")
+                                    .ToDictionary(x => x.QuerySelector("span")?.TextContent.Trim().ToLower(),
+                                                  x => x.QuerySelector("strong")?.TextContent.Trim().ToLower());
 
-            foreach (var pair in pairs)
+            foreach (var technicalPair in technicalPairs)
             {
-                if (!TechnicalParsingTable.ContainsKey(pair.Key))
+                if (!TechnicalParsingTable.ContainsKey(technicalPair.Key))
                 {
                     continue;
                 }
 
-                TechnicalParsingTable[pair.Key].Invoke(pair.Value, model);
+                TechnicalParsingTable[technicalPair.Key].Invoke(technicalPair.Value, model);
             }
+        }
+
+        public static void ParseEuroStandard(AdvertScrapeModel model)
+        {
+            string currentEuroStandardType = null;
+
+            foreach (var euroStandardDatePair in EuroStandardsByDateTable)
+            {
+                if (euroStandardDatePair.Key.CompareTo(model.ManufacturingDate) > 0)
+                {
+                    break;
+                }
+
+                currentEuroStandardType = euroStandardDatePair.Value;
+            }
+
+            model.EuroStandardType = currentEuroStandardType;
+            model.IsEuroStandardExact = model.EuroStandardType == null;
         }
 
         public static void ParsePrice(string input, AdvertScrapeModel model)
@@ -218,14 +248,14 @@
             else
             {
                 decimal currencyExchangeRate = input.Contains("eur") ? EuroToBgnExchangeRate : 1;
-                input = SanitizeInput(input, "лв.", "bgn", "eur", Whitespace);
+                input = SanitizeText(input, "лв.", "bgn", "eur", Whitespace);
                 model.Price = decimal.Parse(input) * currencyExchangeRate;
             }
         }
 
         public static void ParseManufacturingDate(string input, AdvertScrapeModel model)
         {
-            input = SanitizeInput(input, "г.")?.Trim();
+            input = SanitizeText(input, "г.")?.Trim();
             var rawDateArgs = input.Split(Whitespace, StringSplitOptions.RemoveEmptyEntries);
             int month = DateTime.ParseExact(rawDateArgs[0], MonthNameDateFormat, BulgarianCultureInfo).Month;
             int year = int.Parse(rawDateArgs[1]);
@@ -239,7 +269,7 @@
 
         public static void ParseHorsePowers(string input, AdvertScrapeModel model)
         {
-            input = SanitizeInput(input, "к.с.")?.Trim();
+            input = SanitizeText(input, "к.с.")?.Trim();
             model.HorsePowers = int.Parse(input);
         }
 
@@ -255,7 +285,7 @@
 
         public static void ParseKilometrage(string input, AdvertScrapeModel model)
         {
-            input = SanitizeInput(input, "км", Whitespace);
+            input = SanitizeText(input, "км", Whitespace);
             model.Kilometrage = int.Parse(input);
         }
 
@@ -264,26 +294,14 @@
             model.Condition = input;
         }
 
-        public static void ParseDoorsAsText(string input, AdvertScrapeModel model)
+        public static void ParseDoors(string input, AdvertScrapeModel model)
         {
-            model.HasFourDoors = SanitizeInput(input, "врати").Trim() == "4(5)";
+            model.HasFourDoors = SanitizeText(input, "врати").Trim() == "4(5)";
         }
 
         public static void ParseColorName(string input, AdvertScrapeModel model)
         {
             model.ColorName = input;
-        }
-
-        private static string SanitizeInput(string input, params string[] stringsToSanitize)
-        {
-            var builder = new StringBuilder(input);
-
-            foreach (string stringToSanitize in stringsToSanitize)
-            {
-                builder.Replace(stringToSanitize, string.Empty);
-            }
-
-            return builder.ToString();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace MotoBest.Scraper
 {
+    using System.Text;
     using System.Globalization;
 
     public static class Utilities
@@ -13,5 +14,17 @@
         public const string NewLine = "\n";
 
         public const decimal EuroToBgnExchangeRate = 1.95583M;
+
+        public static string SanitizeText(string input, params string[] stringsToSanitize)
+        {
+            var builder = new StringBuilder(input);
+
+            foreach (string stringToSanitize in stringsToSanitize)
+            {
+                builder.Replace(stringToSanitize, string.Empty);
+            }
+
+            return builder.ToString();
+        }
     }
 }

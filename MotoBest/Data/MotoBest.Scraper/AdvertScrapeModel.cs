@@ -44,6 +44,8 @@
 
         public string EuroStandardType { get; set; }
 
+        public bool IsEuroStandardExact { get; set; }
+
         public string ColorName { get; set; }
 
         public string Condition { get; set; }

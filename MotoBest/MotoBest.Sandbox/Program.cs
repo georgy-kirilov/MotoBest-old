@@ -13,18 +13,21 @@
     using System.Collections.Generic;
     using System.Text.Json;
     using System.Diagnostics;
+    using System.Text;
 
     public class Program
     {
         public static async Task Main()
         {
-            var db = new ApplicationDbContext();
-            await db.Database.EnsureDeletedAsync();
-            await db.Database.EnsureCreatedAsync();
+            Console.OutputEncoding = Encoding.UTF8;
+
+            //var db = new ApplicationDbContext();
+            //await db.Database.EnsureDeletedAsync();
+            //await db.Database.EnsureCreatedAsync();
 
             Console.WriteLine("Database created");
 
-            var service = new AdvertsService(db);
+            //var service = new AdvertsService(db);
 
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
@@ -35,11 +38,12 @@
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            await scraper.ScrapeAllAdvertsAsync(async (model) =>
+            await scraper.ScrapeAllAdvertsAsync(model =>
             {
-                using var dbContext = new ApplicationDbContext();
-                service = new AdvertsService(dbContext);
-                await service.AddAdvertAsync(model);
+                Console.WriteLine($"{model.EuroStandardType}:{model.ManufacturingDate.Date.ToString("dd-MMM-yyyy")}");
+                //using var dbContext = new ApplicationDbContext();
+                //service = new AdvertsService(dbContext);
+                //await service.AddAdvertAsync(model);
             });
 
             stopwatch.Stop();
