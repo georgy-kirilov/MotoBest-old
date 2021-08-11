@@ -40,7 +40,6 @@
 
             await scraper.ScrapeAllAdvertsAsync(async model =>
             {
-                Console.WriteLine($"{model.EuroStandardType}:{model.ManufacturingDate.Date.ToString("dd-MMM-yyyy")}");
                 using var dbContext = new ApplicationDbContext();
                 service = new AdvertsService(dbContext);
                 await service.AddAdvertAsync(model);
