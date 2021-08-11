@@ -3,7 +3,7 @@
     using System;
     using System.Threading.Tasks;
 
-    public interface IWebScraper
+    public interface IAdvertScraper
     {
         string AdvertUrlFormat { get; }
 
@@ -11,6 +11,6 @@
 
         Task ScrapeLatestAdvertsAsync(Action<AdvertScrapeModel> action);
 
-        Task ScrapeAllAdvertsAsync(string brandName, string modelName, Action<AdvertScrapeModel> action);
+        Task ScrapeAllAdvertsAsync(Action<AdvertScrapeModel> action);
     }
 }

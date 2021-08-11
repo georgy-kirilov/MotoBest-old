@@ -2,38 +2,26 @@
 {
     using MotoBest.Data;
     using MotoBest.Models;
+
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
     using System.Threading.Tasks;
+    using System.Collections.Generic;
 
     public class ColorSeeder : ISeeder
     {
-        public async Task Seed(ApplicationDbContext dbContext)
+        public async Task SeedAsync(ApplicationDbContext dbContext)
         {
-            var colors = new Color[]
-            {
-                new Color { Name = "Бежов" },
-                new Color { Name = "Бордо" },
-                new Color { Name = "Бронзов" },
-                new Color { Name = "Бял" },
-                new Color { Name = "Виолетов" },
-                new Color { Name = "Жълт" },
-                new Color { Name = "Зелен" },
-                new Color { Name = "Златен" },
-                new Color { Name = "Кафяв" },
-                new Color { Name = "Оранжев" },
-                new Color { Name = "Сив" },
-                new Color { Name = "Син" },
-                new Color { Name = "Сребърен" },
-                new Color { Name = "Червен" },
-                new Color { Name = "Черен" },
-                new Color { Name = "Лилав" },
-                new Color { Name = "Охра" },
-                new Color { Name = "Перла" },
-                new Color { Name = "Розов" },
-                new Color { Name = "" },
-                new Color { Name = "" },
-                new Color { Name = "" },
-                new Color { Name = "" },
-            };
+            string path = "./Resources/colors.json";
+            string text = await File.ReadAllTextAsync(path);
+
+            var colors = JsonSerializer
+                            .Deserialize<List<string>>(text)
+                            .Select(name => new Color { Name = name });
+
+            await dbContext.Colors.AddRangeAsync(colors);
+            await dbContext.SaveChangesAsync();
         }
     }
 }

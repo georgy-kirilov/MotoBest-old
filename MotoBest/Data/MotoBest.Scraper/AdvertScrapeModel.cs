@@ -8,7 +8,10 @@
         public AdvertScrapeModel()
         {
             ImageUrls = new HashSet<string>();
+            IsEuroStandardExact = true;
         }
+
+        public string AdvertUrlFormat { get; set; }
 
         public string AdvertProviderName { get; set; }
 
@@ -42,6 +45,8 @@
 
         public string EuroStandardType { get; set; }
 
+        public bool IsEuroStandardExact { get; set; }
+
         public string ColorName { get; set; }
 
         public string Condition { get; set; }
@@ -49,6 +54,8 @@
         public string RegionName { get; set; }
 
         public string TownName { get; set; }
+
+        public bool HasFourDoors { get; set; }
 
         public bool IsNewImport { get; set; }
 

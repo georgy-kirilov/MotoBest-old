@@ -18,24 +18,40 @@
         public AdvertProvider CreateAdvertProvider(AdvertScrapeModel scrapeModel)
         {
             return dbContext.AdvertProviders.FirstOrDefault(ap => ap.Name == scrapeModel.AdvertProviderName)
-                ?? new AdvertProvider { Name = scrapeModel.AdvertProviderName };
+                ?? new AdvertProvider { Name = scrapeModel.AdvertProviderName, AdvertUrlFormat = scrapeModel.AdvertUrlFormat };
         }
 
         public Brand CreateBrand(AdvertScrapeModel scrapeModel)
         {
+            if (scrapeModel.BrandName == null)
+            {
+                return null;
+            }
+
             return dbContext.Brands.FirstOrDefault(b => b.Name == scrapeModel.BrandName)
                 ?? new Brand { Name = scrapeModel.BrandName };
         }
 
         public Model CreateModel(AdvertScrapeModel scrapeModel, Brand brand)
         {
+            if (scrapeModel.ModelName == null)
+            {
+                return null;
+            }
+
             return brand.Models.FirstOrDefault(m => m.Name == scrapeModel.ModelName)
                 ?? new Model { Name = scrapeModel.ModelName, Brand = brand };
         }
 
         public Color CreateColor(AdvertScrapeModel scrapeModel)
         {
-            return dbContext.Colors.FirstOrDefault(c => c.Name == scrapeModel.ColorName);
+            if (scrapeModel.ColorName == null)
+            {
+                return null;
+            }
+
+            return dbContext.Colors.FirstOrDefault(c => c.Name == scrapeModel.ColorName) 
+                ?? new Color { Name = scrapeModel.ColorName };
         }
 
         public Engine CreateEngine(AdvertScrapeModel scrapeModel)
@@ -64,19 +80,36 @@
 
         public Town CreateTown(AdvertScrapeModel scrapeModel, Region region)
         {
+            if (scrapeModel.TownName == null)
+            {
+                return null;
+            }
+
             return dbContext.Towns.FirstOrDefault(t => t.Name == scrapeModel.TownName)
                 ?? new Town { Name = scrapeModel.TownName, Region = region };
         }
 
         public EuroStandard CreateEuroStandard(AdvertScrapeModel scrapeModel)
         {
-            return dbContext.EuroStandards.FirstOrDefault(es => es.Type == scrapeModel.EuroStandardType);
+            if (scrapeModel.EuroStandardType == null)
+            {
+                return null;
+            }
+
+            return dbContext.EuroStandards.FirstOrDefault(es => es.Type == scrapeModel.EuroStandardType) 
+                ?? new EuroStandard { Type = scrapeModel.EuroStandardType };
         }
 
         public Image CreateImage(string url, Advert advert)
         {
             return dbContext.Images.FirstOrDefault(i => i.Url == url && advert.Id == i.AdvertId) 
                 ?? new Image { Advert = advert, Url = url };
+        }
+
+        public Condition CreateCondition(AdvertScrapeModel scrapeModel)
+        {
+            return dbContext.Conditions.FirstOrDefault(c => c.Type == scrapeModel.Condition) 
+                ?? new Condition { Type = scrapeModel.Condition };
         }
     }
 }

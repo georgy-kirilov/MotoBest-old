@@ -6,7 +6,7 @@
 
     public class EuroStandardSeeder : ISeeder
     {
-        public async Task Seed(ApplicationDbContext dbContext)
+        public async Task SeedAsync(ApplicationDbContext dbContext)
         {
             var euroStandards = new EuroStandard[]
             {

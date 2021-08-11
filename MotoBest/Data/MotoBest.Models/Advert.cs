@@ -33,6 +33,10 @@
 
         public bool IsNewImport { get; set; }
 
+        public bool HasFourDoors { get; set; }
+
+        public bool IsEuroStandardExact { get; set; }
+
         public int Views { get; set; }
 
         public int AdvertProviderId { get; set; }
@@ -43,7 +47,7 @@
 
         public virtual BodyStyle BodyStyle { get; set; }
 
-        public int BrandId { get; set; }
+        public int? BrandId { get; set; }
 
         public virtual Brand Brand { get; set; }
 
@@ -63,7 +67,7 @@
 
         public virtual EuroStandard EuroStandard { get; set; }
 
-        public int ModelId { get; set; }
+        public int? ModelId { get; set; }
 
         public virtual Model Model { get; set; }
 

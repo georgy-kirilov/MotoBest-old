@@ -6,7 +6,7 @@
 
     public class BodyStyleSeeder : ISeeder
     {
-        public async Task Seed(ApplicationDbContext dbContext)
+        public async Task SeedAsync(ApplicationDbContext dbContext)
         {
             var bodyStyles = new BodyStyle[]
             {

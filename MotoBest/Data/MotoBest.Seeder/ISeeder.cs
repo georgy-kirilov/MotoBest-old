@@ -5,6 +5,6 @@
 
     public interface ISeeder
     {
-        Task Seed(ApplicationDbContext dbContext);
+        Task SeedAsync(ApplicationDbContext dbContext);
     }
 }

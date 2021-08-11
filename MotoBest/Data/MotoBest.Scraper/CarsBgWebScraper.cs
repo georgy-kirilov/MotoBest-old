@@ -12,14 +12,15 @@
 
     using static Utilities;
 
-    public class CarsBgWebScraper : WebScraper
+    public class CarsBgWebScraper : AdvertScraper
     {
-        private const string CarsBgAdvertUrlFormat = "https://www.cars.bg/offer/{0}";
+        public const string CarsBgAdvertUrlFormat = "https://www.cars.bg/offer/{0}";
+        public const string CarsBgAdvertProviderName = "cars.bg";
 
         private readonly IBrowsingContext browsingContext;
         private readonly HttpClient httpClient;
 
-        public CarsBgWebScraper(IBrowsingContext browsingContext) : base(CarsBgAdvertUrlFormat)
+        public CarsBgWebScraper(IBrowsingContext browsingContext) : base(CarsBgAdvertUrlFormat, CarsBgAdvertProviderName)
         {
             httpClient = new HttpClient();
             this.browsingContext = browsingContext;
@@ -28,15 +29,12 @@
         public override async Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId)
         {
             var document = await browsingContext.OpenAsync(GetAdvertUrl(remoteId));
+            var advert = await base.ScrapeAdvertAsync(remoteId);
 
-            var advert = new AdvertScrapeModel
-            {
-                RemoteId = remoteId,
-                Title = ScrapeTitle(document),
-                Description = ScrapeDescription(document),
-                Views = await ScrapeViewsAsync(remoteId),
-                Price = ScrapePrice(document),
-            };
+            advert.Title = ScrapeTitle(document);
+            advert.Description = ScrapeDescription(document);
+            advert.Views = await ScrapeViewsAsync(remoteId);
+            advert.Price = ScrapePrice(document);
 
             var characteristics = ScrapeTechnicalCharacteristics(document);
 
@@ -48,13 +46,14 @@
             advert.HorsePowers = ParseHorsePowers(characteristics[5]);
 
             string euroStandard = ParseEuroStandardType(characteristics[6]);
-            advert.EuroStandardType = euroStandard.StartsWith("EURO") ? euroStandard : null;
 
-            advert.ColorName = ParseColorName(characteristics[characteristics.Length - 1]);
+            advert.EuroStandardType = euroStandard.StartsWith("EURO") ? euroStandard : null;
+            advert.ColorName = ParseColorName(characteristics[^1]);
+
             return advert;
         }
 
-        public override async Task ScrapeAllAdvertsAsync(string brandName, string modelName, Action<AdvertScrapeModel> action)
+        public override async Task ScrapeAllAdvertsAsync(Action<AdvertScrapeModel> action)
         {
             throw new NotImplementedException();
         }
@@ -118,7 +117,7 @@
         public static DateTime ParseManufacturingDate(string input)
         {
             string[] args = input.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            int month = DateTime.ParseExact(args[0], FullMonthNameDateFormat, BulgarianCultureInfo).Month;
+            int month = DateTime.ParseExact(args[0], MonthNameDateFormat, BulgarianCultureInfo).Month;
             int year = int.Parse(args[1]);
             return new DateTime(year, month, 1);
         }

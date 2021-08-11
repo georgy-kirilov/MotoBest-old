@@ -12,4 +12,19 @@
     <ProjectReference Include="..\MotoBest.Services\MotoBest.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Output\colors.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\carmarket-colors.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\cars.bg-colors.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\mobile-colors.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

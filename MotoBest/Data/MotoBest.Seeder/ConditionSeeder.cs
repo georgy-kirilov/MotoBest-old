@@ -6,13 +6,13 @@
 
     public class ConditionSeeder : ISeeder
     {
-        public async Task Seed(ApplicationDbContext dbContext)
+        public async Task SeedAsync(ApplicationDbContext dbContext)
         {
             var conditions = new Condition[]
             {
                 new Condition { Type = "Нов" },
                 new Condition { Type = "Употребяван" },
-                new Condition { Type = "Повредени/Ударени" },
+                new Condition { Type = "Повреден/Ударен" },
                 new Condition { Type = "За части" },
             };
 
