@@ -19,7 +19,7 @@
     {
         public static async Task Main()
         {
-            Console.OutputEncoding = Encoding.UTF8;
+            /*Console.OutputEncoding = Encoding.UTF8;
 
             var db = new ApplicationDbContext();
             await db.Database.EnsureDeletedAsync();
@@ -27,13 +27,15 @@
 
             Console.WriteLine("Database created");
 
-            var service = new AdvertsService(db);
+            var service = new AdvertsService(db);*/
             
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
-            var scraper = new CarmarketBgAdvertScraper(context);
-            var exceptions = new List<Exception>();
+            var scraper = new MobileBgAdvertScraper(context);
+            var advert = await scraper.ScrapeAdvertAsync("11628669874236365");
+
+            /*var exceptions = new List<Exception>();
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -50,76 +52,7 @@
 
             string path = @"C:\Users\georg\OneDrive\Desktop\exceptions.txt";
             string json = JsonSerializer.Serialize(exceptions);
-            await File.WriteAllTextAsync(path, json);
-        }
-
-        public static async Task<HashSet<string>> GetMobileBgColorsAsync(IBrowsingContext context)
-        {
-            string text = await File.ReadAllTextAsync("./Resources/mobile-colors.html");
-            var dom = await context.OpenAsync(x => x.Content(text));
-
-            return dom.QuerySelectorAll("select > option").Select(o => o.GetAttribute("value").Trim().ToLower()).ToHashSet();
-        }
-
-        public static async Task<HashSet<string>> GetCarsBgColorsAsync(IBrowsingContext context)
-        {
-            string text = await File.ReadAllTextAsync("./Resources/cars.bg-colors.html");
-            var document = await context.OpenAsync(x => x.Content(text));
-
-            return document
-                    .QuerySelectorAll("div.mdc-chip-set mdc-chip-set--choice > label")
-                    .Select(l => l.QuerySelector("span > label")?.TextContent.Trim().ToLower())
-                    .ToHashSet();
-        }
-
-        public static async Task<HashSet<string>> GetCarmarketColorsAsync(IBrowsingContext context)
-        {
-            string text = await File.ReadAllTextAsync("./Resources/carmarket-colors.html");
-            var dom = await context.OpenAsync(x => x.Content(text));
-
-            return dom.QuerySelectorAll("select > option").Select(o => o.TextContent.Trim().ToLower()).ToHashSet();
-        }
-
-        public static async Task OldStuff()
-        {
-            DatabaseConfig.IsDatabaseLocal = false;
-
-            var dbContext = new ApplicationDbContext();
-            //await dbContext.Database.EnsureDeletedAsync();
-            await dbContext.Database.EnsureCreatedAsync();
-
-            var advertsService = new AdvertsService(dbContext);
-
-            var config = Configuration.Default.WithDefaultLoader();
-            var context = BrowsingContext.New(config);
-
-            var address = "https://www.mobile.bg/pcgi/mobile.cgi?act=3&slink=kvo3k4&f1=";
-            var query = "a.mmm";
-
-            var mobileBgProvider = new AdvertProvider
-            {
-                Name = "mobile.bg",
-                AdvertUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv={0}",
-            };
-
-            //await dbContext.AdvertProviders.AddAsync(mobileBgProvider);
-            //await dbContext.SaveChangesAsync();
-
-            for (int page = 6; page <= 10; page++)
-            {
-                var document = await context.OpenAsync($"{address}{page}");
-                var anchorTags = document.QuerySelectorAll(query);
-
-                foreach (IElement anchorTag in anchorTags)
-                {
-                    string url = anchorTag.GetAttribute("href").Trim();
-                    var advertDocument = await context.OpenAsync($"https:{url}");
-                    var scrapeModel = MobileBgAdvertScraper.Scrape(advertDocument, url);
-                    scrapeModel.AdvertProviderName = mobileBgProvider.Name;
-                    await advertsService.AddAdvertAsync(scrapeModel);
-                    dbContext.SaveChanges();
-                }
-            }
+            await File.WriteAllTextAsync(path, json);*/
         }
     }
 }

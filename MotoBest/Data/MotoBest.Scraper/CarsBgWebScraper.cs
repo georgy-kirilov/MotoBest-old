@@ -17,13 +17,12 @@
         public const string CarsBgAdvertUrlFormat = "https://www.cars.bg/offer/{0}";
         public const string CarsBgAdvertProviderName = "cars.bg";
 
-        private readonly IBrowsingContext browsingContext;
         private readonly HttpClient httpClient;
 
-        public CarsBgWebScraper(IBrowsingContext browsingContext) : base(CarsBgAdvertUrlFormat, CarsBgAdvertProviderName)
+        public CarsBgWebScraper(IBrowsingContext browsingContext) 
+            : base(browsingContext, CarsBgAdvertUrlFormat, CarsBgAdvertProviderName)
         {
             httpClient = new HttpClient();
-            this.browsingContext = browsingContext;
         }
 
         public override async Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId)

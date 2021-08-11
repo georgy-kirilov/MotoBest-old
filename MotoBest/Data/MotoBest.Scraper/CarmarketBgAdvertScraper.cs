@@ -16,8 +16,6 @@
         public const string CarmarketBgAdvertProviderName = "carmarket.bg";
         public const string AdvertSearchUrlFormat = "https://www.carmarket.bg/obiavi/{0}?sort=1";
 
-        private readonly IBrowsingContext browsingContext;
-
         private static readonly Dictionary<string, Action<string, AdvertScrapeModel>> TechnicalParsingTable = new()
         {
             { "цена", ParsePrice },
@@ -32,9 +30,9 @@
             { "цвят", ParseColorName },
         };
 
-        public CarmarketBgAdvertScraper(IBrowsingContext browsingContext) : base(CarmarketBgAdvertUrlFormat, CarmarketBgAdvertProviderName)
+        public CarmarketBgAdvertScraper(IBrowsingContext browsingContext) 
+            : base(browsingContext, CarmarketBgAdvertUrlFormat, CarmarketBgAdvertProviderName)
         {
-            this.browsingContext = browsingContext;
         }
 
         public override async Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId)
@@ -63,12 +61,10 @@
             string firstPageUrl = string.Format(AdvertSearchUrlFormat, string.Empty);
             var firstPageDocument = await browsingContext.OpenAsync(firstPageUrl);
 
-            int advertsCount = int.Parse(
-                                    firstPageDocument.QuerySelector("span.foundOffers > strong")?
-                                            .TextContent
-                                            .Replace(Whitespace, string.Empty));
-
             int advertsPerPage = 15;
+
+            int advertsCount = int.Parse(SanitizeText(
+                                firstPageDocument.QuerySelector("span.foundOffers > strong")?.TextContent, Whitespace));
 
             for (int advertIndex = 1; advertIndex <= advertsCount / advertsPerPage; advertIndex++)
             {
@@ -173,14 +169,12 @@
                 string brandName = SanitizeText(scriptTagVariableArgs[0], "'").Trim();
                 string modelName = scriptTagVariableArgs[1].Trim();
 
-                if (rawImageTagBrandAndModel == $"{brandName}{Whitespace}{modelName}")
-                {
-                    imageTagArgs = new string[] { brandName, modelName };
-                }
-                else
+                if (rawImageTagBrandAndModel != $"{brandName}{Whitespace}{modelName}")
                 {
                     return;
                 }
+
+                imageTagArgs = new string[] { brandName, modelName };
             }
 
             model.BrandName = imageTagArgs[0];

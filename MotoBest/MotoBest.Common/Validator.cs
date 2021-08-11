@@ -11,5 +11,13 @@
                 throw new ArgumentException($"{paramName} cannot be null or empty");
             }
         }
+
+        public static void ThrowIfNull(object obj, string paramName)
+        {
+            if (obj == null)
+            {
+                throw new ArgumentNullException($"{paramName} cannot be null");
+            }
+        }
     }
 }

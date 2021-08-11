@@ -1,5 +1,6 @@
 ﻿namespace MotoBest.Scraper
 {
+    using AngleSharp;
     using Common;
 
     using System;
@@ -7,12 +8,18 @@
 
     public abstract class AdvertScraper : IAdvertScraper
     {
-        protected AdvertScraper(string advertUrlFormat, string advertProviderName)
+        protected readonly IBrowsingContext browsingContext;
+
+        protected AdvertScraper(IBrowsingContext browsingContext, string advertUrlFormat, string advertProviderName)
         {
             Validator.ThrowIfNullOrEmpty(advertUrlFormat, nameof(advertUrlFormat));
-            Validator.ThrowIfNullOrEmpty(advertProviderName, nameof(advertProviderName));
             AdvertUrlFormat = advertUrlFormat;
+
+            Validator.ThrowIfNullOrEmpty(advertProviderName, nameof(advertProviderName));
             AdvertProviderName = advertProviderName;
+
+            Validator.ThrowIfNull(browsingContext, nameof(browsingContext));
+            this.browsingContext = browsingContext;
         }
 
         protected string GetAdvertUrl(string remoteId)

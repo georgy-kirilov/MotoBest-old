@@ -5,10 +5,19 @@
     using System.Collections.Generic;
 
     using AngleSharp.Dom;
+    using System.Threading.Tasks;
+    using AngleSharp;
 
-    public static class MobileBgAdvertScraper
+    using static Utilities;
+
+    public class MobileBgAdvertScraper : AdvertScraper
     {
+        public const string MobileBgAdvertUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv={0}";
+        public const string MobileBgAdvertProviderName = "mobile.bg";
+
         private delegate void TechnicalCharacteristicsParser(string input, AdvertScrapeModel scrapeModel);
+
+        private HashSet<string> features = new HashSet<string>();
 
         private static readonly Dictionary<string, TechnicalCharacteristicsParser> CharacteristicsParsingTable = new()
         {
@@ -22,62 +31,71 @@
             { "евростандарт", ParseEuroStandard },
         };
 
-        public static AdvertScrapeModel Scrape(IDocument document, string advertisementUrl)
+        public MobileBgAdvertScraper(IBrowsingContext browsingContext) 
+            : base(browsingContext, MobileBgAdvertUrlFormat, MobileBgAdvertProviderName)
         {
-            var scrapeModel = new AdvertScrapeModel();
-
-            ParseRemoteId(advertisementUrl, scrapeModel);
-            ScrapeLastModifiedOn(document, scrapeModel);
-
-            ScrapeTitle(document, scrapeModel);
-            ScrapeBrandAndModelName(document, scrapeModel);
-
-            ScrapeTechnicalCharacteristics(document, scrapeModel);
-            ScrapePrice(document, scrapeModel);
-
-            ScrapeViews(document, scrapeModel);
-            ScrapeImageUrls(document, scrapeModel);
-
-            ScrapeDescription(document, scrapeModel);
-            ScrapeRegionAndTownName(document, scrapeModel);
-
-            return scrapeModel;
         }
 
-        public static void ParseRemoteId(string advertisementUrl, AdvertScrapeModel scrapeModel)
+        public override async Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId)
         {
-            scrapeModel.RemoteId = advertisementUrl.Split("?")[1].Split("&")[1].Split("=")[1].Trim();
+            var document = await browsingContext.OpenAsync(GetAdvertUrl(remoteId));
+            var model = await base.ScrapeAdvertAsync(remoteId);
+
+            features = ScrapeFeatures(document);
+
+            model.LastModifiedOn = ScrapeLastModifiedOn(document);
+
+            model.Title = ScrapeTitle(document);
+            model.Price = ScrapePrice(document);
+
+            model.Views = ScrapeViews(document);
+            model.Description = ScrapeDescription(document);
+
+            model.IsNewImport = ParseImportValue();
+            model.HasFourDoors = ParseDoors();
+
+            ScrapeBrandAndModelName(document, model);
+            ScrapeTechnicalCharacteristics(document, model);
+
+            ScrapeImageUrls(document, model);
+            ScrapeRegionAndTownName(document, model);
+
+            return model;
         }
 
-        public static void ScrapeTitle(IDocument document, AdvertScrapeModel scrapeModel)
+        public override Task ScrapeAllAdvertsAsync(Action<AdvertScrapeModel> action)
         {
-            scrapeModel.Title = document.QuerySelector("h1")?.TextContent.Trim();
+            throw new NotImplementedException();
         }
 
-        public static void ScrapeDescription(IDocument document, AdvertScrapeModel scrapeModel)
+        public override Task ScrapeLatestAdvertsAsync(Action<AdvertScrapeModel> action)
         {
-            scrapeModel.Description = document
-                                        .QuerySelectorAll("form[name='search'] > table")[2]
-                                        .QuerySelector("tbody > tr > td")?
-                                        .TextContent
-                                        .Trim();
+            throw new NotImplementedException();
         }
 
-        public static void ScrapePrice(IDocument document, AdvertScrapeModel scrapeModel)
+        public static string ScrapeTitle(IDocument document)
+        {
+            return document.QuerySelector("h1")?.TextContent.Trim();
+        }
+
+        public static string ScrapeDescription(IDocument document)
+        {
+            return document.QuerySelectorAll("form[name='search'] > table")[2]
+                           .QuerySelector("tbody > tr > td")?
+                           .TextContent
+                           .Trim();
+        }
+
+        public static decimal? ScrapePrice(IDocument document)
         {
             try
             {
-                string input = document
-                                .QuerySelector("#details_price")?
-                                .TextContent
-                                .Replace("лв.", string.Empty)
-                                .Replace(" ", string.Empty);
-
-                scrapeModel.Price = decimal.Parse(input);
+                string input = SanitizeText(document.QuerySelector("#details_price")?.TextContent, "лв.", Whitespace);
+                return decimal.Parse(input);
             }
             catch (Exception)
             {
-                scrapeModel.Price = null;
+                return null;
             }
         }
 
@@ -88,15 +106,36 @@
             for (int i = 0; i < characteristicsList.Length; i += 2)
             {
                 string currentPropertyName = characteristicsList[i].TextContent.ToLower();
-                string currentPropertyValue = characteristicsList[i + 1].TextContent;
+                string currentPropertyValue = characteristicsList[i + 1].TextContent.ToLower();
 
                 CharacteristicsParsingTable[currentPropertyName].Invoke(currentPropertyValue, scrapeModel);
             }
         }
 
-        public static void ScrapeViews(IDocument document, AdvertScrapeModel scrapeModel)
+        public bool ParseImportValue()
         {
-            scrapeModel.Views = int.Parse(document.QuerySelector("span.advact")?.TextContent);
+            return features.Contains("нов внос");
+        }
+
+        public bool ParseDoors()
+        {
+            return features.Contains("4(5) врати");
+        }
+
+        public static HashSet<string> ScrapeFeatures(IDocument document)
+        {
+            char bullet = (char) 0x2022;
+
+            return document.QuerySelectorAll("table[width=660]")?[2]
+                           .QuerySelector("tr")?.TextContent
+                           .Split(new char[] { bullet, NewLine }, StringSplitOptions.RemoveEmptyEntries)
+                           .Select(x => x.Trim().ToLower())
+                           .ToHashSet();
+        }
+
+        public static int ScrapeViews(IDocument document)
+        {
+            return int.Parse(document.QuerySelector("span.advact")?.TextContent);
         }
 
         public static void ScrapeImageUrls(IDocument document, AdvertScrapeModel scrapeModel)
@@ -135,7 +174,7 @@
             scrapeModel.TownName = fullAddressArgs[1];
         }
 
-        public static void ScrapeLastModifiedOn(IDocument document, AdvertScrapeModel scrapeModel)
+        public static DateTime ScrapeLastModifiedOn(IDocument document)
         {
             var args = document.QuerySelector("div[style='float:left; margin-top:10px;'] > span")?.TextContent.Split(" ");
             var timeArgs = args[2].Split(":");
@@ -143,10 +182,10 @@
             int hour = int.Parse(timeArgs[0]);
             int minute = int.Parse(timeArgs[1]);
             int day = int.Parse(args[5]);
-            int month = DateTime.ParseExact(args[6], Utilities.MonthNameDateFormat, Utilities.BulgarianCultureInfo).Month;
+            int month = DateTime.ParseExact(args[6], MonthNameDateFormat, BulgarianCultureInfo).Month;
             int year = int.Parse(args[7]);
 
-            scrapeModel.LastModifiedOn = new DateTime(year, month, day, hour, minute, 0);
+            return new DateTime(year, month, day, hour, minute, 0);
         }
 
         public static void ParseManufacturingDate(string input, AdvertScrapeModel scrapeModel)
@@ -159,7 +198,7 @@
             string rawDateInput = input.Replace("г.", string.Empty);
             string[] rawDateInputArgs = rawDateInput.Split(" ");
 
-            int month = DateTime.ParseExact(rawDateInputArgs[0], Utilities.MonthNameDateFormat, Utilities.BulgarianCultureInfo).Month;
+            int month = DateTime.ParseExact(rawDateInputArgs[0], MonthNameDateFormat, BulgarianCultureInfo).Month;
             int year = int.Parse(rawDateInputArgs[1]);
 
             scrapeModel.ManufacturingDate = new DateTime(year, month, 1);

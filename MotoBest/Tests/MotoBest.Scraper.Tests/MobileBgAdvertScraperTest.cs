@@ -137,15 +137,6 @@
             Assert.AreEqual(pathScrapeModelPairs[path].LastModifiedOn, originalScrapeModel.LastModifiedOn);
         }
 
-        [TestCase(BmwPath, BmwUrl)]
-        [TestCase(RenaultPath, RenaultUrl)]
-        [TestCase(HondaPath, HondaUrl)]
-        public void ParseRemoteId_Should_Work_Correctly(string path, string url)
-        {
-            MobileBgAdvertScraper.ParseRemoteId(url, originalScrapeModel);
-            Assert.AreEqual(pathScrapeModelPairs[path].RemoteId, originalScrapeModel.RemoteId);
-        }
-
         [TestCase(BmwPath)]
         [TestCase(RenaultPath)]
         [TestCase(HondaPath)]
