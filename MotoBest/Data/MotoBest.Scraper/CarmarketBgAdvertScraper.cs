@@ -44,7 +44,7 @@
 
             model.Title = ScrapeTitle(document);
             model.Description = ScrapeDescription(document);
-            model.LastModifiedOn = ScrapeLastModifiedOn(document, remoteId);
+            model.LastModifiedOn = ScrapeLastModifiedOn(document);
             model.RegionName = ScrapeRegionName(document);
             model.ImageUrls = ScrapeImageUrls(document);
             model.IsNewImport = ScrapeImportValue(document);
@@ -115,32 +115,23 @@
             return SanitizeText(document.QuerySelector("span.cmOfferRegion")?.TextContent, "Регион:").Trim();
         }
 
-        public static DateTime ScrapeLastModifiedOn(IDocument document, string remoteId)
+        public static DateTime ScrapeLastModifiedOn(IDocument document)
         {
-            try
-            {
-                var dateTimeTag = document.QuerySelector("div.cmOfferStatus > time");
-                var date = DateTime.ParseExact(dateTimeTag.GetAttribute("datetime"), "yyyy-MM-dd", BulgarianCultureInfo);
-                var args = dateTimeTag.TextContent.Split(Whitespace, StringSplitOptions.RemoveEmptyEntries);
-                var timeArgs = args[2].Split(":");
-                int hour = int.Parse(timeArgs[0]);
-                int minute = int.Parse(timeArgs[1]);
-                return new DateTime(date.Year, date.Month, date.Day, hour, minute, 0);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(remoteId);
-                Console.WriteLine(e.Message);
-                return DateTime.Now;
-            }
+            var dateTimeTag = document.QuerySelector("div.cmOfferStatus > time");
+            var date = DateTime.ParseExact(dateTimeTag.GetAttribute("datetime"), "yyyy-MM-dd", BulgarianCultureInfo);
+            var args = dateTimeTag.TextContent.Split(Whitespace, StringSplitOptions.RemoveEmptyEntries);
+            var timeArgs = args[2].Split(":");
+            int hour = int.Parse(timeArgs[0]);
+            int minute = int.Parse(timeArgs[1]);
+            return new DateTime(date.Year, date.Month, date.Day, hour, minute, 0);
         }
 
         public static HashSet<string> ScrapeImageUrls(IDocument document)
         {
-            var bigImageTag = document.QuerySelector("section.cmOffer > a") ?? document.QuerySelector("section.cmOffer > img");
-            string bigImageUrl = bigImageTag.HasAttribute("href") ? bigImageTag.GetAttribute("href") : bigImageTag.GetAttribute("src");
-
             var imageUrls = new HashSet<string>();
+
+            string bigImageUrl = document.QuerySelector("section.cmOffer > a")?.GetAttribute("href") 
+                ?? document.QuerySelector("section.cmOffer > img")?.GetAttribute("src");
 
             if (bigImageUrl != null)
             {

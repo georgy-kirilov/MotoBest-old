@@ -21,14 +21,14 @@
         {
             Console.OutputEncoding = Encoding.UTF8;
 
-            //var db = new ApplicationDbContext();
-            //await db.Database.EnsureDeletedAsync();
-            //await db.Database.EnsureCreatedAsync();
+            var db = new ApplicationDbContext();
+            await db.Database.EnsureDeletedAsync();
+            await db.Database.EnsureCreatedAsync();
 
             Console.WriteLine("Database created");
 
-            //var service = new AdvertsService(db);
-
+            var service = new AdvertsService(db);
+            
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
@@ -38,12 +38,12 @@
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            await scraper.ScrapeAllAdvertsAsync(model =>
+            await scraper.ScrapeAllAdvertsAsync(async model =>
             {
                 Console.WriteLine($"{model.EuroStandardType}:{model.ManufacturingDate.Date.ToString("dd-MMM-yyyy")}");
-                //using var dbContext = new ApplicationDbContext();
-                //service = new AdvertsService(dbContext);
-                //await service.AddAdvertAsync(model);
+                using var dbContext = new ApplicationDbContext();
+                service = new AdvertsService(dbContext);
+                await service.AddAdvertAsync(model);
             });
 
             stopwatch.Stop();
@@ -65,11 +65,12 @@
         public static async Task<HashSet<string>> GetCarsBgColorsAsync(IBrowsingContext context)
         {
             string text = await File.ReadAllTextAsync("./Resources/cars.bg-colors.html");
-            var dom = await context.OpenAsync(x => x.Content(text));
+            var document = await context.OpenAsync(x => x.Content(text));
 
-            return dom.QuerySelectorAll("div.mdc-chip-set mdc-chip-set--choice > label")
-               .Select(l => l.QuerySelector("span > label").TextContent.Trim().ToLower())
-               .ToHashSet();
+            return document
+                    .QuerySelectorAll("div.mdc-chip-set mdc-chip-set--choice > label")
+                    .Select(l => l.QuerySelector("span > label")?.TextContent.Trim().ToLower())
+                    .ToHashSet();
         }
 
         public static async Task<HashSet<string>> GetCarmarketColorsAsync(IBrowsingContext context)
