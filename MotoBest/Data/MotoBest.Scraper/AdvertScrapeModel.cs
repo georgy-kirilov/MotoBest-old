@@ -8,6 +8,7 @@
         public AdvertScrapeModel()
         {
             ImageUrls = new HashSet<string>();
+            IsEuroStandardExact = true;
         }
 
         public string AdvertUrlFormat { get; set; }

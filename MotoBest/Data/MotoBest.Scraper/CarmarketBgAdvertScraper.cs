@@ -32,16 +32,6 @@
             { "цвят", ParseColorName },
         };
 
-        private static readonly SortedDictionary<DateTime, string> EuroStandardsByDateTable = new()
-        {
-            { new DateTime(1992, 12, 31), "Евро 1" },
-            { new DateTime(1997, 1, 1), "Евро 2" },
-            { new DateTime(2001, 1, 1), "Евро 3" },
-            { new DateTime(2006, 1, 1), "Евро 4" },
-            { new DateTime(2011, 1, 1), "Евро 5" },
-            { new DateTime(2015, 9, 1), "Евро 6" },
-        };
-
         public CarmarketBgAdvertScraper(IBrowsingContext browsingContext) : base(CarmarketBgAdvertUrlFormat, CarmarketBgAdvertProviderName)
         {
             this.browsingContext = browsingContext;
@@ -62,7 +52,8 @@
 
             ScrapeBrandAndModelName(document, model);
             ScrapeTechnicalCharacteristics(document, model);
-            ParseEuroStandard(model);
+
+            model.EuroStandardType = EstimateEuroStandard(model);
 
             return model;
         }
@@ -77,7 +68,9 @@
                                             .TextContent
                                             .Replace(Whitespace, string.Empty));
 
-            for (int advertIndex = 200; advertIndex < advertsCount / 15; advertIndex++)
+            int advertsPerPage = 15;
+
+            for (int advertIndex = 1; advertIndex <= advertsCount / advertsPerPage; advertIndex++)
             {
                 string url = string.Format(AdvertSearchUrlFormat, advertIndex);
                 var document = await browsingContext.OpenAsync(url);
@@ -219,24 +212,6 @@
 
                 TechnicalParsingTable[technicalPair.Key].Invoke(technicalPair.Value, model);
             }
-        }
-
-        public static void ParseEuroStandard(AdvertScrapeModel model)
-        {
-            string currentEuroStandardType = null;
-
-            foreach (var euroStandardDatePair in EuroStandardsByDateTable)
-            {
-                if (euroStandardDatePair.Key.CompareTo(model.ManufacturingDate) > 0)
-                {
-                    break;
-                }
-
-                currentEuroStandardType = euroStandardDatePair.Value;
-            }
-
-            model.EuroStandardType = currentEuroStandardType;
-            model.IsEuroStandardExact = model.EuroStandardType == null;
         }
 
         public static void ParsePrice(string input, AdvertScrapeModel model)

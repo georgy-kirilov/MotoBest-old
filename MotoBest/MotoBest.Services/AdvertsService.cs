@@ -48,6 +48,7 @@
             advert.Town = modelFactory.CreateTown(scrapeModel, advert.Region);
             advert.EuroStandard = modelFactory.CreateEuroStandard(scrapeModel);
             advert.Condition = modelFactory.CreateCondition(scrapeModel);
+
             advert.Views = scrapeModel.Views;
             advert.Kilometrage = scrapeModel.Kilometrage;
             advert.HorsePowers = scrapeModel.HorsePowers;
@@ -58,6 +59,7 @@
             advert.LastModifiedOn = scrapeModel.LastModifiedOn;
             advert.IsNewImport = scrapeModel.IsNewImport;
             advert.HasFourDoors = scrapeModel.HasFourDoors;
+            advert.IsEuroStandardExact = scrapeModel.IsEuroStandardExact;
 
             foreach (string imageUrl in scrapeModel.ImageUrls)
             {
