@@ -6,13 +6,17 @@
 
     public class TransmissionSeeder : ISeeder
     {
+        public const string Manual = "ръчна";
+        public const string Automatic = "автоматична";
+        public const string SemiAutomatic = "полуавтоматична";
+
         public async Task SeedAsync(ApplicationDbContext dbContext)
         {
             var transmissions = new Transmission[]
             {
-                new Transmission { Type = "Ръчна" },
-                new Transmission { Type = "Автоматична" },
-                new Transmission { Type = "Полуавтоматична" },
+                new Transmission { Type = Manual },
+                new Transmission { Type = Automatic },
+                new Transmission { Type = SemiAutomatic },
             };
 
             await dbContext.Transmissions.AddRangeAsync(transmissions);

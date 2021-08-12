@@ -68,17 +68,17 @@
             throw new NotImplementedException();
         }
 
-        public static string ScrapeTitle(IDocument document)
-        {
-            return document.QuerySelector("h2")?.TextContent.Trim();
-        }
-
         public async Task<int> ScrapeViewsAsync(string remoteId)
         {
             string url = $"https://stats.cars.bg/get/?object_id={remoteId}";
             var response = await httpClient.GetAsync(url);
             string content = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<ViewsInfo>(content).ViewsCount;
+        }
+
+        public static string ScrapeTitle(IDocument document)
+        {
+            return document.QuerySelector("h2")?.TextContent.Trim();
         }
 
         public static string ScrapeDescription(IDocument document)
@@ -88,7 +88,7 @@
 
         public static decimal? ScrapePrice(IDocument document)
         {
-            string input = document.QuerySelector("div.offer-price > strong")?.TextContent.Replace("лв.", string.Empty).Trim();
+            string input = SanitizeText(document.QuerySelector("div.offer-price > strong")?.TextContent, "лв.").Trim();
 
             if (input == null)
             {
@@ -100,6 +100,9 @@
 
         public static string[] ScrapeTechnicalCharacteristics(IDocument document)
         {
+            var args = document.QuerySelector("div.text-copy > div.text-copy")?.TextContent.Split(", ");
+
+
             var stringsToReplace = new string[]
             {
                 "Употребяван автомобил,",
@@ -109,7 +112,7 @@
                 "4/5 врати,",
             };
 
-            var builder = new StringBuilder(document.QuerySelector("div.text-copy > div.text-copy")?.TextContent);
+            var builder = new StringBuilder();
 
             foreach (string stringToReplace in stringsToReplace)
             {

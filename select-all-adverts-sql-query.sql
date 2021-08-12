@@ -36,7 +36,3 @@ join Regions as r on r.Id = a.RegionId
 join Transmissions as t on t.Id = a.TransmissionId
 join EuroStandards as es on es.Id = a.EuroStandardId
 left join Towns as town on town.Id = a.TownId
-
-order by [Remote Id]
-
-select count(distinct RemoteId) from Adverts
