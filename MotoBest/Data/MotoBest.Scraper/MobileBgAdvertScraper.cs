@@ -2,11 +2,11 @@
 {
     using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using System.Collections.Generic;
 
-    using AngleSharp.Dom;
-    using System.Threading.Tasks;
     using AngleSharp;
+    using AngleSharp.Dom;
 
     using static Utilities;
 
@@ -14,13 +14,11 @@
     {
         public const string MobileBgAdvertUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv={0}";
         public const string MobileBgAdvertProviderName = "mobile.bg";
-        public const string MobileBgSearchUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=3&slink=l3kesi&f1={0}";
-
-        private delegate void TechnicalCharacteristicsParser(string input, AdvertScrapeModel scrapeModel);
+        public const string MobileBgSearchUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=3&slink=l3kqkm&f1={0}";
 
         private HashSet<string> features = new HashSet<string>();
 
-        private static readonly Dictionary<string, TechnicalCharacteristicsParser> CharacteristicsParsingTable = new()
+        private static readonly Dictionary<string, Action<string, AdvertScrapeModel>> CharacteristicsParsingTable = new()
         {
             { "дата на производство", ParseManufacturingDate },
             { "тип двигател", ParseEngineType },
@@ -74,7 +72,7 @@
         {
             int pagesCount = 150;
 
-            for (int pageIndex = 15; pageIndex <= pagesCount; pageIndex++)
+            for (int pageIndex = 1; pageIndex <= pagesCount; pageIndex++)
             {
                 var document = await browsingContext.OpenAsync(string.Format(MobileBgSearchUrlFormat, pageIndex));
                 var urls = document.QuerySelectorAll("a.mmm").Select(a => a.GetAttribute("href"));
@@ -90,6 +88,7 @@
 
         public override Task ScrapeLatestAdvertsAsync(Action<AdvertScrapeModel> action)
         {
+            // TODO: Implement ScrapeLatestAdvertsAsync
             throw new NotImplementedException();
         }
 

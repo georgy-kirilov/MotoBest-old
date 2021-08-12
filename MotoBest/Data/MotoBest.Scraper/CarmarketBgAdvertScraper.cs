@@ -12,8 +12,8 @@
 
     public class CarmarketBgAdvertScraper : AdvertScraper
     {
-        public const string CarmarketBgAdvertUrlFormat = "https://www.carmarket.bg/{0}";
         public const string CarmarketBgAdvertProviderName = "carmarket.bg";
+        public const string CarmarketBgAdvertUrlFormat = "https://www.carmarket.bg/{0}";
         public const string AdvertSearchUrlFormat = "https://www.carmarket.bg/obiavi/{0}?sort=1";
 
         private static readonly Dictionary<string, Action<string, AdvertScrapeModel>> TechnicalParsingTable = new()
@@ -68,8 +68,6 @@
 
             int pagesCount = advertsCount / advertsPerPage;
 
-            pagesCount = 5;
-
             for (int pageIndex = 1; pageIndex <= pagesCount; pageIndex++)
             {
                 string url = string.Format(AdvertSearchUrlFormat, pageIndex);
@@ -90,7 +88,7 @@
 
         public override Task ScrapeLatestAdvertsAsync(Action<AdvertScrapeModel> action)
         {
-            //TODO: Implement ScrapeLatestAdvertsAsync
+            // TODO: Implement ScrapeLatestAdvertsAsync
             throw new NotImplementedException();
         }
 
