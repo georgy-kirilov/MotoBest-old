@@ -12,14 +12,14 @@
 
     using static Utilities;
 
-    public class CarsBgWebScraper : AdvertScraper
+    public class CarsBgAdvertScraper : AdvertScraper
     {
         public const string CarsBgAdvertUrlFormat = "https://www.cars.bg/offer/{0}";
         public const string CarsBgAdvertProviderName = "cars.bg";
 
         private readonly HttpClient httpClient;
 
-        public CarsBgWebScraper(IBrowsingContext browsingContext) 
+        public CarsBgAdvertScraper(IBrowsingContext browsingContext) 
             : base(browsingContext, CarsBgAdvertUrlFormat, CarsBgAdvertProviderName)
         {
             httpClient = new HttpClient();

@@ -10,7 +10,7 @@
 
     using static Utilities;
 
-    public class CarmarketBgAdvertScraper : AdvertScraper
+    public class CarmarketAdvertScraper : AdvertScraper
     {
         public const string CarmarketBgAdvertProviderName = "carmarket.bg";
         public const string CarmarketBgAdvertUrlFormat = "https://www.carmarket.bg/{0}";
@@ -30,7 +30,7 @@
             { "цвят", ParseColorName },
         };
 
-        public CarmarketBgAdvertScraper(IBrowsingContext browsingContext) 
+        public CarmarketAdvertScraper(IBrowsingContext browsingContext) 
             : base(browsingContext, CarmarketBgAdvertUrlFormat, CarmarketBgAdvertProviderName)
         {
         }
@@ -58,14 +58,8 @@
 
         public override async Task ScrapeAllAdvertsAsync(Action<AdvertScrapeModel> action)
         {
-            string firstPageUrl = string.Format(AdvertSearchUrlFormat, string.Empty);
-            var firstPageDocument = await browsingContext.OpenAsync(firstPageUrl);
-
             int advertsPerPage = 15;
-
-            int advertsCount = int.Parse(SanitizeText(
-                                firstPageDocument.QuerySelector("span.foundOffers > strong")?.TextContent, Whitespace));
-
+            int advertsCount = await ScrapeAllAdvertsCountAsync();
             int pagesCount = advertsCount / advertsPerPage;
 
             for (int pageIndex = 1; pageIndex <= pagesCount; pageIndex++)
@@ -264,6 +258,14 @@
         public static void ParseColorName(string input, AdvertScrapeModel model)
         {
             model.ColorName = input;
+        }
+
+        public async Task<int> ScrapeAllAdvertsCountAsync()
+        {
+            string query = "span.foundOffers > strong";
+            string firstPageUrl = string.Format(AdvertSearchUrlFormat, string.Empty);
+            var firstPageDocument = await browsingContext.OpenAsync(firstPageUrl);
+            return int.Parse(SanitizeText(firstPageDocument.QuerySelector(query)?.TextContent, Whitespace));
         }
     }
 }

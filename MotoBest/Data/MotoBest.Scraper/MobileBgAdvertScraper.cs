@@ -16,7 +16,7 @@
         public const string MobileBgAdvertProviderName = "mobile.bg";
         public const string MobileBgSearchUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=3&slink=l3kqkm&f1={0}";
 
-        private HashSet<string> features = new HashSet<string>();
+        private HashSet<string> features = new();
 
         private static readonly Dictionary<string, Action<string, AdvertScrapeModel>> CharacteristicsParsingTable = new()
         {
