@@ -11,6 +11,7 @@
     using System.Text.Json.Serialization;
 
     using static Utilities;
+    using System.Linq;
 
     public class CarsBgAdvertScraper : AdvertScraper
     {
@@ -35,7 +36,7 @@
             advert.Views = await ScrapeViewsAsync(remoteId);
             advert.Price = ScrapePrice(document);
 
-            var characteristics = ScrapeTechnicalCharacteristics(document);
+            var characteristics = ScrapeTechnicalCharacteristics(document).Select(x => x.ToLower()).ToArray();
 
             advert.ManufacturingDate = ParseManufacturingDate(characteristics[0]);
             advert.BodyStyleName = ParseBodyStyleName(characteristics[1]);
@@ -48,6 +49,11 @@
 
             advert.EuroStandardType = euroStandard.StartsWith("EURO") ? euroStandard : null;
             advert.ColorName = ParseColorName(characteristics[^1]);
+
+            if (advert.EuroStandardType == null)
+            {
+                advert.EuroStandardType = EstimateEuroStandard(advert);
+            }
 
             return advert;
         }
@@ -62,7 +68,7 @@
             throw new NotImplementedException();
         }
 
-        public string ScrapeTitle(IDocument document)
+        public static string ScrapeTitle(IDocument document)
         {
             return document.QuerySelector("h2")?.TextContent.Trim();
         }
