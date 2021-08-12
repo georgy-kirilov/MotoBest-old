@@ -14,6 +14,7 @@
     using System.Text.Json;
     using System.Diagnostics;
     using System.Text;
+    using System.Threading;
 
     public class Program
     {
@@ -21,19 +22,53 @@
         {
             /*Console.OutputEncoding = Encoding.UTF8;
 
-            var db = new ApplicationDbContext();
-            await db.Database.EnsureDeletedAsync();
-            await db.Database.EnsureCreatedAsync();
+            
 
             Console.WriteLine("Database created");
 
-            var service = new AdvertsService(db);*/
-            
+            var service = new AdvertsService(db);
+
+            Task.Run(() =>
+            {
+                for (int i = 0; i < 60; i++)
+                {
+                    Thread.Sleep(2000);
+                    Console.WriteLine(i);
+                }
+            });*/
+
+            var db = new ApplicationDbContext();
+            await db.Database.EnsureDeletedAsync();
+            Console.WriteLine("Database deleted");
+            await db.Database.EnsureCreatedAsync();
+            Console.WriteLine("Database created");
+
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
-            var scraper = new MobileBgAdvertScraper(context);
-            var advert = await scraper.ScrapeAdvertAsync("11622188754581401");
+            var carmarketScraper = new MobileBgAdvertScraper(context);
+
+            await carmarketScraper.ScrapeAllAdvertsAsync(async model =>
+            {
+                using var dbContext = new ApplicationDbContext();
+                var service = new AdvertsService(dbContext);
+                await service.AddAdvertAsync(model);
+            });
+            
+            /*new Thread(async () =>
+            {
+                var mobileScraper = new MobileBgAdvertScraper(context);
+
+                mobileScraper.ScrapeAllAdvertsAsync(async model =>
+                {
+                    using var dbContext = new ApplicationDbContext();
+                    var service = new AdvertsService(dbContext);
+                    await service.AddAdvertAsync(model);
+                    Console.WriteLine("mobile");
+                });
+            }).Start();
+
+            Console.ReadLine();
 
             /*var exceptions = new List<Exception>();
 

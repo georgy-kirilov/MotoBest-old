@@ -66,9 +66,13 @@
             int advertsCount = int.Parse(SanitizeText(
                                 firstPageDocument.QuerySelector("span.foundOffers > strong")?.TextContent, Whitespace));
 
-            for (int advertIndex = 1; advertIndex <= advertsCount / advertsPerPage; advertIndex++)
+            int pagesCount = advertsCount / advertsPerPage;
+
+            pagesCount = 5;
+
+            for (int pageIndex = 1; pageIndex <= pagesCount; pageIndex++)
             {
-                string url = string.Format(AdvertSearchUrlFormat, advertIndex);
+                string url = string.Format(AdvertSearchUrlFormat, pageIndex);
                 var document = await browsingContext.OpenAsync(url);
 
                 var ids = document.QuerySelectorAll("div.cmOffersList > div.cmOffersListItem")

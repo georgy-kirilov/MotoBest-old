@@ -14,6 +14,7 @@
     {
         public const string MobileBgAdvertUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv={0}";
         public const string MobileBgAdvertProviderName = "mobile.bg";
+        public const string MobileBgSearchUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=3&slink=l3kesi&f1={0}";
 
         private delegate void TechnicalCharacteristicsParser(string input, AdvertScrapeModel scrapeModel);
 
@@ -69,9 +70,22 @@
             return model;
         }
 
-        public override Task ScrapeAllAdvertsAsync(Action<AdvertScrapeModel> action)
+        public override async Task ScrapeAllAdvertsAsync(Action<AdvertScrapeModel> action)
         {
-            throw new NotImplementedException();
+            int pagesCount = 150;
+
+            for (int pageIndex = 15; pageIndex <= pagesCount; pageIndex++)
+            {
+                var document = await browsingContext.OpenAsync(string.Format(MobileBgSearchUrlFormat, pageIndex));
+                var urls = document.QuerySelectorAll("a.mmm").Select(a => a.GetAttribute("href"));
+
+                foreach (string url in urls)
+                {
+                    string remoteId = url.Split("?")[1].Split("&")[1].Split("=")[1];
+                    var advert = await ScrapeAdvertAsync(remoteId);
+                    action.Invoke(advert);
+                }
+            }
         }
 
         public override Task ScrapeLatestAdvertsAsync(Action<AdvertScrapeModel> action)
@@ -131,12 +145,22 @@
         public static HashSet<string> ScrapeFeatures(IDocument document)
         {
             char bullet = (char) 0x2022;
+            int featuresTableIndex = 2;
+            var tableElements = document.QuerySelectorAll("table[width=660][cellspacing=0]");
 
-            return document.QuerySelectorAll("table[width=660]")?[2]
-                           .QuerySelector("tr")?.TextContent
-                           .Split(new char[] { bullet, NewLine }, StringSplitOptions.RemoveEmptyEntries)
-                           .Select(x => x.Trim().ToLower())
-                           .ToHashSet();
+            var allAdvertFeatures = new HashSet<string>();
+
+            if (tableElements.Length > featuresTableIndex)
+            {
+                allAdvertFeatures = tableElements[featuresTableIndex]
+                                        .QuerySelector("tr")?
+                                        .TextContent
+                                        .Split(new char[] { bullet, NewLine }, StringSplitOptions.RemoveEmptyEntries)
+                                        .Select(x => x.Trim().ToLower())
+                                        .ToHashSet();
+            }
+
+            return allAdvertFeatures;
         }
 
         public static int ScrapeViews(IDocument document)
