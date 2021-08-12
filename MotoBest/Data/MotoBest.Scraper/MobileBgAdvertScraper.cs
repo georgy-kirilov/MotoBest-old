@@ -29,6 +29,7 @@
             { "пробег", ParseKilometrage },
             { "цвят", ParseColorName },
             { "евростандарт", ParseEuroStandard },
+            { "състояние", ParseCondition },
         };
 
         public MobileBgAdvertScraper(IBrowsingContext browsingContext) 
@@ -59,6 +60,11 @@
 
             ScrapeImageUrls(document, model);
             ScrapeRegionAndTownName(document, model);
+
+            if (model.EuroStandardType == null)
+            {
+                model.EuroStandardType = EstimateEuroStandard(model);
+            }
 
             return model;
         }
@@ -253,6 +259,11 @@
         public static void ParseEuroStandard(string input, AdvertScrapeModel scrapeModel)
         {
             scrapeModel.EuroStandardType = input?.Trim();
+        }
+
+        public static void ParseCondition(string input, AdvertScrapeModel scrapeModel)
+        {
+            scrapeModel.Condition = input?.Trim();
         }
     }
 }

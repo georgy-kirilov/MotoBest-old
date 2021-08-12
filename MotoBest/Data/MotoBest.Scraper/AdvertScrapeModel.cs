@@ -5,10 +5,13 @@
 
     public class AdvertScrapeModel
     {
+        public const string DefaultConditionValue = "употребяван";
+
         public AdvertScrapeModel()
         {
             ImageUrls = new HashSet<string>();
             IsEuroStandardExact = true;
+            Condition = DefaultConditionValue;
         }
 
         public string AdvertUrlFormat { get; set; }

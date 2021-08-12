@@ -33,7 +33,7 @@
             var context = BrowsingContext.New(config);
 
             var scraper = new MobileBgAdvertScraper(context);
-            var advert = await scraper.ScrapeAdvertAsync("11628669874236365");
+            var advert = await scraper.ScrapeAdvertAsync("11622188754581401");
 
             /*var exceptions = new List<Exception>();
 
