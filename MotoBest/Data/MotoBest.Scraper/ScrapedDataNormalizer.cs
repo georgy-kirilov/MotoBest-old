@@ -1,11 +1,13 @@
 ﻿namespace MotoBest.Scraper
 {
+    using System;
     using System.Collections.Generic;
 
     using static MotoBest.Seeder.EngineSeeder;
     using static MotoBest.Seeder.ConditionSeeder;
     using static MotoBest.Seeder.TransmissionSeeder;
     using static MotoBest.Seeder.BodyStyleSeeder;
+    using static MotoBest.Seeder.EuroStandardSeeder;
 
     public class ScrapedDataNormalizer
     {
@@ -67,6 +69,16 @@
             { BusOrMinibus, BusOrMinibus },
         };
 
+        private static readonly SortedDictionary<DateTime, string> EuroStandardsByDateTable = new()
+        {
+            { new DateTime(1992, 12, 31), EuroOne },
+            { new DateTime(1997, 1, 1), EuroTwo },
+            { new DateTime(2001, 1, 1), EuroThree },
+            { new DateTime(2006, 1, 1), EuroFour },
+            { new DateTime(2011, 1, 1), EuroFive },
+            { new DateTime(2015, 9, 1), EuroSix },
+        };
+
         public static string NormalizeEngine(string engine)
         {
             if (engine == null)
@@ -109,6 +121,24 @@
 
             string lowerBodyStyle = bodyStyle.ToLower();
             return BodyStyleVariations.ContainsKey(lowerBodyStyle) ? BodyStyleVariations[lowerBodyStyle] : null;
+        }
+
+        public static string EstimateEuroStandard(AdvertScrapeModel model)
+        {
+            model.IsEuroStandardExact = false;
+            string currentEuroStandardType = null;
+
+            foreach (var euroStandardDatePair in EuroStandardsByDateTable)
+            {
+                if (euroStandardDatePair.Key.CompareTo(model.ManufacturingDate) > 0)
+                {
+                    break;
+                }
+
+                currentEuroStandardType = euroStandardDatePair.Value;
+            }
+
+            return currentEuroStandardType;
         }
     }
 }
