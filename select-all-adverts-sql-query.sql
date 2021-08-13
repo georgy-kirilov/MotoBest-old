@@ -1,6 +1,6 @@
 use [MotoBest]
 
-select distinct a.RemoteId,
+select
 	ap.Name as [Provider],
 	a.RemoteId as [Remote Id],
 	a.Title as [Title],
@@ -21,7 +21,9 @@ select distinct a.RemoteId,
 		when a.HasFourDoors = 0 then '2/3'
 		when a.HasFourDoors = 1 then '4/5'
 	end as [Doors],
-	a.Views as [Views]
+	a.Views as [Views],
+	a.Description,
+	a.LastModifiedOn as [Last Modified On]
 
 from Adverts as a
 

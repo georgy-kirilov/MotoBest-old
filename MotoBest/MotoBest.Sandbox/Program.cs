@@ -12,22 +12,22 @@
     {
         public static async Task Main()
         {
+            //await new ApplicationDbContext().Database.EnsureDeletedAsync();
             await new ApplicationDbContext().Database.EnsureCreatedAsync();
 
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
-            AdvertScraper scraper = new CarsBgAdvertScraper(context);
-            var advert = await scraper.ScrapeAdvertAsync("600305de963dfb15a5465b82");
-
-            /*
-            await scraper.ScrapeAllAdvertsAsync(async model =>
+            AdvertScraper scraper = new MobileBgAdvertScraper(context);
+            var model = await scraper.ScrapeAdvertAsync("11622188754581401");
+            await new AdvertsService(new ApplicationDbContext()).AddAdvertAsync(model);
+            
+            /*await scraper.ScrapeAllAdvertsAsync(async model =>
             {
                 using var dbContext = new ApplicationDbContext();
                 var service = new AdvertsService(dbContext);
                 await service.AddAdvertAsync(model);
-            });
-            */
+            });*/
         }
     }
 }

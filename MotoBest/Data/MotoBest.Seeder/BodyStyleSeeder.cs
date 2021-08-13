@@ -16,6 +16,7 @@
         public const string Pickup = "пикап";
         public const string Minivan = "миниван";
         public const string StretchLimousine = "стреч лимузина";
+        public const string BusOrMinibus = "бус/минибус";
 
         public async Task SeedAsync(ApplicationDbContext dbContext)
         {
@@ -31,6 +32,7 @@
                 new BodyStyle { Name = Pickup },
                 new BodyStyle { Name = Minivan },
                 new BodyStyle { Name = StretchLimousine },
+                new BodyStyle { Name = BusOrMinibus },
             };
 
             await dbContext.AddRangeAsync(bodyStyles);

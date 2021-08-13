@@ -9,12 +9,12 @@
     {
         public static readonly SortedDictionary<DateTime, string> EuroStandardsByDateTable = new()
         {
-            { new DateTime(1992, 12, 31), "Евро 1" },
-            { new DateTime(1997, 1, 1), "Евро 2" },
-            { new DateTime(2001, 1, 1), "Евро 3" },
-            { new DateTime(2006, 1, 1), "Евро 4" },
-            { new DateTime(2011, 1, 1), "Евро 5" },
-            { new DateTime(2015, 9, 1), "Евро 6" },
+            { new DateTime(1992, 12, 31), "евро 1" },
+            { new DateTime(1997, 1, 1), "евро 2" },
+            { new DateTime(2001, 1, 1), "евро 3" },
+            { new DateTime(2006, 1, 1), "евро 4" },
+            { new DateTime(2011, 1, 1), "евро 5" },
+            { new DateTime(2015, 9, 1), "евро 6" },
         };
 
         public static readonly CultureInfo BulgarianCultureInfo = new("bg-BG");

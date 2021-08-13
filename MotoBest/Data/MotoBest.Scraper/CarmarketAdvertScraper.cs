@@ -9,6 +9,7 @@
     using System.Collections.Generic;
 
     using static Utilities;
+    using static ScrapedDataNormalizer;
 
     public class CarmarketAdvertScraper : AdvertScraper
     {
@@ -52,6 +53,11 @@
             ScrapeTechnicalCharacteristics(document, model);
 
             model.EuroStandardType = EstimateEuroStandard(model);
+
+            model.BodyStyleName = NormalizeBodyStyle(model.BodyStyleName);
+            model.EngineType = NormalizeEngine(model.EngineType);
+            model.Condition = NormalizeCondition(model.Condition);
+            model.TransmissionType = NormalizeTransmission(model.TransmissionType);
 
             return model;
         }

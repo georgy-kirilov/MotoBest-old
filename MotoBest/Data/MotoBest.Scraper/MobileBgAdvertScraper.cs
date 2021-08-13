@@ -9,6 +9,7 @@
     using AngleSharp.Dom;
 
     using static Utilities;
+    using static ScrapedDataNormalizer;
 
     public class MobileBgAdvertScraper : AdvertScraper
     {
@@ -64,6 +65,11 @@
             {
                 model.EuroStandardType = EstimateEuroStandard(model);
             }
+
+            model.BodyStyleName = NormalizeBodyStyle(model.BodyStyleName);
+            model.EngineType = NormalizeEngine(model.EngineType);
+            model.Condition = NormalizeCondition(model.Condition);
+            model.TransmissionType = NormalizeTransmission(model.TransmissionType);
 
             return model;
         }
@@ -281,7 +287,7 @@
 
         public static void ParseEuroStandard(string input, AdvertScrapeModel scrapeModel)
         {
-            scrapeModel.EuroStandardType = input?.Trim();
+            scrapeModel.EuroStandardType = input?.Trim().ToLower();
         }
 
         public static void ParseCondition(string input, AdvertScrapeModel scrapeModel)
