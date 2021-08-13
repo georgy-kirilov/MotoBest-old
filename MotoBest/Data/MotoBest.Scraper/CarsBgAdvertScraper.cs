@@ -4,6 +4,7 @@
     using AngleSharp.Dom;
 
     using System;
+    using System.Linq;
     using System.Text;
     using System.Net.Http;
     using System.Text.Json;
@@ -11,7 +12,7 @@
     using System.Text.Json.Serialization;
 
     using static Utilities;
-    using System.Linq;
+    using static ScrapedDataNormalizer;
 
     public class CarsBgAdvertScraper : AdvertScraper
     {

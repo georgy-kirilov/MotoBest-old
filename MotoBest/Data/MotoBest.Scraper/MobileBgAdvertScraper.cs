@@ -13,9 +13,9 @@
 
     public class MobileBgAdvertScraper : AdvertScraper
     {
-        public const string MobileBgAdvertUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv={0}";
         public const string MobileBgAdvertProviderName = "mobile.bg";
-        public const string MobileBgSearchUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=3&slink=l3kqkm&f1={0}";
+        public const string MobileBgAdvertUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv={0}";
+        public const string MobileBgSearchUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=3&slink=l40dr7&f1={0}";
 
         private HashSet<string> features = new();
 
@@ -105,7 +105,7 @@
 
         public static string ScrapeDescription(IDocument document)
         {
-            return document.QuerySelectorAll("form[name='search'] > table")[2]
+            return document.QuerySelectorAll("form[name='search'] > table")?[2]
                            .QuerySelector("tbody > tr > td")?
                            .TextContent
                            .Trim();
