@@ -23,7 +23,8 @@ select
 	end as [Doors],
 	a.Views as [Views],
 	a.Description,
-	a.LastModifiedOn as [Last Modified On]
+	a.LastModifiedOn as [Last Modified On],
+	a.IsNewImport as [New Import]
 
 from Adverts as a
 
@@ -38,3 +39,5 @@ join Regions as r on r.Id = a.RegionId
 join Transmissions as t on t.Id = a.TransmissionId
 join EuroStandards as es on es.Id = a.EuroStandardId
 left join Towns as town on town.Id = a.TownId
+
+order by a.Price desc
