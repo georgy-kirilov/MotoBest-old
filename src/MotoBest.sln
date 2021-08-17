@@ -11,13 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Data", "Data\MotoB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Models", "Data\MotoBest.Models\MotoBest.Models.csproj", "{0EB601B7-E55F-4D58-90A9-5F5434543A73}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Scraping", "Data\MotoBest.Scraper\MotoBest.Scraping.csproj", "{9FA34223-568F-4DFA-8902-CEBFFC79E96D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Scraping", "Data\MotoBest.Scraping\MotoBest.Scraping.csproj", "{9FA34223-568F-4DFA-8902-CEBFFC79E96D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Services", "MotoBest.Services\MotoBest.Services.csproj", "{9D3355B5-2A20-4EC7-9FD2-E54C6818B838}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Common", "MotoBest.Common\MotoBest.Common.csproj", "{E5CB9095-6EF3-4F3E-82C1-725DF947283A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Seeding", "Data\MotoBest.Seeder\MotoBest.Seeding.csproj", "{4E268B60-D5A7-41AD-A050-03DF2558829D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Seeding", "Data\MotoBest.Seeding\MotoBest.Seeding.csproj", "{4E268B60-D5A7-41AD-A050-03DF2558829D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
