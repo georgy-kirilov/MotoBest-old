@@ -21,61 +21,54 @@
                 ?? new AdvertProvider { Name = scrapeModel.AdvertProviderName, AdvertUrlFormat = scrapeModel.AdvertUrlFormat };
         }
 
-        public Brand CreateBrand(AdvertScrapeModel scrapeModel)
+        public Brand CreateBrand(string brand)
         {
-            if (scrapeModel.BrandName == null)
+            if (brand == null)
             {
                 return null;
             }
 
-            return dbContext.Brands.FirstOrDefault(b => b.Name == scrapeModel.BrandName)
-                ?? new Brand { Name = scrapeModel.BrandName };
+            return dbContext.Brands.FirstOrDefault(b => b.Name == brand) ?? new Brand { Name = brand };
         }
 
-        public Model CreateModel(AdvertScrapeModel scrapeModel, Brand brand)
+        public Model CreateModel(string model, Brand brand)
         {
-            if (scrapeModel.ModelName == null)
+            if (model == null)
             {
                 return null;
             }
 
-            return brand.Models.FirstOrDefault(m => m.Name == scrapeModel.ModelName)
-                ?? new Model { Name = scrapeModel.ModelName, Brand = brand };
+            return brand.Models.FirstOrDefault(m => m.Name == model) ?? new Model { Name = model, Brand = brand };
         }
 
-        public Color CreateColor(AdvertScrapeModel scrapeModel)
+        public Color CreateColor(string color)
         {
-            if (scrapeModel.ColorName == null)
+            if (color == null)
             {
                 return null;
             }
 
-            return dbContext.Colors.FirstOrDefault(c => c.Name == scrapeModel.ColorName) 
-                ?? new Color { Name = scrapeModel.ColorName };
+            return dbContext.Colors.FirstOrDefault(c => c.Name == color) ?? new Color { Name = color };
         }
 
-        public Engine CreateEngine(AdvertScrapeModel scrapeModel)
+        public Engine CreateEngine(string engine)
         {
-            return dbContext.Engines.FirstOrDefault(e => e.Type == scrapeModel.EngineType)
-                ?? new Engine { Type = scrapeModel.EngineType };
+            return dbContext.Engines.FirstOrDefault(e => e.Type == engine) ?? new Engine { Type = engine };
         }
 
-        public Transmission CreateTransmission(AdvertScrapeModel scrapeModel)
+        public Transmission CreateTransmission(string transmission)
         {
-            return dbContext.Transmissions.FirstOrDefault(t => t.Type == scrapeModel.TransmissionType)
-                ?? new Transmission { Type = scrapeModel.TransmissionType };
+            return dbContext.Transmissions.FirstOrDefault(t => t.Type == transmission) ?? new Transmission { Type = transmission };
         }
 
-        public BodyStyle CreateBodyStyle(AdvertScrapeModel scrapeModel)
+        public BodyStyle CreateBodyStyle(string bodyStyle)
         {
-            return dbContext.BodyStyles.FirstOrDefault(bs => bs.Name == scrapeModel.BodyStyleName)
-                ?? new BodyStyle { Name = scrapeModel.BodyStyleName };
+            return dbContext.BodyStyles.FirstOrDefault(bs => bs.Name == bodyStyle) ?? new BodyStyle { Name = bodyStyle };
         }
 
-        public Region CreateRegion(AdvertScrapeModel scrapeModel)
+        public Region CreateRegion(string region)
         {
-            return dbContext.Regions.FirstOrDefault(r => r.Name == scrapeModel.RegionName)
-                ?? new Region { Name = scrapeModel.RegionName };
+            return dbContext.Regions.FirstOrDefault(r => r.Name == region) ?? new Region { Name = region };
         }
 
         public Town CreateTown(AdvertScrapeModel scrapeModel, Region region)
@@ -89,15 +82,14 @@
                 ?? new Town { Name = scrapeModel.TownName, Region = region };
         }
 
-        public EuroStandard CreateEuroStandard(AdvertScrapeModel scrapeModel)
+        public EuroStandard CreateEuroStandard(string euroStandard)
         {
-            if (scrapeModel.EuroStandardType == null)
+            if (euroStandard == null)
             {
                 return null;
             }
 
-            return dbContext.EuroStandards.FirstOrDefault(es => es.Type == scrapeModel.EuroStandardType) 
-                ?? new EuroStandard { Type = scrapeModel.EuroStandardType };
+            return dbContext.EuroStandards.FirstOrDefault(es => es.Type == euroStandard) ?? new EuroStandard { Type = euroStandard };
         }
 
         public Image CreateImage(string url, Advert advert)
@@ -106,10 +98,9 @@
                 ?? new Image { Advert = advert, Url = url };
         }
 
-        public Condition CreateCondition(AdvertScrapeModel scrapeModel)
+        public Condition CreateCondition(string condition)
         {
-            return dbContext.Conditions.FirstOrDefault(c => c.Type == scrapeModel.Condition) 
-                ?? new Condition { Type = scrapeModel.Condition };
+            return dbContext.Conditions.FirstOrDefault(c => c.Type == condition) ?? new Condition { Type = condition };
         }
     }
 }

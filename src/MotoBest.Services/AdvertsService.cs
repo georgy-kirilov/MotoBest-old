@@ -19,49 +19,49 @@
             modelFactory = new ModelFactory(dbContext);
         }
 
-        public async Task AddAdvertAsync(AdvertScrapeModel scrapeModel)
+        public async Task AddAdvertAsync(AdvertScrapeModel model)
         {
-            if (scrapeModel == null)
+            if (model == null)
             {
-                throw new ArgumentNullException(nameof(scrapeModel));
+                throw new ArgumentNullException(nameof(model));
             }
 
-            AdvertProvider advertProvider = modelFactory.CreateAdvertProvider(scrapeModel);
+            AdvertProvider advertProvider = modelFactory.CreateAdvertProvider(model);
 
-            Advert advert = advertProvider.Adverts.FirstOrDefault(a => a.RemoteId == scrapeModel.RemoteId);
+            Advert advert = advertProvider.Adverts.FirstOrDefault(a => a.RemoteId == model.RemoteId);
             bool isAdvertNew = false;
 
             if (advert == null)
             {
-                advert = new Advert { RemoteId = scrapeModel.RemoteId };
+                advert = new Advert { RemoteId = model.RemoteId };
                 isAdvertNew = true;
             }
 
             advert.AdvertProvider = advertProvider;
-            advert.Brand = modelFactory.CreateBrand(scrapeModel);
-            advert.Model = modelFactory.CreateModel(scrapeModel, advert.Brand);
-            advert.Color = modelFactory.CreateColor(scrapeModel);
-            advert.Engine = modelFactory.CreateEngine(scrapeModel);
-            advert.Transmission = modelFactory.CreateTransmission(scrapeModel);
-            advert.BodyStyle = modelFactory.CreateBodyStyle(scrapeModel);
-            advert.Region = modelFactory.CreateRegion(scrapeModel);
-            advert.Town = modelFactory.CreateTown(scrapeModel, advert.Region);
-            advert.EuroStandard = modelFactory.CreateEuroStandard(scrapeModel);
-            advert.Condition = modelFactory.CreateCondition(scrapeModel);
+            advert.Brand = modelFactory.CreateBrand(model.BrandName);
+            advert.Model = modelFactory.CreateModel(model.ModelName, advert.Brand);
+            advert.Color = modelFactory.CreateColor(model.ColorName);
+            advert.Engine = modelFactory.CreateEngine(model.EngineType);
+            advert.Transmission = modelFactory.CreateTransmission(model.TransmissionType);
+            advert.BodyStyle = modelFactory.CreateBodyStyle(model.BodyStyleName);
+            advert.Region = modelFactory.CreateRegion(model.RegionName);
+            advert.Town = modelFactory.CreateTown(model, advert.Region);
+            advert.EuroStandard = modelFactory.CreateEuroStandard(model.EuroStandardType);
+            advert.Condition = modelFactory.CreateCondition(model.Condition);
 
-            advert.Views = scrapeModel.Views;
-            advert.Kilometrage = scrapeModel.Kilometrage;
-            advert.HorsePowers = scrapeModel.HorsePowers;
-            advert.Title = scrapeModel.Title;
-            advert.Description = scrapeModel.Description;
-            advert.Price = scrapeModel.Price;
-            advert.ManufacturingDate = scrapeModel.ManufacturingDate;
-            advert.LastModifiedOn = scrapeModel.LastModifiedOn;
-            advert.IsNewImport = scrapeModel.IsNewImport;
-            advert.HasFourDoors = scrapeModel.HasFourDoors;
-            advert.IsEuroStandardExact = scrapeModel.IsEuroStandardExact;
+            advert.Views = model.Views;
+            advert.Kilometrage = model.Kilometrage;
+            advert.HorsePowers = model.HorsePowers;
+            advert.Title = model.Title;
+            advert.Description = model.Description;
+            advert.Price = model.Price;
+            advert.ManufacturingDate = model.ManufacturingDate;
+            advert.LastModifiedOn = model.LastModifiedOn;
+            advert.IsNewImport = model.IsNewImport;
+            advert.HasFourDoors = model.HasFourDoors;
+            advert.IsEuroStandardExact = model.IsEuroStandardExact;
 
-            foreach (string imageUrl in scrapeModel.ImageUrls)
+            foreach (string imageUrl in model.ImageUrls)
             {
                 Image image = modelFactory.CreateImage(imageUrl, advert);
                 advert.Images.Add(image);
