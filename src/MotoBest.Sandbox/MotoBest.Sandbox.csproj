@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Data\MotoBest.Data\MotoBest.Data.csproj" />
+    <ProjectReference Include="..\Data\MotoBest.Models\MotoBest.Models.csproj" />
+    <ProjectReference Include="..\Data\MotoBest.Scraper\MotoBest.Scraping.csproj" />
+    <ProjectReference Include="..\MotoBest.Services\MotoBest.Services.csproj" />
+  </ItemGroup>
+
+</Project>
