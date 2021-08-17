@@ -26,12 +26,12 @@
         public const string Sliven = "Сливен";
         public const string Smolyan = "Смолян";
         public const string Sofia = "София";
-        public const string SofiaCapital = "София - град";
         public const string StaraZagora = "Стара Загора";
         public const string Targovishte = "Търговище";
         public const string Haskovo = "Хасково";
         public const string Shumen = "Шумен";
         public const string Yambol = "Ямбол";
+        public const string Abroad = "Извън страната";
 
         public static IEnumerable<string> All()
         {
@@ -59,12 +59,12 @@
                 Sliven,
                 Smolyan,
                 Sofia,
-                SofiaCapital,
                 StaraZagora,
                 Targovishte,
                 Haskovo,
                 Shumen,
                 Yambol,
+                Abroad,
             };
         }
     }

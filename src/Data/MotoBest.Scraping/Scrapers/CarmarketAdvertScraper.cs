@@ -56,7 +56,7 @@
 
             model.EuroStandardType = EstimateEuroStandard(model);
 
-            NormalizeAdvertScrapeModel(model);
+            NormalizeScrapeModel(model);
 
             return model;
         }
@@ -270,14 +270,6 @@
             string firstPageUrl = string.Format(AdvertSearchUrlFormat, string.Empty);
             var firstPageDocument = await browsingContext.OpenAsync(firstPageUrl);
             return int.Parse(SanitizeText(firstPageDocument.QuerySelector(query)?.TextContent, Whitespace));
-        }
-
-        private static void NormalizeAdvertScrapeModel(AdvertScrapeModel model)
-        {
-            model.BodyStyleName = NormalizeBodyStyle(model.BodyStyleName);
-            model.EngineType = NormalizeEngine(model.EngineType);
-            model.Condition = NormalizeCondition(model.Condition);
-            model.TransmissionType = NormalizeTransmission(model.TransmissionType);
         }
     }
 }

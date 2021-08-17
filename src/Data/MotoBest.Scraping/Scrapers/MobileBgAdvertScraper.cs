@@ -68,10 +68,7 @@
                 model.EuroStandardType = EstimateEuroStandard(model);
             }
 
-            model.BodyStyleName = NormalizeBodyStyle(model.BodyStyleName);
-            model.EngineType = NormalizeEngine(model.EngineType);
-            model.Condition = NormalizeCondition(model.Condition);
-            model.TransmissionType = NormalizeTransmission(model.TransmissionType);
+            NormalizeScrapeModel(model);
 
             return model;
         }
@@ -88,7 +85,7 @@
                 foreach (string url in urls)
                 {
                     string remoteId = url.Split("?")[1].Split("&")[1].Split("=")[1];
-                    var advert = await ScrapeAdvertAsync(remoteId);
+                    AdvertScrapeModel advert = await ScrapeAdvertAsync(remoteId);
                     action.Invoke(advert);
                 }
             }

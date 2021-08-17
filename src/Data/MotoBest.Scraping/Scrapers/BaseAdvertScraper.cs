@@ -8,6 +8,8 @@
     using MotoBest.Scraping.Common;
     using MotoBest.Common;
 
+    using static MotoBest.Scraping.Common.ScrapedDataNormalizer;
+
     public abstract class BaseAdvertScraper : IAdvertScraper
     {
         protected readonly IBrowsingContext browsingContext;
@@ -29,18 +31,28 @@
             return string.Format(AdvertUrlFormat, remoteId);
         }
 
+        protected void NormalizeScrapeModel(AdvertScrapeModel model)
+        {
+            model.BodyStyleName = NormalizeBodyStyle(model.BodyStyleName);
+            model.EngineType = NormalizeEngine(model.EngineType);
+            model.Condition = NormalizeCondition(model.Condition);
+            model.TransmissionType = NormalizeTransmission(model.TransmissionType);
+            model.ColorName = NormalizeColor(model.ColorName);
+            model.RegionName = NormalizeRegion(model.RegionName);
+        }
+
         public string AdvertUrlFormat { get; }
 
         public string AdvertProviderName { get; }
 
-        public virtual Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId)
+        public virtual async Task<AdvertScrapeModel> ScrapeAdvertAsync(string remoteId)
         {
-            return new Task<AdvertScrapeModel>(() => new AdvertScrapeModel
+            return new AdvertScrapeModel
             {
                 RemoteId = remoteId,
                 AdvertProviderName = AdvertProviderName,
                 AdvertUrlFormat = AdvertUrlFormat,
-            });
+            };
         }
 
         public abstract Task ScrapeAllAdvertsAsync(Action<AdvertScrapeModel> action);

@@ -4,11 +4,22 @@
 
     using MotoBest.Data;
 
-    public class ApplicationSeeder<T> : ISeeder where T : ISeeder
+    public class ApplicationSeeder : ISeeder
     {
-        private readonly T[] seeders;
+        private readonly ISeeder[] seeders;
 
-        public ApplicationSeeder(params T[] seeders)
+        public ApplicationSeeder() 
+            : this(new BodyStyleSeeder(), 
+                   new ColorSeeder(), 
+                   new ConditionSeeder(), 
+                   new EngineSeeder(), 
+                   new EuroStandardSeeder(), 
+                   new RegionSeeder(), 
+                   new TransmissionSeeder())
+        {
+        }
+
+        public ApplicationSeeder(params ISeeder[] seeders)
         {
             this.seeders = seeders;
         }
