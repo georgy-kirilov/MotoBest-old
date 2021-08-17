@@ -14,7 +14,7 @@
     using static Utilities;
     using static ScrapedDataNormalizer;
 
-    public class CarsBgAdvertScraper : AdvertScraper
+    public class CarsBgAdvertScraper : BaseAdvertScraper
     {
         public const string CarsBgAdvertUrlFormat = "https://www.cars.bg/offer/{0}";
         public const string CarsBgAdvertProviderName = "cars.bg";

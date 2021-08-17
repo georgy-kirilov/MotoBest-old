@@ -11,7 +11,7 @@
     using static Utilities;
     using static ScrapedDataNormalizer;
 
-    public class CarmarketAdvertScraper : AdvertScraper
+    public class CarmarketAdvertScraper : BaseAdvertScraper
     {
         public const string CarmarketBgAdvertProviderName = "carmarket.bg";
         public const string CarmarketBgAdvertUrlFormat = "https://www.carmarket.bg/{0}";
@@ -40,7 +40,7 @@
         {
             var document = await browsingContext.OpenAsync(GetAdvertUrl(remoteId));
             var model = await base.ScrapeAdvertAsync(remoteId);
-
+            
             model.Title = ScrapeTitle(document);
             model.Description = ScrapeDescription(document);
             model.LastModifiedOn = ScrapeLastModifiedOn(document);
@@ -54,10 +54,7 @@
 
             model.EuroStandardType = EstimateEuroStandard(model);
 
-            model.BodyStyleName = NormalizeBodyStyle(model.BodyStyleName);
-            model.EngineType = NormalizeEngine(model.EngineType);
-            model.Condition = NormalizeCondition(model.Condition);
-            model.TransmissionType = NormalizeTransmission(model.TransmissionType);
+            NormalizeAdvertScrapeModel(model);
 
             return model;
         }
@@ -88,7 +85,6 @@
 
         public override Task ScrapeLatestAdvertsAsync(Action<AdvertScrapeModel> action)
         {
-            // TODO: Implement ScrapeLatestAdvertsAsync
             throw new NotImplementedException();
         }
 
@@ -272,6 +268,14 @@
             string firstPageUrl = string.Format(AdvertSearchUrlFormat, string.Empty);
             var firstPageDocument = await browsingContext.OpenAsync(firstPageUrl);
             return int.Parse(SanitizeText(firstPageDocument.QuerySelector(query)?.TextContent, Whitespace));
+        }
+
+        private static void NormalizeAdvertScrapeModel(AdvertScrapeModel model)
+        {
+            model.BodyStyleName = NormalizeBodyStyle(model.BodyStyleName);
+            model.EngineType = NormalizeEngine(model.EngineType);
+            model.Condition = NormalizeCondition(model.Condition);
+            model.TransmissionType = NormalizeTransmission(model.TransmissionType);
         }
     }
 }

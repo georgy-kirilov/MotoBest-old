@@ -9,13 +9,4 @@
     <ProjectReference Include="..\MotoBest.Models\MotoBest.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Resources\brands.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Resources\colors.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

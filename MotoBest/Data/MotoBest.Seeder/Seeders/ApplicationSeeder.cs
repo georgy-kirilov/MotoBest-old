@@ -1,7 +1,8 @@
-﻿namespace MotoBest.Seeder
+﻿namespace MotoBest.Seeding.Seeders
 {
-    using MotoBest.Data;
     using System.Threading.Tasks;
+
+    using MotoBest.Data;
 
     public class ApplicationSeeder<T> : ISeeder where T : ISeeder
     {

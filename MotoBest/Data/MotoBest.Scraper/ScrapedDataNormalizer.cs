@@ -3,11 +3,11 @@
     using System;
     using System.Collections.Generic;
 
-    using static MotoBest.Seeder.EngineSeeder;
-    using static MotoBest.Seeder.ConditionSeeder;
-    using static MotoBest.Seeder.TransmissionSeeder;
-    using static MotoBest.Seeder.BodyStyleSeeder;
-    using static MotoBest.Seeder.EuroStandardSeeder;
+    using static MotoBest.Seeding.Entities.Engines;
+    using static MotoBest.Seeding.Entities.Conditions;
+    using static MotoBest.Seeding.Entities.Transmissions;
+    using static MotoBest.Seeding.Entities.BodyStyles;
+    using static MotoBest.Seeding.Entities.EuroStandards;
 
     public class ScrapedDataNormalizer
     {
@@ -107,7 +107,7 @@
             {
                 return null;
             }
-
+            
             string lowerTransmission = transmission.ToLower();
             return TransmissionVariations.ContainsKey(lowerTransmission) ? TransmissionVariations[lowerTransmission] : null;
         }

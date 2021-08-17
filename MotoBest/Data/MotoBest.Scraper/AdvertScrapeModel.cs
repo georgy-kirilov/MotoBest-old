@@ -3,15 +3,15 @@
     using System;
     using System.Collections.Generic;
 
+    using MotoBest.Seeding.Entities;
+
     public class AdvertScrapeModel
     {
-        public const string DefaultConditionValue = "употребяван";
-
         public AdvertScrapeModel()
         {
             ImageUrls = new HashSet<string>();
             IsEuroStandardExact = true;
-            Condition = DefaultConditionValue;
+            Condition = Conditions.Used;
         }
 
         public string AdvertUrlFormat { get; set; }

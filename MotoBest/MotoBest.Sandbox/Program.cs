@@ -21,7 +21,7 @@
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
-            AdvertScraper scraper = new CarsBgAdvertScraper(context);
+            BaseAdvertScraper scraper = new CarsBgAdvertScraper(context);
             var advert = await scraper.ScrapeAdvertAsync("611637121d432f4cbf5b5ff2");
             
             //await scraper.ScrapeAllAdvertsAsync(async model =>

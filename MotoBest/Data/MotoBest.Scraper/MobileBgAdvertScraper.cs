@@ -11,7 +11,7 @@
     using static Utilities;
     using static ScrapedDataNormalizer;
 
-    public class MobileBgAdvertScraper : AdvertScraper
+    public class MobileBgAdvertScraper : BaseAdvertScraper
     {
         public const string MobileBgAdvertProviderName = "mobile.bg";
         public const string MobileBgAdvertUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv={0}";

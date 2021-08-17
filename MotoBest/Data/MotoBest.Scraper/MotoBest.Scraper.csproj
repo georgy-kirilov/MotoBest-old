@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\MotoBest.Common\MotoBest.Common.csproj" />
-    <ProjectReference Include="..\MotoBest.Seeder\MotoBest.Seeder.csproj" />
+    <ProjectReference Include="..\MotoBest.Seeder\MotoBest.Seeding.csproj" />
   </ItemGroup>
 
 </Project>
