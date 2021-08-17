@@ -1,8 +1,8 @@
 ﻿namespace MotoBest.Models
 {
-    using Common;
+    using MotoBest.Models.Common;
 
-    public class EuroStandard : TypeableBaseModel
+    public class EuroStandard : BaseTypeableModel
     {
     }
 }

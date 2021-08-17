@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
-    using Common;
+    using MotoBest.Models.Common;
 
-    public class Brand : NameableBaseModel
+    public class Brand : BaseNameableModel
     {
         public Brand()
         {

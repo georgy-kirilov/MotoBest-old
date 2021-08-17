@@ -1,8 +1,8 @@
 ﻿namespace MotoBest.Models
 {
-    using Common;
+    using MotoBest.Models.Common;
 
-    public class Town : NameableBaseModel
+    public class Town : BaseNameableModel
     {
         public int RegionId { get; set; }
 

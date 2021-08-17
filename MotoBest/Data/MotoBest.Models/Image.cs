@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    using Common;
+    using MotoBest.Models.Common;
 
     public class Image : BaseModel<int>
     {

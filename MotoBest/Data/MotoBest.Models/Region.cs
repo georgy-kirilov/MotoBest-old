@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
-    using Common;
+    using MotoBest.Models.Common;
 
-    public class Region : NameableBaseModel
+    public class Region : BaseNameableModel
     {
         public Region()
         {

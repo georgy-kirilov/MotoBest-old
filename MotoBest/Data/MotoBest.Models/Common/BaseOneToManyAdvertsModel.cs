@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
-    public abstract class OneToManyAdvertsBaseModel : BaseModel<int>
+    public abstract class BaseOneToManyAdvertsModel : BaseModel<int>
     {
-        public OneToManyAdvertsBaseModel()
+        public BaseOneToManyAdvertsModel()
         {
             Adverts = new HashSet<Advert>();
         }

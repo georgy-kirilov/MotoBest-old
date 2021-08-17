@@ -1,8 +1,8 @@
 ﻿namespace MotoBest.Models
 {
-    using Common;
+    using MotoBest.Models.Common;
 
-    public class Engine : TypeableBaseModel
+    public class Engine : BaseTypeableModel
     {
     }
 }

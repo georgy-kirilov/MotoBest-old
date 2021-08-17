@@ -1,9 +1,10 @@
 ﻿namespace MotoBest.Models
 {
-    using Common;
     using System.ComponentModel.DataAnnotations;
 
-    public class AdvertProvider : NameableBaseModel
+    using MotoBest.Models.Common;
+
+    public class AdvertProvider : BaseNameableModel
     {
         [Required]
         public string AdvertUrlFormat { get; set; }

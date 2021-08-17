@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using Common;
+    using MotoBest.Models.Common;
 
     public class Advert : BaseModel<Guid>
     {

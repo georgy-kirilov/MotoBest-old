@@ -1,10 +1,11 @@
 ﻿namespace MotoBest.Data
 {
     using System;
+
     using Microsoft.EntityFrameworkCore;
 
-    using Models;
-    using Models.Common;
+    using MotoBest.Models;
+    using MotoBest.Models.Common;
 
     public class ApplicationDbContext : DbContext
     {
@@ -79,12 +80,12 @@
         {
             foreach (Type type in types)
             {
-                if (type.IsSubclassOf(typeof(NameableBaseModel)))
+                if (type.IsSubclassOf(typeof(BaseNameableModel)))
                 {
                     modelBuilder.Entity(type).HasIndex("Name").IsUnique();
                 }
 
-                if (type.IsSubclassOf(typeof(TypeableBaseModel)))
+                if (type.IsSubclassOf(typeof(BaseTypeableModel)))
                 {
                     modelBuilder.Entity(type).HasIndex("Type").IsUnique();
                 }

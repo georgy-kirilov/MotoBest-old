@@ -1,8 +1,8 @@
 ﻿namespace MotoBest.Models
 {
-    using Common;
+    using MotoBest.Models.Common;
 
-    public class BodyStyle : NameableBaseModel
+    public class BodyStyle : BaseNameableModel
     {
     }
 }

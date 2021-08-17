@@ -1,8 +1,8 @@
 ﻿namespace MotoBest.Models
 {
-    using Common;
+    using MotoBest.Models.Common;
 
-    public class Model : NameableBaseModel
+    public class Model : BaseNameableModel
     {
         public int BrandId { get; set; }
 
