@@ -7,7 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Data\MotoBest.Data\MotoBest.Data.csproj" />
     <ProjectReference Include="..\Data\MotoBest.Models\MotoBest.Models.csproj" />
-    <ProjectReference Include="..\Data\MotoBest.Scraper\MotoBest.Scraping.csproj" />
+    <ProjectReference Include="..\Data\MotoBest.Scraping\MotoBest.Scraping.csproj" />
   </ItemGroup>
 
 </Project>
