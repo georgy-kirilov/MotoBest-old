@@ -40,4 +40,4 @@ join Transmissions as t on t.Id = a.TransmissionId
 join EuroStandards as es on es.Id = a.EuroStandardId
 left join Towns as town on town.Id = a.TownId
 
-order by a.Price desc
+order by a.Views desc

@@ -92,8 +92,8 @@
         {
             InitializeVariationsTable(RegionVariations, Regions.All());
             RegionVariations.Add("Дупница", Kyustendil);
-            RegionVariations.Add("София - град", Sofia);
-            RegionVariations.Add("Софийска област", Sofia);
+            RegionVariations.Add("София - град", Regions.Sofia);
+            RegionVariations.Add("Софийска област", Regions.Sofia);
         }
 
         private static void InitializeBrandsVariations()

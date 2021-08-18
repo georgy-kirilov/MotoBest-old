@@ -19,18 +19,7 @@
         public static async Task Main()
         {
             Console.OutputEncoding = Encoding.UTF8;
-            var db = new ApplicationDbContext();
 
-            foreach (Brand brand in db.Brands.ToList())
-            {
-                Console.WriteLine(brand.Name);
-                foreach (Model model in brand.Models.OrderBy(m => m.Name))
-                {
-                    Console.WriteLine($"-- {model.Name}");
-                }
-            }
-
-            /*
             await new ApplicationDbContext().Database.EnsureDeletedAsync();
             Console.WriteLine("Database deleted");
 
