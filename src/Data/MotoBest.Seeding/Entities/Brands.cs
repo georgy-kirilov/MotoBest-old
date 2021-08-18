@@ -225,6 +225,14 @@
         public const string Zaz = "Zaz";
         #endregion
 
+        #region Non-Latin Brands
+        public const string Vaz = "ВАЗ";
+        public const string Warsaw = "Варшава";
+        public const string Victory = "Победа";
+        public const string Sofia = "София";
+        public const string Seagull = "Чайка";
+        #endregion
+
         public static IEnumerable<string> All()
         {
             return new[]
@@ -448,6 +456,14 @@
                 #region Brands with Z
                     Zaz,
                     Zastava,
+                #endregion
+
+                #region Non-Latin Brands
+                    Vaz,
+                    Warsaw,
+                    Victory,
+                    Sofia,
+                    Seagull,
                 #endregion
             };
         }
