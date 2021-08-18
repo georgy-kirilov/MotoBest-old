@@ -15,92 +15,89 @@
             this.dbContext = dbContext;
         }
 
-        public AdvertProvider CreateAdvertProvider(AdvertScrapeModel scrapeModel)
+        public AdvertProvider GetOrCreateAdvertProvider(AdvertScrapeModel scrapeModel)
         {
-            return dbContext.AdvertProviders.FirstOrDefault(ap => ap.Name == scrapeModel.AdvertProviderName)
-                ?? new AdvertProvider { Name = scrapeModel.AdvertProviderName, AdvertUrlFormat = scrapeModel.AdvertUrlFormat };
+            return dbContext.AdvertProviders.FirstOrDefault(ap => ap.Name == scrapeModel.AdvertProviderName) ?? new AdvertProvider { Name = scrapeModel.AdvertProviderName, AdvertUrlFormat = scrapeModel.AdvertUrlFormat };
         }
 
-        public Brand CreateBrand(string brand)
+        public Brand GetOrCreateBrand(string brandName)
         {
-            if (brand == null)
+            if (brandName == null)
             {
                 return null;
             }
 
-            return dbContext.Brands.FirstOrDefault(b => b.Name == brand) ?? new Brand { Name = brand };
+            return dbContext.Brands.FirstOrDefault(brand => brand.Name == brandName) ?? new Brand { Name = brandName };
         }
 
-        public Model CreateModel(string model, Brand brand)
+        public Model GetOrCreateModel(string modelName, Brand brand)
         {
-            if (model == null)
+            if (modelName == null)
             {
                 return null;
             }
 
-            return brand.Models.FirstOrDefault(m => m.Name == model) ?? new Model { Name = model, Brand = brand };
+            return brand.Models.FirstOrDefault(model => model.Name == modelName) ?? new Model { Name = modelName, Brand = brand };
         }
 
-        public Color CreateColor(string color)
+        public Color GetOrCreateColor(string colorName)
         {
-            if (color == null)
+            if (colorName == null)
             {
                 return null;
             }
 
-            return dbContext.Colors.FirstOrDefault(c => c.Name == color) ?? new Color { Name = color };
+            return dbContext.Colors.FirstOrDefault(color => color.Name == colorName) ?? new Color { Name = colorName };
         }
 
-        public Engine CreateEngine(string engine)
+        public Engine GetOrCreateEngine(string engineType)
         {
-            return dbContext.Engines.FirstOrDefault(e => e.Type == engine) ?? new Engine { Type = engine };
+            return dbContext.Engines.FirstOrDefault(engine => engine.Type == engineType) ?? new Engine { Type = engineType };
         }
 
-        public Transmission CreateTransmission(string transmission)
+        public Transmission GetOrCreateTransmission(string transmissionType)
         {
-            return dbContext.Transmissions.FirstOrDefault(t => t.Type == transmission) ?? new Transmission { Type = transmission };
+            return dbContext.Transmissions.FirstOrDefault(transmission => transmission.Type == transmissionType) ?? new Transmission { Type = transmissionType };
         }
 
-        public BodyStyle CreateBodyStyle(string bodyStyle)
+        public BodyStyle GetOrCreateBodyStyle(string bodyStyleName)
         {
-            return dbContext.BodyStyles.FirstOrDefault(bs => bs.Name == bodyStyle) ?? new BodyStyle { Name = bodyStyle };
+            return dbContext.BodyStyles.FirstOrDefault(bodyStyle => bodyStyle.Name == bodyStyleName) ?? new BodyStyle { Name = bodyStyleName };
         }
 
-        public Region CreateRegion(string region)
+        public Region GetOrCreateRegion(string regionName)
         {
-            return dbContext.Regions.FirstOrDefault(r => r.Name == region) ?? new Region { Name = region };
+            return dbContext.Regions.FirstOrDefault(region => region.Name == regionName) ?? new Region { Name = regionName };
         }
 
-        public Town CreateTown(AdvertScrapeModel scrapeModel, Region region)
+        public Town GetOrCreateTown(string townName, Region region)
         {
-            if (scrapeModel.TownName == null)
+            if (townName == null)
             {
                 return null;
             }
 
-            return dbContext.Towns.FirstOrDefault(t => t.Name == scrapeModel.TownName)
-                ?? new Town { Name = scrapeModel.TownName, Region = region };
+            return dbContext.Towns.FirstOrDefault(town => town.Name == townName) ?? new Town { Name = townName, Region = region };
         }
 
-        public EuroStandard CreateEuroStandard(string euroStandard)
+        public EuroStandard GetOrCreateEuroStandard(string euroStandardType)
         {
-            if (euroStandard == null)
+            if (euroStandardType == null)
             {
                 return null;
             }
 
-            return dbContext.EuroStandards.FirstOrDefault(es => es.Type == euroStandard) ?? new EuroStandard { Type = euroStandard };
+            return dbContext.EuroStandards.FirstOrDefault(euroStandard => euroStandard.Type == euroStandardType) ?? new EuroStandard { Type = euroStandardType };
         }
 
-        public Image CreateImage(string url, Advert advert)
+        public Image GetOrCreateImage(string url, Advert advert)
         {
-            return dbContext.Images.FirstOrDefault(i => i.Url == url && advert.Id == i.AdvertId) 
-                ?? new Image { Advert = advert, Url = url };
+            return dbContext.Images.FirstOrDefault(image => image.Url == url && advert.Id == image.AdvertId) ?? new Image { Advert = advert, Url = url };
         }
 
-        public Condition CreateCondition(string condition)
+        public Condition GetOrCreateCondition(string conditionType)
         {
-            return dbContext.Conditions.FirstOrDefault(c => c.Type == condition) ?? new Condition { Type = condition };
+            return dbContext.Conditions.FirstOrDefault(condition => condition.Type == conditionType) ?? new Condition { Type = conditionType };
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace MotoBest.Seeding.Seeders
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using MotoBest.Data;
@@ -12,8 +13,11 @@
         {
             foreach (string engine in Engines.All())
             {
-                await dbContext.Engines.AddAsync(new Engine { Type = engine });
-                await dbContext.SaveChangesAsync();
+                if (dbContext.Engines.FirstOrDefault(e => e.Type == engine) == null)
+                {
+                    await dbContext.Engines.AddAsync(new Engine { Type = engine });
+                    await dbContext.SaveChangesAsync();
+                }
             }
         }
     }

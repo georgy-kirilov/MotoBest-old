@@ -1,5 +1,6 @@
 ﻿namespace MotoBest.Seeding.Seeders
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using MotoBest.Data;
@@ -12,8 +13,11 @@
         {
             foreach (string bodyStyle in BodyStyles.All())
             {
-                await dbContext.BodyStyles.AddAsync(new BodyStyle { Name = bodyStyle });
-                await dbContext.SaveChangesAsync();
+                if (dbContext.BodyStyles.FirstOrDefault(bs => bs.Name == bodyStyle) == null)
+                {
+                    await dbContext.BodyStyles.AddAsync(new BodyStyle { Name = bodyStyle });
+                    await dbContext.SaveChangesAsync();
+                }
             }
         }
     }

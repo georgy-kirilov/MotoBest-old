@@ -1,5 +1,6 @@
 ﻿namespace MotoBest.Seeding.Seeders
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using MotoBest.Data;
@@ -12,8 +13,11 @@
         {
             foreach (string transmission in Transmissions.All())
             {
-                await dbContext.Transmissions.AddAsync(new Transmission { Type = transmission });
-                await dbContext.SaveChangesAsync();
+                if (dbContext.Transmissions.FirstOrDefault(t => t.Type == transmission) == null)
+                {
+                    await dbContext.Transmissions.AddAsync(new Transmission { Type = transmission });
+                    await dbContext.SaveChangesAsync();
+                }
             }
         }
     }

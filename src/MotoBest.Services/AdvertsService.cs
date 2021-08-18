@@ -19,14 +19,14 @@
             modelFactory = new ModelFactory(dbContext);
         }
 
-        public async Task AddAdvertAsync(AdvertScrapeModel model)
+        public async Task AddOrUpdateAsync(AdvertScrapeModel model)
         {
             if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
             }
 
-            AdvertProvider advertProvider = modelFactory.CreateAdvertProvider(model);
+            AdvertProvider advertProvider = modelFactory.GetOrCreateAdvertProvider(model);
 
             Advert advert = advertProvider.Adverts.FirstOrDefault(a => a.RemoteId == model.RemoteId);
             bool isAdvertNew = false;
@@ -38,16 +38,16 @@
             }
 
             advert.AdvertProvider = advertProvider;
-            advert.Brand = modelFactory.CreateBrand(model.BrandName);
-            advert.Model = modelFactory.CreateModel(model.ModelName, advert.Brand);
-            advert.Color = modelFactory.CreateColor(model.ColorName);
-            advert.Engine = modelFactory.CreateEngine(model.EngineType);
-            advert.Transmission = modelFactory.CreateTransmission(model.TransmissionType);
-            advert.BodyStyle = modelFactory.CreateBodyStyle(model.BodyStyleName);
-            advert.Region = modelFactory.CreateRegion(model.RegionName);
-            advert.Town = modelFactory.CreateTown(model, advert.Region);
-            advert.EuroStandard = modelFactory.CreateEuroStandard(model.EuroStandardType);
-            advert.Condition = modelFactory.CreateCondition(model.Condition);
+            advert.Brand = modelFactory.GetOrCreateBrand(model.BrandName);
+            advert.Model = modelFactory.GetOrCreateModel(model.ModelName, advert.Brand);
+            advert.Color = modelFactory.GetOrCreateColor(model.ColorName);
+            advert.Engine = modelFactory.GetOrCreateEngine(model.EngineType);
+            advert.Transmission = modelFactory.GetOrCreateTransmission(model.TransmissionType);
+            advert.BodyStyle = modelFactory.GetOrCreateBodyStyle(model.BodyStyleName);
+            advert.Region = modelFactory.GetOrCreateRegion(model.RegionName);
+            advert.Town = modelFactory.GetOrCreateTown(model.TownName, advert.Region);
+            advert.EuroStandard = modelFactory.GetOrCreateEuroStandard(model.EuroStandardType);
+            advert.Condition = modelFactory.GetOrCreateCondition(model.Condition);
 
             advert.Views = model.Views;
             advert.Kilometrage = model.Kilometrage;
@@ -63,7 +63,7 @@
 
             foreach (string imageUrl in model.ImageUrls)
             {
-                Image image = modelFactory.CreateImage(imageUrl, advert);
+                Image image = modelFactory.GetOrCreateImage(imageUrl, advert);
                 advert.Images.Add(image);
             }
 

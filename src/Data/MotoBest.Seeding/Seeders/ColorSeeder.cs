@@ -1,5 +1,6 @@
 ﻿namespace MotoBest.Seeding.Seeders
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using MotoBest.Data;
@@ -12,8 +13,11 @@
         {
             foreach (string color in Colors.All())
             {
-                await dbContext.Colors.AddAsync(new Color { Name = color });
-                await dbContext.SaveChangesAsync();
+                if (dbContext.Colors.FirstOrDefault(c => c.Name == color) == null)
+                {
+                    await dbContext.Colors.AddAsync(new Color { Name = color });
+                    await dbContext.SaveChangesAsync();
+                }
             }
         }
     }

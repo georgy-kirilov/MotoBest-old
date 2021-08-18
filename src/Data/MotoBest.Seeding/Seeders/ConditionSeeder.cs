@@ -1,5 +1,6 @@
 ﻿namespace MotoBest.Seeding.Seeders
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using MotoBest.Data;
@@ -12,8 +13,11 @@
         {
             foreach (string condition in Conditions.All())
             {
-                await dbContext.Conditions.AddAsync(new Condition { Type = condition });
-                await dbContext.SaveChangesAsync();
+                if (dbContext.Conditions.FirstOrDefault(c => c.Type == condition) == null)
+                {
+                    await dbContext.Conditions.AddAsync(new Condition { Type = condition });
+                    await dbContext.SaveChangesAsync();
+                }
             }
         }
     }

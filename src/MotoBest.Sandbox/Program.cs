@@ -38,7 +38,7 @@
             {
                 using var db = new ApplicationDbContext();
                 var service = new AdvertsService(db);
-                await service.AddAdvertAsync(model);
+                await service.AddOrUpdateAsync(model);
             });
         }
     }

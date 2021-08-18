@@ -1,5 +1,6 @@
 ﻿namespace MotoBest.Seeding.Seeders
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using MotoBest.Data;
@@ -12,8 +13,11 @@
         {
             foreach (string euroStandard in EuroStandards.All())
             {
-                await dbContext.EuroStandards.AddAsync(new EuroStandard { Type = euroStandard });
-                await dbContext.SaveChangesAsync();
+                if (dbContext.EuroStandards.FirstOrDefault(es => es.Type == euroStandard) == null)
+                {
+                    await dbContext.EuroStandards.AddAsync(new EuroStandard { Type = euroStandard });
+                    await dbContext.SaveChangesAsync();
+                }
             }
         }
     }

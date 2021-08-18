@@ -1,5 +1,6 @@
 ﻿namespace MotoBest.Seeding.Seeders
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using MotoBest.Data;
@@ -12,8 +13,11 @@
         {
             foreach (string region in Regions.All())
             {
-                await dbContext.Regions.AddAsync(new Region { Name = region });
-                await dbContext.SaveChangesAsync();
+                if (dbContext.Regions.FirstOrDefault(r => r.Name == region) == null)
+                {
+                    await dbContext.Regions.AddAsync(new Region { Name = region });
+                    await dbContext.SaveChangesAsync();
+                }
             }
         }
     }
