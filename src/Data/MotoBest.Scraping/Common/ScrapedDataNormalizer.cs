@@ -12,6 +12,7 @@
     using static MotoBest.Seeding.Entities.EuroStandards;
     using static MotoBest.Seeding.Entities.Colors;
     using static MotoBest.Seeding.Entities.Regions;
+    using static MotoBest.Seeding.Entities.Brands;
 
     public static class ScrapedDataNormalizer
     {
@@ -21,6 +22,7 @@
         private static readonly Dictionary<string, string> BodyStyleVariations = new();
         private static readonly Dictionary<string, string> ColorVariations = new();
         private static readonly Dictionary<string, string> RegionVariations = new();
+        private static readonly Dictionary<string, string> BrandsVariations = new();
         private static readonly SortedDictionary<DateTime, string> EuroStandardsByDateTable;
 
         static ScrapedDataNormalizer()
@@ -31,6 +33,7 @@
             InitializeBodyStyleVariations();
             InitializeColorVariations();
             InitializeRegionVariations();
+            InitializeBrandsVariations();
 
             EuroStandardsByDateTable = new()
             {
@@ -91,6 +94,13 @@
             RegionVariations.Add("Дупница", Kyustendil);
             RegionVariations.Add("София - град", Sofia);
             RegionVariations.Add("Софийска област", Sofia);
+        }
+
+        private static void InitializeBrandsVariations()
+        {
+            InitializeVariationsTable(BrandsVariations, Brands.All());
+            BrandsVariations.Add("Asia", AsiaMotors);
+            BrandsVariations.Add("Aston martin", AstonMartin);
         }
 
         private static void InitializeVariationsTable(Dictionary<string, string> table, IEnumerable<string> values)

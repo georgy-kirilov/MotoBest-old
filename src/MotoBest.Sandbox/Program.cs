@@ -1,6 +1,7 @@
 ﻿namespace MotoBest.Sandbox
 {
     using System;
+    using System.Text;
     using System.Threading.Tasks;
 
     using AngleSharp;
@@ -9,13 +10,27 @@
     using MotoBest.Services;
     using MotoBest.Seeding.Seeders;
     using MotoBest.Scraping.Scrapers;
-    using System.Text;
+    using System.Linq;
+    using MotoBest.Seeding.Entities;
+    using MotoBest.Models;
 
     public class Program
     {
         public static async Task Main()
         {
             Console.OutputEncoding = Encoding.UTF8;
+            var db = new ApplicationDbContext();
+
+            foreach (Brand brand in db.Brands.ToList())
+            {
+                Console.WriteLine(brand.Name);
+                foreach (Model model in brand.Models.OrderBy(m => m.Name))
+                {
+                    Console.WriteLine($"-- {model.Name}");
+                }
+            }
+
+            /*
             await new ApplicationDbContext().Database.EnsureDeletedAsync();
             Console.WriteLine("Database deleted");
 
@@ -33,13 +48,12 @@
             var context = BrowsingContext.New(config);
 
             BaseAdvertScraper scraper = new CarmarketAdvertScraper(context);
-
-            await scraper.ScrapeAllAdvertsAsync(async (model) =>
+            /*await scraper.ScrapeAllAdvertsAsync(async (model) =>
             {
                 using var db = new ApplicationDbContext();
                 var service = new AdvertsService(db);
                 await service.AddOrUpdateAsync(model);
-            });
+            });*/
         }
     }
 }

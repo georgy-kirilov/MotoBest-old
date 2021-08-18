@@ -33,7 +33,7 @@
             { "цвят", ParseColorName },
         };
 
-        public CarmarketAdvertScraper(IBrowsingContext browsingContext) 
+        public CarmarketAdvertScraper(IBrowsingContext browsingContext)
             : base(browsingContext, CarmarketBgAdvertUrlFormat, CarmarketBgAdvertProviderName)
         {
         }
@@ -42,7 +42,7 @@
         {
             var document = await browsingContext.OpenAsync(GetAdvertUrl(remoteId));
             var model = await base.ScrapeAdvertAsync(remoteId);
-            
+
             model.Title = ScrapeTitle(document);
             model.Description = ScrapeDescription(document);
             model.LastModifiedOn = ScrapeLastModifiedOn(document);
@@ -55,7 +55,6 @@
             ScrapeTechnicalCharacteristics(document, model);
 
             model.EuroStandardType = EstimateEuroStandard(model);
-
             NormalizeScrapeModel(model);
 
             return model;
@@ -79,8 +78,15 @@
                                                 .Split("/")[^1]);
                 foreach (string id in ids)
                 {
-                    AdvertScrapeModel model = await ScrapeAdvertAsync(id);
-                    action.Invoke(model);
+                    try
+                    {
+                        AdvertScrapeModel model = await ScrapeAdvertAsync(id);
+                        action.Invoke(model);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine(id);
+                    }
                 }
             }
         }
@@ -126,7 +132,7 @@
         {
             var imageUrls = new HashSet<string>();
 
-            string bigImageUrl = document.QuerySelector("section.cmOffer > a")?.GetAttribute("href") 
+            string bigImageUrl = document.QuerySelector("section.cmOffer > a")?.GetAttribute("href")
                 ?? document.QuerySelector("section.cmOffer > img")?.GetAttribute("src");
 
             if (bigImageUrl != null)
