@@ -194,6 +194,37 @@
         public const string Triumph = "Triumph";
         #endregion
 
+        #region Brands with U
+        public const string Uaz = "Uaz";
+        #endregion
+
+        #region Brands with V
+        public const string Vw = "VW";
+        public const string Volga = "Volga";
+        public const string Volvo = "Volvo";
+        public const string Vauxhall = "Vauxhall";
+        #endregion
+
+        #region Brands with W
+        public const string Wartburg = "Wartburg";
+        public const string Wiesmann = "Wiesmann";
+        public const string Warszawa = "Warszawa";
+        #endregion
+
+        #region Brands with X
+        public const string Xinkai = "Xinkai";
+        public const string Xinshun = "Xinshun";
+        #endregion
+
+        #region Brands with Y
+        public const string Yogomo = "Yogomo";
+        #endregion
+
+        #region Brands with Z
+        public const string Zastava = "Zastava";
+        public const string Zaz = "Zaz";
+        #endregion
+
         public static IEnumerable<string> All()
         {
             return new[]
@@ -386,6 +417,37 @@
                     Toyota,
                     Trabant,
                     Triumph,
+                #endregion
+
+                #region Brands with U
+                    Uaz,
+                #endregion
+
+                #region Brands with V
+                    Vw,
+                    Volga,
+                    Volvo,
+                    Vauxhall,
+                #endregion
+
+                #region Brands with W
+                    Warszawa,
+                    Wartburg,
+                    Wiesmann,
+                #endregion
+
+                #region Brands with X
+                    Xinkai,
+                    Xinshun,
+                #endregion
+
+                #region Brands with Y
+                    Yogomo,
+                #endregion
+
+                #region Brands with Z
+                    Zaz,
+                    Zastava,
                 #endregion
             };
         }

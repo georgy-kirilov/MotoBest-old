@@ -112,6 +112,8 @@
             BrandsVariations.Add("Rolls-Royce", RollsRoyce);
             BrandsVariations.Add("Ssangyong", SsangYong);
             BrandsVariations.Add("SECMA", Secma);
+            BrandsVariations.Add("UAZ", Uaz);
+            BrandsVariations.Add("Vw", Vw);
         }
 
         private static void InitializeVariationsTable(Dictionary<string, string> table, IEnumerable<string> values)
