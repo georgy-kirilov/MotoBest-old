@@ -41,10 +41,34 @@
         public const string Dkw = "Dkw";
         public const string Dodge = "Dodge";
 
+        public const string Eagle = "Eagle";
+        public const string Excalibur = "Excalibur";
+
+        public const string Fso = "FSO";
+        public const string Ferrari = "Ferrari";
+        public const string Fiat = "Fiat";
+        public const string Ford = "Ford";
+        public const string Foton = "Foton";
+
+        public const string Gaz = "Gaz";
+        public const string Geo = "Geo";
+        public const string Gmc = "Gmc";
+        public const string GreatWall = "Great Wall";
+        public const string GacGonow = "Gac Gonow";
+
+        public const string Haval = "Haval";
+        public const string Heinkel = "Heinkel";
+        public const string Hillman = "Hillman";
+        public const string Honda = "Honda";
+        public const string Hummer = "Hummer";
+        public const string Hyundai = "Hyundai";
+        public const string Humber = "Humber";
+
         public static IEnumerable<string> All()
         {
             return new[]
             {
+                #region Brands with A
                 Abarth,
                 Acura,
                 Aixam,
@@ -55,7 +79,8 @@
                 AstonMartin,
                 Audi,
                 Austin,
-
+                #endregion
+                #region Brands with B
                 Bmw,
                 Bentley,
                 Berliner,
@@ -64,14 +89,16 @@
                 Brilliance,
                 Bugatti,
                 Buick,
-
+                #endregion
+                #region Brands with C
                 Cadillac,
                 Chevrolet,
                 Chrysler,
                 Citroen,
                 Corvette,
                 Cupra,
-
+                #endregion
+                #region Brands with D
                 DS,
                 DR,
                 Dacia,
@@ -81,6 +108,34 @@
                 Datsun,
                 Dkw,
                 Dodge,
+                #endregion
+                #region Brands with E
+                Eagle,
+                Excalibur,
+                #endregion
+                #region Brands with F
+                Fso,
+                Ferrari,
+                Fiat,
+                Ford,
+                Foton,
+                #endregion
+                #region Brands with G
+                Gaz,
+                Geo,
+                Gmc,
+                GreatWall,
+                GacGonow,
+                #endregion
+                #region Brands with H
+                Haval,
+                Heinkel,
+                Hillman,
+                Honda,
+                Hummer,
+                Hyundai,
+                Humber,
+                #endregion
             };
         }
     }

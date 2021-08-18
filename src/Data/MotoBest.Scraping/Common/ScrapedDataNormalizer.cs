@@ -101,6 +101,10 @@
             InitializeVariationsTable(BrandsVariations, Brands.All());
             BrandsVariations.Add("Asia", AsiaMotors);
             BrandsVariations.Add("Aston martin", AstonMartin);
+            BrandsVariations.Add("Great wall", GreatWall);
+            BrandsVariations.Add("GAZ", Gaz);
+            BrandsVariations.Add("GMC", Gmc);
+            BrandsVariations.Add("Gonow", GacGonow);
         }
 
         private static void InitializeVariationsTable(Dictionary<string, string> table, IEnumerable<string> values)
