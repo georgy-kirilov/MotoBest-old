@@ -105,6 +105,13 @@
             BrandsVariations.Add("GAZ", Gaz);
             BrandsVariations.Add("GMC", Gmc);
             BrandsVariations.Add("Gonow", GacGonow);
+            BrandsVariations.Add("Land rover", LandRover);
+            BrandsVariations.Add("Mg", MG);
+            BrandsVariations.Add("Mercedes-Benz", Mercedes);
+            BrandsVariations.Add("Oltsit", Oltcit);
+            BrandsVariations.Add("Rolls-Royce", RollsRoyce);
+            BrandsVariations.Add("Ssangyong", SsangYong);
+            BrandsVariations.Add("SECMA", Secma);
         }
 
         private static void InitializeVariationsTable(Dictionary<string, string> table, IEnumerable<string> values)

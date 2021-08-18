@@ -15,7 +15,8 @@
                    new EngineSeeder(), 
                    new EuroStandardSeeder(), 
                    new RegionSeeder(), 
-                   new TransmissionSeeder())
+                   new TransmissionSeeder(),
+                   new BrandSeeder())
         {
         }
 
