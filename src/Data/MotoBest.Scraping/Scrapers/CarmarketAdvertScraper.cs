@@ -246,7 +246,7 @@
         public static void ParseKilometrage(string input, AdvertScrapeModel model)
         {
             input = SanitizeText(input, "км", Whitespace);
-            model.Kilometrage = int.Parse(input);
+            model.Kilometrage = long.Parse(input);
         }
 
         public static void ParseCondition(string input, AdvertScrapeModel model)

@@ -38,28 +38,9 @@
             }
 
             advert.AdvertProvider = advertProvider;
-            advert.Brand = modelFactory.GetOrCreateBrand(model.BrandName);
-            advert.Model = modelFactory.GetOrCreateModel(model.ModelName, advert.Brand);
-            advert.Color = modelFactory.GetOrCreateColor(model.ColorName);
-            advert.Engine = modelFactory.GetOrCreateEngine(model.EngineType);
-            advert.Transmission = modelFactory.GetOrCreateTransmission(model.TransmissionType);
-            advert.BodyStyle = modelFactory.GetOrCreateBodyStyle(model.BodyStyleName);
-            advert.Region = modelFactory.GetOrCreateRegion(model.RegionName);
-            advert.Town = modelFactory.GetOrCreateTown(model.TownName, advert.Region);
-            advert.EuroStandard = modelFactory.GetOrCreateEuroStandard(model.EuroStandardType);
-            advert.Condition = modelFactory.GetOrCreateCondition(model.Condition);
 
-            advert.Views = model.Views;
-            advert.Kilometrage = model.Kilometrage;
-            advert.HorsePowers = model.HorsePowers;
-            advert.Title = model.Title;
-            advert.Description = model.Description;
-            advert.Price = model.Price;
-            advert.ManufacturingDate = model.ManufacturingDate;
-            advert.LastModifiedOn = model.LastModifiedOn;
-            advert.IsNewImport = model.IsNewImport;
-            advert.HasFourDoors = model.HasFourDoors;
-            advert.IsEuroStandardExact = model.IsEuroStandardExact;
+            MapNavigationalProperties(advert, model);
+            MapSimpleProperties(advert, model);
 
             foreach (string imageUrl in model.ImageUrls)
             {
@@ -73,6 +54,35 @@
             }
 
             await dbContext.SaveChangesAsync();
+        }
+
+        private void MapNavigationalProperties(Advert advert, AdvertScrapeModel model)
+        {
+            advert.Brand = modelFactory.GetOrCreateBrand(model.BrandName);
+            advert.Model = modelFactory.GetOrCreateModel(model.ModelName, advert.Brand);
+            advert.Color = modelFactory.GetOrCreateColor(model.ColorName);
+            advert.Engine = modelFactory.GetOrCreateEngine(model.EngineType);
+            advert.Transmission = modelFactory.GetOrCreateTransmission(model.TransmissionType);
+            advert.BodyStyle = modelFactory.GetOrCreateBodyStyle(model.BodyStyleName);
+            advert.Region = modelFactory.GetOrCreateRegion(model.RegionName);
+            advert.Town = modelFactory.GetOrCreateTown(model.TownName, advert.Region);
+            advert.EuroStandard = modelFactory.GetOrCreateEuroStandard(model.EuroStandardType);
+            advert.Condition = modelFactory.GetOrCreateCondition(model.Condition);
+        }
+
+        private void MapSimpleProperties(Advert advert, AdvertScrapeModel model)
+        {
+            advert.Views = model.Views;
+            advert.Kilometrage = model.Kilometrage;
+            advert.HorsePowers = model.HorsePowers;
+            advert.Title = model.Title;
+            advert.Description = model.Description;
+            advert.Price = model.Price;
+            advert.ManufacturingDate = model.ManufacturingDate;
+            advert.LastModifiedOn = model.LastModifiedOn;
+            advert.IsNewImport = model.IsNewImport;
+            advert.HasFourDoors = model.HasFourDoors;
+            advert.IsEuroStandardExact = model.IsEuroStandardExact;
         }
     }
 }

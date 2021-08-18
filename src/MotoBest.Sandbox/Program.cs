@@ -16,14 +16,14 @@
         public static async Task Main()
         {
             Console.OutputEncoding = Encoding.UTF8;
-            //await new ApplicationDbContext().Database.EnsureDeletedAsync();
+            await new ApplicationDbContext().Database.EnsureDeletedAsync();
             Console.WriteLine("Database deleted");
 
             await new ApplicationDbContext().Database.EnsureCreatedAsync();
             Console.WriteLine("Database created");
 
-            //var appSeeder = new ApplicationSeeder();
-            //await appSeeder.SeedAsync(new ApplicationDbContext());
+            var appSeeder = new ApplicationSeeder();
+            await appSeeder.SeedAsync(new ApplicationDbContext());
 
             Console.WriteLine("Seeding complete. Press any key to continue...");
             Console.ReadKey();

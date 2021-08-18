@@ -29,7 +29,7 @@
 
         public int HorsePowers { get; set; }
 
-        public int Kilometrage { get; set; }
+        public long Kilometrage { get; set; }
 
         public bool IsNewImport { get; set; }
 

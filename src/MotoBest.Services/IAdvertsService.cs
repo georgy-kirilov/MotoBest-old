@@ -6,6 +6,6 @@
 
     public interface IAdvertsService
     {
-        Task AddOrUpdateAsync(AdvertScrapeModel scrapeModel);
+        Task AddOrUpdateAsync(AdvertScrapeModel model);
     }
 }
