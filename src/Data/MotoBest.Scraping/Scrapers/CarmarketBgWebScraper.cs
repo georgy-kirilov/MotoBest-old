@@ -13,7 +13,7 @@
     using static MotoBest.Scraping.Common.Utilities;
     using static MotoBest.Scraping.Common.ScrapedDataNormalizer;
 
-    public class CarmarketAdvertScraper : BaseAdvertScraper
+    public class CarmarketBgWebScraper : BaseWebScraper
     {
         public const string CarmarketBgAdvertProviderName = "carmarket.bg";
         public const string CarmarketBgAdvertUrlFormat = "https://www.carmarket.bg/{0}";
@@ -33,7 +33,7 @@
             { "цвят", ParseColorName },
         };
 
-        public CarmarketAdvertScraper(IBrowsingContext browsingContext)
+        public CarmarketBgWebScraper(IBrowsingContext browsingContext)
             : base(browsingContext, CarmarketBgAdvertUrlFormat, CarmarketBgAdvertProviderName)
         {
         }

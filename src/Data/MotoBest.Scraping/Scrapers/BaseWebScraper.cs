@@ -10,11 +10,11 @@
 
     using static MotoBest.Scraping.Common.ScrapedDataNormalizer;
 
-    public abstract class BaseAdvertScraper : IAdvertScraper
+    public abstract class BaseWebScraper : IWebScraper
     {
         protected readonly IBrowsingContext browsingContext;
 
-        protected BaseAdvertScraper(IBrowsingContext browsingContext, string advertUrlFormat, string advertProviderName)
+        protected BaseWebScraper(IBrowsingContext browsingContext, string advertUrlFormat, string advertProviderName)
         {
             Validator.ThrowIfNullOrEmpty(advertUrlFormat, nameof(advertUrlFormat));
             AdvertUrlFormat = advertUrlFormat;

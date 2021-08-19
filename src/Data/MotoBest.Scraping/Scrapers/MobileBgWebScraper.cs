@@ -13,7 +13,7 @@
     using static MotoBest.Scraping.Common.Utilities;
     using static MotoBest.Scraping.Common.ScrapedDataNormalizer;
 
-    public class MobileBgAdvertScraper : BaseAdvertScraper
+    public class MobileBgWebScraper : BaseWebScraper
     {
         public const string MobileBgAdvertProviderName = "mobile.bg";
         public const string MobileBgAdvertUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv={0}";
@@ -34,7 +34,7 @@
 
         private HashSet<string> features = new();
 
-        public MobileBgAdvertScraper(IBrowsingContext browsingContext) 
+        public MobileBgWebScraper(IBrowsingContext browsingContext) 
             : base(browsingContext, MobileBgAdvertUrlFormat, MobileBgAdvertProviderName)
         {
         }

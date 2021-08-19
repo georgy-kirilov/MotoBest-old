@@ -5,7 +5,7 @@
 
     using MotoBest.Scraping.Common;
 
-    public interface IAdvertScraper
+    public interface IWebScraper
     {
         string AdvertUrlFormat { get; }
 

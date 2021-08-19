@@ -20,9 +20,6 @@
 
     public class Program
     {
-        private const string SamsungGalaxyS9UserAgentValue = "Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.84 Mobile Safari/537.36";
-        private static readonly KeyValuePair<string, string> UserAgentHeader = new("user-agent", SamsungGalaxyS9UserAgentValue);
-
         public static async Task Main()
         {
             Console.OutputEncoding = Encoding.UTF8;
@@ -43,10 +40,10 @@
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
-            string url = "https://www.cars.bg/offer/60c88084e50d624e8b1afd02";
-            string content = await Utilities.GetHtmlAsync(url, UserAgentHeader);
-            string fileName = "C:/Users/georg/OneDrive/Desktop/cars-bg-mobile-page.html";
-            await File.WriteAllTextAsync(fileName, content, Encoding.UTF8);
+            var scraper = new CarsBgWebScraper(context);
+            var model = await scraper.ScrapeAdvertAsync("6093f4d8aef39a099f541502");
+
+            Console.WriteLine();
 
             /*
             BaseAdvertScraper scraper = new MobileBgAdvertScraper(context);

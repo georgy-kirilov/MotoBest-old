@@ -18,6 +18,10 @@
 
         public const decimal EuroToBgnExchangeRate = 1.95583M;
 
+        public const string SamsungGalaxyUserAgentValue = "Mozilla/5.0 (Linux; Android 8.0.0; SM-G960F Build/R16NW) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.84 Mobile Safari/537.36";
+
+        public static readonly KeyValuePair<string, string> UserAgentHeader = new("user-agent", SamsungGalaxyUserAgentValue);
+
         public static string SanitizeText(string input, params string[] stringsToSanitize)
         {
             var builder = new StringBuilder(input);
