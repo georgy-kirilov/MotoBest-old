@@ -50,6 +50,8 @@
 
         public bool IsEuroStandardExact { get; set; }
 
+        public bool IsExteriorMetallic { get; set; }
+
         public string ColorName { get; set; }
 
         public string Condition { get; set; }

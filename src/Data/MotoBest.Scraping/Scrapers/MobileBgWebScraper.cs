@@ -11,6 +11,8 @@
     using MotoBest.Scraping.Common;
 
     using static MotoBest.Scraping.Common.Utilities;
+    using static MotoBest.Scraping.Common.Utilities.Date;
+    using static MotoBest.Scraping.Common.Utilities.Characters;
     using static MotoBest.Scraping.Common.ScrapedDataNormalizer;
 
     public class MobileBgWebScraper : BaseWebScraper

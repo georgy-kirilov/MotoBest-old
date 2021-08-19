@@ -11,6 +11,9 @@
     using MotoBest.Scraping.Common;
 
     using static MotoBest.Scraping.Common.Utilities;
+    using static MotoBest.Scraping.Common.Utilities.Date;
+    using static MotoBest.Scraping.Common.Utilities.Currency;
+    using static MotoBest.Scraping.Common.Utilities.Characters;
     using static MotoBest.Scraping.Common.ScrapedDataNormalizer;
 
     public class CarmarketBgWebScraper : BaseWebScraper
@@ -194,14 +197,12 @@
                                     .ToDictionary(x => x.QuerySelector("span")?.TextContent.Trim().ToLower(),
                                                   x => x.QuerySelector("strong")?.TextContent.Trim().ToLower());
 
-            foreach (var technicalPair in technicalPairs)
+            foreach (var pair in technicalPairs)
             {
-                if (!TechnicalParsingTable.ContainsKey(technicalPair.Key))
+                if (TechnicalParsingTable.ContainsKey(pair.Key))
                 {
-                    continue;
+                    TechnicalParsingTable[pair.Key].Invoke(pair.Value, model);
                 }
-
-                TechnicalParsingTable[technicalPair.Key].Invoke(technicalPair.Value, model);
             }
         }
 

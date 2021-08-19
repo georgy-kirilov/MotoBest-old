@@ -37,6 +37,8 @@
 
         public bool IsEuroStandardExact { get; set; }
 
+        public bool IsExteriorMetallic { get; set; }
+
         public int Views { get; set; }
 
         public int AdvertProviderId { get; set; }

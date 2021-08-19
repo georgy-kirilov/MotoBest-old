@@ -39,6 +39,7 @@
             model.TransmissionType = NormalizeTransmission(model.TransmissionType);
             model.ColorName = NormalizeColor(model.ColorName);
             model.RegionName = NormalizeRegion(model.RegionName);
+            model.BrandName = NormalizeBrand(model.BrandName);
         }
 
         public string AdvertUrlFormat { get; }

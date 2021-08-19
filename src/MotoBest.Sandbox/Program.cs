@@ -41,7 +41,7 @@
             var context = BrowsingContext.New(config);
 
             var scraper = new CarsBgWebScraper(context);
-            var model = await scraper.ScrapeAdvertAsync("6093f4d8aef39a099f541502");
+            var model = await scraper.ScrapeAdvertAsync("6083b3420edcd575d2410372");
 
             Console.WriteLine();
 

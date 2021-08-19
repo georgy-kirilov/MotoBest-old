@@ -154,6 +154,11 @@
             return NormalizeEntity(region, RegionVariations, false);
         }
 
+        public static string NormalizeBrand(string brand)
+        {
+            return NormalizeEntity(brand, BrandsVariations);
+        }
+
         public static string EstimateEuroStandard(AdvertScrapeModel model)
         {
             model.IsEuroStandardExact = false;
