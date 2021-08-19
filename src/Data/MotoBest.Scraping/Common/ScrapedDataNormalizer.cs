@@ -151,12 +151,7 @@
 
         public static string NormalizeRegion(string region)
         {
-            if (region == null)
-            {
-                return null;
-            }
-
-            return RegionVariations.ContainsKey(region) ? RegionVariations[region] : null;
+            return NormalizeEntity(region, RegionVariations, false);
         }
 
         public static string EstimateEuroStandard(AdvertScrapeModel model)
@@ -177,15 +172,15 @@
             return currentEuroStandardType;
         }
 
-        private static string NormalizeEntity(string entity, IDictionary<string, string> entityVariations)
+        private static string NormalizeEntity(string entity, IDictionary<string, string> entityVariations, bool lowercaseComparison = true)
         {
             if (entity == null)
             {
                 return null;
             }
 
-            string lowerEntity = entity.ToLower();
-            return entityVariations.ContainsKey(lowerEntity) ? entityVariations[lowerEntity] : null;
+            string formattedEntity = lowercaseComparison ? entity.ToLower() : entity;
+            return entityVariations.ContainsKey(formattedEntity) ? entityVariations[formattedEntity] : entity;
         }
     }
 }

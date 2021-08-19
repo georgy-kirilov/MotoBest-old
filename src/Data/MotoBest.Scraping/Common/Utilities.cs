@@ -2,6 +2,9 @@
 {
     using System.Text;
     using System.Globalization;
+    using System.Threading.Tasks;
+    using System.Net.Http;
+    using System.Collections.Generic;
 
     public static class Utilities
     {
@@ -25,6 +28,20 @@
             }
 
             return builder.ToString();
+        }
+
+        public static async Task<string> GetHtmlAsync(string url, params KeyValuePair<string, string>[] headers)
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+            foreach (var header in headers)
+            {
+                request.Headers.Add(header.Key, header.Value);
+            }
+
+            var response = await client.SendAsync(request);
+            return await response.Content.ReadAsStringAsync();
         }
     }
 }

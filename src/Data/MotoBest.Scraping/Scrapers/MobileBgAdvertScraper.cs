@@ -85,8 +85,8 @@
                 foreach (string url in urls)
                 {
                     string remoteId = url.Split("?")[1].Split("&")[1].Split("=")[1];
-                    AdvertScrapeModel advert = await ScrapeAdvertAsync(remoteId);
-                    action.Invoke(advert);
+                    AdvertScrapeModel model = await ScrapeAdvertAsync(remoteId);
+                    action.Invoke(model);
                 }
             }
         }
