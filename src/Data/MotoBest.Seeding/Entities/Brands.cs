@@ -203,6 +203,7 @@
         public const string Volga = "Volga";
         public const string Volvo = "Volvo";
         public const string Vauxhall = "Vauxhall";
+        public const string Vromos = "VROMOS";
         #endregion
 
         #region Brands with W
@@ -436,6 +437,7 @@
                     Volga,
                     Volvo,
                     Vauxhall,
+                    Vromos,
                 #endregion
 
                 #region Brands with W

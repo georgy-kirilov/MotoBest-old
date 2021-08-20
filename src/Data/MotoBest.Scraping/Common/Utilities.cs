@@ -5,6 +5,7 @@
     using System.Globalization;
     using System.Threading.Tasks;
     using System.Collections.Generic;
+    using System;
 
     public static class Utilities
     {
@@ -22,7 +23,6 @@
             public const string MonthNameDateFormat = "MMMM";
         }
 
-        
         public static class Currency
         {
             public const decimal EuroToBgnExchangeRate = 1.95583M;
@@ -34,6 +34,11 @@
 
         public static string SanitizeText(string input, params string[] stringsToSanitize)
         {
+            if (input == null)
+            {
+                return null;
+            }
+
             var builder = new StringBuilder(input);
 
             foreach (string stringToSanitize in stringsToSanitize)
@@ -42,6 +47,16 @@
             }
 
             return builder.ToString();
+        }
+
+        public static decimal GetCurrencyExchangeRate(string input)
+        {
+            if (input.Contains("eur"))
+            {
+                return Currency.EuroToBgnExchangeRate;
+            }
+
+            return 1;
         }
 
         public static async Task<string> GetHtmlAsync(string url, params KeyValuePair<string, string>[] headers)

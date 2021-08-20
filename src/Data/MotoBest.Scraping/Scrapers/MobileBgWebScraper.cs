@@ -15,6 +15,8 @@
     using static MotoBest.Scraping.Common.Utilities.Characters;
     using static MotoBest.Scraping.Common.ScrapedDataNormalizer;
 
+    using static MotoBest.Scraping.Common.PropertyParser;
+
     public class MobileBgWebScraper : BaseWebScraper
     {
         public const string MobileBgAdvertProviderName = "mobile.bg";
@@ -23,15 +25,15 @@
 
         private static readonly Dictionary<string, Action<string, AdvertScrapeModel>> KeyValuePairsParsingTable = new()
         {
-            { "дата на производство", ParseManufacturingDate },
-            { "тип двигател", ParseEngineType },
-            { "мощност", ParseHorsePowers },
-            { "скоростна кутия", ParseTransmissionType },
-            { "категория", ParseBodyStyle },
-            { "пробег", ParseKilometrage },
-            { "цвят", ParseColorName },
-            { "евростандарт", ParseEuroStandard },
-            { "състояние", ParseCondition },
+            { "цвят", ParseColorNameAndExterior },
+            { "тип двигател", (input, model) => model.EngineType = input?.Trim() },
+            { "скоростна кутия", (input, model) => model.TransmissionType = input?.Trim() },
+            { "категория", (input, model) => model.BodyStyleName = input?.Trim() },
+            { "евростандарт", (input, model) => model.EuroStandardType = input?.Trim().ToLower() },
+            { "състояние", (input, model) => model.Condition = input?.Trim() },
+            { "дата на производство", (input, model) => model.ManufacturingDate = ParseManufacturingDate(input) },
+            { "мощност", (input, model) => model.HorsePowers = ParseHorsePowers(input) },
+            { "пробег", (input, model) => model.Kilometrage = ParseKilometrage(input) },
         };
 
         private HashSet<string> features = new();
@@ -56,8 +58,8 @@
             model.Views = ScrapeViews(document);
             model.Description = ScrapeDescription(document);
 
-            model.IsNewImport = ParseImportValue();
-            model.HasFourDoors = ParseDoors();
+            model.IsNewImport = features.Contains("нов внос");
+            model.HasFourDoors = features.Contains("4(5) врати");
 
             ScrapeBrandAndModelName(document, model);
             ScrapeTechnicalCharacteristics(document, model);
@@ -115,47 +117,20 @@
 
         public static decimal? ScrapePrice(IDocument document)
         {
-            decimal? price;
-
-            try
-            {
-                string input = SanitizeText(document.QuerySelector("#details_price")?.TextContent, "лв.", Whitespace);
-                price = decimal.Parse(input);
-            }
-            catch (Exception)
-            {
-                price = null;
-            }
-
-            if (price == 0)
-            {
-                price = null;
-            }
-
-            return price;
+            return ParsePrice(document.QuerySelector("#details_price")?.TextContent);
         }
 
-        public static void ScrapeTechnicalCharacteristics(IDocument document, AdvertScrapeModel scrapeModel)
+        public static void ScrapeTechnicalCharacteristics(IDocument document, AdvertScrapeModel model)
         {
             var characteristicsList = document.QuerySelectorAll("ul.dilarData > li");
 
             for (int i = 0; i < characteristicsList.Length; i += 2)
             {
-                string currentPropertyName = characteristicsList[i].TextContent.ToLower();
-                string currentPropertyValue = characteristicsList[i + 1].TextContent.ToLower();
+                string propertyKey = characteristicsList[i]?.TextContent.ToLower();
+                string propertyValue = characteristicsList[i + 1]?.TextContent.ToLower();
 
-                KeyValuePairsParsingTable[currentPropertyName].Invoke(currentPropertyValue, scrapeModel);
+                KeyValuePairsParsingTable[propertyKey].Invoke(propertyValue, model);
             }
-        }
-
-        public bool ParseImportValue()
-        {
-            return features.Contains("нов внос");
-        }
-
-        public bool ParseDoors()
-        {
-            return features.Contains("4(5) врати");
         }
 
         public static HashSet<string> ScrapeFeatures(IDocument document)
@@ -179,9 +154,16 @@
             return allAdvertFeatures;
         }
 
-        public static int ScrapeViews(IDocument document)
+        public static int? ScrapeViews(IDocument document)
         {
-            return int.Parse(SanitizeText(document.QuerySelector("span.advact")?.TextContent, Whitespace));
+            try
+            {
+                return int.Parse(SanitizeText(document.QuerySelector("span.advact")?.TextContent, Whitespace));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public static void ScrapeImageUrls(IDocument document, AdvertScrapeModel model)
@@ -215,93 +197,30 @@
             string fullAddress = addressBlocks[addressBlockIndex].TextContent.Trim();
 
             var fullAddressArgs = fullAddress.Split($"{Comma}{Whitespace}");
-            model.RegionName = fullAddressArgs[0];
-            model.TownName = fullAddressArgs[1];
+            model.RegionName = fullAddressArgs[0]?.Trim();
+            model.TownName = SanitizeText(fullAddressArgs[1], "гр.", "с.", "к.к.").Trim();
         }
 
-        public static DateTime ScrapeLastModifiedOn(IDocument document)
-        {
-            string query = "div[style='float:left; margin-top:10px;'] > span";
-            var args = document.QuerySelector(query)?.TextContent.Split(Whitespace);
-            var timeArgs = args[2].Split(Colon);
-
-            int hour = int.Parse(timeArgs[0]);
-            int minute = int.Parse(timeArgs[1]);
-            int day = int.Parse(args[5]);
-            int month = DateTime.ParseExact(args[6], MonthNameDateFormat, BulgarianCultureInfo).Month;
-            int year = int.Parse(args[7]);
-
-            return new DateTime(year, month, day, hour, minute, 0);
-        }
-
-        public static void ParseManufacturingDate(string input, AdvertScrapeModel model)
-        {
-            if (input == null)
-            {
-                return;
-            }
-
-            string rawDateInput = SanitizeText(input, "г.");
-            string[] rawDateInputArgs = rawDateInput.Split(Whitespace);
-
-            int month = DateTime.ParseExact(rawDateInputArgs[0], MonthNameDateFormat, BulgarianCultureInfo).Month;
-            int year = int.Parse(rawDateInputArgs[1]);
-
-            model.ManufacturingDate = new DateTime(year, month, 1);
-        }
-
-        public static void ParseKilometrage(string input, AdvertScrapeModel model)
+        public static DateTime? ScrapeLastModifiedOn(IDocument document)
         {
             try
             {
-                model.Kilometrage = int.Parse(SanitizeText(input.ToLower(), Whitespace, "км"));
+                string query = "div[style='float:left; margin-top:10px;'] > span";
+                var args = document.QuerySelector(query)?.TextContent.Split(Whitespace);
+                var timeArgs = args[2].Split(Colon);
+
+                int hour = int.Parse(timeArgs[0]);
+                int minute = int.Parse(timeArgs[1]);
+                int day = int.Parse(args[5]);
+                int month = DateTime.ParseExact(args[6], MonthNameDateFormat, BulgarianCultureInfo).Month;
+                int year = int.Parse(args[7]);
+
+                return new DateTime(year, month, day, hour, minute, 0);
             }
             catch (Exception)
             {
-                return;
+                return null;
             }
-        }
-
-        public static void ParseHorsePowers(string input, AdvertScrapeModel model)
-        {
-            try
-            {
-                model.HorsePowers = int.Parse(SanitizeText(input.ToLower(), Whitespace, "к.с."));
-            }
-            catch (Exception)
-            {
-                return;
-            }
-        }
-
-        public static void ParseEngineType(string input, AdvertScrapeModel model)
-        {
-            model.EngineType = input?.Trim();
-        }
-
-        public static void ParseTransmissionType(string input, AdvertScrapeModel model)
-        {
-            model.TransmissionType = input?.Trim();
-        }
-
-        public static void ParseBodyStyle(string input, AdvertScrapeModel model)
-        {
-            model.BodyStyleName = input?.Trim();
-        }
-
-        public static void ParseColorName(string input, AdvertScrapeModel model)
-        {
-            model.ColorName = input?.Trim();
-        }
-
-        public static void ParseEuroStandard(string input, AdvertScrapeModel model)
-        {
-            model.EuroStandardType = input?.Trim().ToLower();
-        }
-
-        public static void ParseCondition(string input, AdvertScrapeModel model)
-        {
-            model.Condition = input?.Trim();
         }
     }
 }

@@ -16,6 +16,8 @@
     using static MotoBest.Scraping.Common.Utilities.Characters;
     using static MotoBest.Scraping.Common.ScrapedDataNormalizer;
 
+    using static MotoBest.Scraping.Common.PropertyParser;
+
     public class CarmarketBgWebScraper : BaseWebScraper
     {
         public const string CarmarketBgAdvertProviderName = "carmarket.bg";
@@ -24,16 +26,16 @@
 
         private static readonly Dictionary<string, Action<string, AdvertScrapeModel>> TechnicalParsingTable = new()
         {
-            { "цена", ParsePrice },
-            { "дата на производство", ParseManufacturingDate },
-            { "тип двигател", ParseEngineType },
-            { "мощност", ParseHorsePowers },
-            { "скоростна кутия", ParseTransmissionType },
-            { "категория", ParseBodyStyleName },
-            { "пробег", ParseKilometrage },
-            { "тип", ParseCondition },
-            { "врати", ParseDoors },
-            { "цвят", ParseColorName },
+            { "врати", ParseDoorsCount },
+            { "цвят", ParseColorNameAndExterior },
+            { "цена", (input, model) => model.Price = ParsePrice(input) },
+            { "дата на производство", (input, model) => model.ManufacturingDate = ParseManufacturingDate(input) },
+            { "тип двигател", (input, model) => model.EngineType = input?.Trim() },
+            { "мощност", (input, model) => model.HorsePowers = ParseHorsePowers(input) },
+            { "скоростна кутия", (input, model) => model.TransmissionType = input?.Trim() },
+            { "категория", (input, model) => model.BodyStyleName = input?.Trim() },
+            { "пробег", (input, model) => model.Kilometrage = ParseKilometrage(input) },
+            { "тип", (input, model) => model.Condition = input?.Trim() },
         };
 
         public CarmarketBgWebScraper(IBrowsingContext browsingContext)
@@ -81,15 +83,8 @@
                                                 .Split("/")[^1]);
                 foreach (string id in ids)
                 {
-                    try
-                    {
-                        AdvertScrapeModel model = await ScrapeAdvertAsync(id);
-                        action.Invoke(model);
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine(id);
-                    }
+                    AdvertScrapeModel model = await ScrapeAdvertAsync(id);
+                    action.Invoke(model);
                 }
             }
         }
@@ -120,15 +115,25 @@
             return SanitizeText(document.QuerySelector("span.cmOfferRegion")?.TextContent, "Регион:").Trim();
         }
 
-        public static DateTime ScrapeLastModifiedOn(IDocument document)
+        public static DateTime? ScrapeLastModifiedOn(IDocument document)
         {
-            var dateTimeTag = document.QuerySelector("div.cmOfferStatus > time");
-            var date = DateTime.ParseExact(dateTimeTag.GetAttribute("datetime"), "yyyy-MM-dd", BulgarianCultureInfo);
-            var args = dateTimeTag.TextContent.Split(Whitespace, StringSplitOptions.RemoveEmptyEntries);
-            var timeArgs = args[2].Split(":");
-            int hour = int.Parse(timeArgs[0]);
-            int minute = int.Parse(timeArgs[1]);
-            return new DateTime(date.Year, date.Month, date.Day, hour, minute, 0);
+            try
+            {
+                var dateTimeTag = document.QuerySelector("div.cmOfferStatus > time");
+                var date = DateTime.ParseExact(dateTimeTag.GetAttribute("datetime"), "yyyy-MM-dd", BulgarianCultureInfo);
+
+                var args = dateTimeTag.TextContent.Split(Whitespace, StringSplitOptions.RemoveEmptyEntries);
+                var timeArgs = args[2].Split(Colon);
+
+                int hour = int.Parse(timeArgs[0]);
+                int minute = int.Parse(timeArgs[1]);
+
+                return new DateTime(date.Year, date.Month, date.Day, hour, minute, 0);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public static HashSet<string> ScrapeImageUrls(IDocument document)
@@ -173,7 +178,7 @@
             if (imageTagArgs.Length != 2)
             {
                 string query = "div[style='margin-top: 10px;'] > script";
-                var scriptTagVariableArgs = document.QuerySelector(query)?.TextContent.Split(NewLine)[7].Split("=")[1].Split(", ");
+                var scriptTagVariableArgs = document.QuerySelector(query)?.TextContent.Split(NewLine)[7].Split("=")[1].Split($"{Comma}{Whitespace}");
 
                 string brandName = SanitizeText(scriptTagVariableArgs[0], "'").Trim();
                 string modelName = scriptTagVariableArgs[1].Trim();
@@ -206,69 +211,9 @@
             }
         }
 
-        public static void ParsePrice(string input, AdvertScrapeModel model)
-        {
-            if (input == null)
-            {
-                model.Price = null;
-            }
-            else
-            {
-                decimal currencyExchangeRate = input.Contains("eur") ? EuroToBgnExchangeRate : 1;
-                input = SanitizeText(input, "лв.", "bgn", "eur", Whitespace);
-                model.Price = decimal.Parse(input) * currencyExchangeRate;
-            }
-        }
-
-        public static void ParseManufacturingDate(string input, AdvertScrapeModel model)
-        {
-            input = SanitizeText(input, "г.")?.Trim();
-            var rawDateArgs = input.Split(Whitespace, StringSplitOptions.RemoveEmptyEntries);
-            int month = DateTime.ParseExact(rawDateArgs[0], MonthNameDateFormat, BulgarianCultureInfo).Month;
-            int year = int.Parse(rawDateArgs[1]);
-            model.ManufacturingDate = new DateTime(year, month, 1);
-        }
-
-        public static void ParseEngineType(string input, AdvertScrapeModel model)
-        {
-            model.EngineType = input;
-        }
-
-        public static void ParseHorsePowers(string input, AdvertScrapeModel model)
-        {
-            input = SanitizeText(input, "к.с.")?.Trim();
-            model.HorsePowers = int.Parse(input);
-        }
-
-        public static void ParseTransmissionType(string input, AdvertScrapeModel model)
-        {
-            model.TransmissionType = input;
-        }
-
-        public static void ParseBodyStyleName(string input, AdvertScrapeModel model)
-        {
-            model.BodyStyleName = input;
-        }
-
-        public static void ParseKilometrage(string input, AdvertScrapeModel model)
-        {
-            input = SanitizeText(input, "км", Whitespace);
-            model.Kilometrage = long.Parse(input);
-        }
-
-        public static void ParseCondition(string input, AdvertScrapeModel model)
-        {
-            model.Condition = input;
-        }
-
-        public static void ParseDoors(string input, AdvertScrapeModel model)
+        public static void ParseDoorsCount(string input, AdvertScrapeModel model)
         {
             model.HasFourDoors = SanitizeText(input, "врати").Trim() == "4(5)";
-        }
-
-        public static void ParseColorName(string input, AdvertScrapeModel model)
-        {
-            model.ColorName = input;
         }
 
         public async Task<int> ScrapeAllAdvertsCountAsync()

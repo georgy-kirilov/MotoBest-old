@@ -26,15 +26,15 @@
 
         public decimal? Price { get; set; }
 
-        public int HorsePowers { get; set; }
+        public int? HorsePowers { get; set; }
 
-        public long Kilometrage { get; set; }
+        public long? Kilometrage { get; set; }
 
-        public int Views { get; set; }
+        public int? Views { get; set; }
 
-        public DateTime ManufacturingDate { get; set; }
+        public DateTime? ManufacturingDate { get; set; }
 
-        public DateTime LastModifiedOn { get; set; }
+        public DateTime? LastModifiedOn { get; set; }
 
         public string BrandName { get; set; }
 

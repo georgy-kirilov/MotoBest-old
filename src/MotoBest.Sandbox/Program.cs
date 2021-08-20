@@ -25,8 +25,8 @@
             Console.OutputEncoding = Encoding.UTF8;
 
             //await new ApplicationDbContext().Database.EnsureDeletedAsync();
-            //Console.WriteLine("Database deleted");
-/*
+            Console.WriteLine("Database deleted");
+
             await new ApplicationDbContext().Database.EnsureCreatedAsync();
             Console.WriteLine("Database created");
 
@@ -36,23 +36,18 @@
             Console.WriteLine("Seeding complete. Press any key to continue...");
             Console.ReadKey();
             Console.WriteLine("Scraping...");
-*/
+
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
-            var scraper = new CarsBgWebScraper(context);
-            var model = await scraper.ScrapeAdvertAsync("6083b3420edcd575d2410372");
+            BaseWebScraper scraper = new CarmarketBgWebScraper(context);
 
-            Console.WriteLine();
-
-            /*
-            BaseAdvertScraper scraper = new MobileBgAdvertScraper(context);
             await scraper.ScrapeAllAdvertsAsync(async (model) =>
             {
                 using var db = new ApplicationDbContext();
                 var service = new AdvertsService(db);
                 await service.AddOrUpdateAsync(model);
-            });*/
+            });
         }
     }
 }
