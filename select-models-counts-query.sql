@@ -5,6 +5,4 @@ select count(*) from Engines /* 4 */
 select count(*) from Colors /* 41 */
 select count(*) from EuroStandards /* 6 */
 select count(*) from Regions /* 28 */
-select count(*) from Brands /* 151 */
-select count(*) from Adverts
-select * from Brands
+select count(*) from Brands /* 152 */

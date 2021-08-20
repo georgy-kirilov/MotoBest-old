@@ -40,18 +40,14 @@
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
-            BaseWebScraper scraper = new MobileBgWebScraper(context);
-            var model = await scraper.ScrapeAdvertAsync("21624193922807549");
-            using var db = new ApplicationDbContext();
-            var service = new AdvertsService(db);
-            await service.AddOrUpdateAsync(model);
-            Console.WriteLine(model.IsExteriorMetallic);
-            /*await scraper.ScrapeAllAdvertsAsync(async (model) =>
+            BaseWebScraper scraper = new CarmarketBgWebScraper(context);
+            
+            await scraper.ScrapeAllAdvertsAsync(async (model) =>
             {
                 using var db = new ApplicationDbContext();
                 var service = new AdvertsService(db);
                 await service.AddOrUpdateAsync(model);
-            });*/
+            });
         }
     }
 }

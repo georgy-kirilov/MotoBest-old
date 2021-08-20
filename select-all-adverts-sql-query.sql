@@ -25,7 +25,8 @@ select
 	a.Views as [Views],
 	a.Description,
 	a.LastModifiedOn as [Last Modified On],
-	a.IsNewImport as [New Import]
+	a.IsNewImport as [New Import],
+	a.IsEuroStandardExact [Is ES Exact]
 
 from Adverts as a
 
@@ -41,6 +42,4 @@ join Transmissions as t on t.Id = a.TransmissionId
 join EuroStandards as es on es.Id = a.EuroStandardId
 left join Towns as town on town.Id = a.TownId
 
-
-select RemoteId from Adverts where Price is null
-select RemoteId from Adverts where HorsePowers is null
+select count(*) from Adverts

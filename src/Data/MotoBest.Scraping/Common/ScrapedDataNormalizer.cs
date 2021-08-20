@@ -151,12 +151,12 @@
 
         public static string NormalizeRegion(string region)
         {
-            return NormalizeEntity(region, RegionVariations, false);
+            return NormalizeEntity(region, RegionVariations, lowercaseComparison: false);
         }
 
         public static string NormalizeBrand(string brand)
         {
-            return NormalizeEntity(brand, BrandsVariations);
+            return NormalizeEntity(brand, BrandsVariations, lowercaseComparison: false);
         }
 
         public static string EstimateEuroStandard(AdvertScrapeModel model)
