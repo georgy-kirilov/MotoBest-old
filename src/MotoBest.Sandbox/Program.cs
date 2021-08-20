@@ -17,14 +17,16 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Diagnostics;
+    using System.Linq;
+    using MotoBest.Models;
 
     public class Program
     {
         public static async Task Main()
         {
             Console.OutputEncoding = Encoding.UTF8;
-
-            await new ApplicationDbContext().Database.EnsureDeletedAsync();
+            /*
+            //await new ApplicationDbContext().Database.EnsureDeletedAsync();
             Console.WriteLine("Database deleted");
 
             await new ApplicationDbContext().Database.EnsureCreatedAsync();
@@ -40,14 +42,37 @@
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
-            BaseWebScraper scraper = new CarmarketBgWebScraper(context);
+            BaseWebScraper scraper = new MobileBgWebScraper(context);
             
             await scraper.ScrapeAllAdvertsAsync(async (model) =>
             {
                 using var db = new ApplicationDbContext();
                 var service = new AdvertsService(db);
                 await service.AddOrUpdateAsync(model);
-            });
+            });*/
+
+            GetAvdertById("D4E6E361-E738-436D-70A7-08D963C8F61B");
+        }
+
+        public static void GetAvdertById(string id)
+        {
+            using var db = new ApplicationDbContext();
+            var advert = db.Adverts.FirstOrDefault(a => a.Id.ToString() == id);
+
+            if (advert != null)
+            {
+                DrawAdvert(advert);
+            }
+        }
+
+        public static void DrawAdvert(Advert advert)
+        {
+            string c = advert.IsEuroStandardExact ? "" : "*";
+            Console.WriteLine($"{advert.Title} -> {advert.Price:f2} лв");
+            Console.WriteLine($"мощност: {advert.HorsePowers} к.с.");
+            Console.WriteLine($"категория: {advert.BodyStyle.Name}");
+            Console.WriteLine($"скоростна кутия: {advert.Transmission.Type}");
+            Console.WriteLine($"евро стандарт: {advert.EuroStandard.Type}{c}");
         }
     }
 }

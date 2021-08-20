@@ -1,6 +1,7 @@
 use [MotoBest]
 
 select
+	a.Id,
 	ap.Name as [Provider],
 	a.RemoteId as [Remote Id],
 	a.Title as [Title],
