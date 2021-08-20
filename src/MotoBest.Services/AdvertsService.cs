@@ -83,6 +83,7 @@
             advert.IsNewImport = model.IsNewImport;
             advert.HasFourDoors = model.HasFourDoors;
             advert.IsEuroStandardExact = model.IsEuroStandardExact;
+            advert.IsExteriorMetallic = model.IsExteriorMetallic;
         }
     }
 }

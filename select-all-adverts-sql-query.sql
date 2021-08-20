@@ -16,6 +16,7 @@ select
 	es.Type as [Euro Standard],
 	a.HorsePowers as [Horse Powers],
 	a.Price as [Price],
+	a.IsExteriorMetallic as [Metallic Exterior],
 	format(a.ManufacturingDate, 'MMMM yyyy') as [Manufacturing Date],
 	case
 		when a.HasFourDoors = 0 then '2/3'
@@ -40,5 +41,6 @@ join Transmissions as t on t.Id = a.TransmissionId
 join EuroStandards as es on es.Id = a.EuroStandardId
 left join Towns as town on town.Id = a.TownId
 
-order by a.Views desc
-select [Description] from Adverts where [Description] = ''
+
+select RemoteId from Adverts where Price is null
+select RemoteId from Adverts where HorsePowers is null
