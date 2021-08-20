@@ -21,7 +21,7 @@
         public const string MobileBgAdvertUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv={0}";
         public const string MobileBgSearchUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=3&slink=l40dr7&f1={0}";
 
-        private static readonly Dictionary<string, Action<string, AdvertScrapeModel>> CharacteristicsParsingTable = new()
+        private static readonly Dictionary<string, Action<string, AdvertScrapeModel>> KeyValuePairsParsingTable = new()
         {
             { "дата на производство", ParseManufacturingDate },
             { "тип двигател", ParseEngineType },
@@ -105,23 +105,34 @@
 
         public static string ScrapeDescription(IDocument document)
         {
-            return document.QuerySelectorAll("form[name='search'] > table")?[2]
-                           .QuerySelector("tbody > tr > td")?
-                           .TextContent
-                           .Trim();
+            string description = document.QuerySelectorAll("form[name='search'] > table")?[2]
+                                         .QuerySelector("tbody > tr > td")?
+                                         .TextContent
+                                         .Trim();
+
+            return description != string.Empty ? description : null;
         }
 
         public static decimal? ScrapePrice(IDocument document)
         {
+            decimal? price;
+
             try
             {
                 string input = SanitizeText(document.QuerySelector("#details_price")?.TextContent, "лв.", Whitespace);
-                return decimal.Parse(input);
+                price = decimal.Parse(input);
             }
             catch (Exception)
             {
-                return null;
+                price = null;
             }
+
+            if (price == 0)
+            {
+                price = null;
+            }
+
+            return price;
         }
 
         public static void ScrapeTechnicalCharacteristics(IDocument document, AdvertScrapeModel scrapeModel)
@@ -133,7 +144,7 @@
                 string currentPropertyName = characteristicsList[i].TextContent.ToLower();
                 string currentPropertyValue = characteristicsList[i + 1].TextContent.ToLower();
 
-                CharacteristicsParsingTable[currentPropertyName].Invoke(currentPropertyValue, scrapeModel);
+                KeyValuePairsParsingTable[currentPropertyName].Invoke(currentPropertyValue, scrapeModel);
             }
         }
 
@@ -170,49 +181,49 @@
 
         public static int ScrapeViews(IDocument document)
         {
-            return int.Parse(document.QuerySelector("span.advact")?.TextContent);
+            return int.Parse(SanitizeText(document.QuerySelector("span.advact")?.TextContent, Whitespace));
         }
 
-        public static void ScrapeImageUrls(IDocument document, AdvertScrapeModel scrapeModel)
+        public static void ScrapeImageUrls(IDocument document, AdvertScrapeModel model)
         {
-            var imageUrls = document
-                             .QuerySelectorAll("div#pictures_moving > a")
-                             .Select(a => a.GetAttribute("data-link"));
+            var imageUrls = document.QuerySelectorAll("div#pictures_moving > a")
+                                    .Select(a => a.GetAttribute("data-link"));
 
             foreach (string imageUrl in imageUrls)
             {
-                scrapeModel.ImageUrls.Add(imageUrl);
+                model.ImageUrls.Add(imageUrl);
             }
         }
 
-        public static void ScrapeBrandAndModelName(IDocument document, AdvertScrapeModel scrapeModel)
+        public static void ScrapeBrandAndModelName(IDocument document, AdvertScrapeModel model)
         {
             var args = document
-                        .QuerySelector("a.fastLinks")
-                        .GetAttribute("href")
+                        .QuerySelector("a.fastLinks")?
+                        .GetAttribute("href")?
                         .Trim()
                         .Split("?")[1]
                         .Split("&");
 
-            scrapeModel.BrandName = args[1].Split("=")[1];
-            scrapeModel.ModelName = args[2].Split("=")[1];
+            model.BrandName = args[1].Split("=")[1];
+            model.ModelName = args[2].Split("=")[1];
         }
 
-        public static void ScrapeRegionAndTownName(IDocument document, AdvertScrapeModel scrapeModel)
+        public static void ScrapeRegionAndTownName(IDocument document, AdvertScrapeModel model)
         {
             var addressBlocks = document.QuerySelectorAll("div.adress");
             int addressBlockIndex = addressBlocks.Length > 1 ? 1 : 0;
             string fullAddress = addressBlocks[addressBlockIndex].TextContent.Trim();
 
-            var fullAddressArgs = fullAddress.Split(", ");
-            scrapeModel.RegionName = fullAddressArgs[0];
-            scrapeModel.TownName = fullAddressArgs[1];
+            var fullAddressArgs = fullAddress.Split($"{Comma}{Whitespace}");
+            model.RegionName = fullAddressArgs[0];
+            model.TownName = fullAddressArgs[1];
         }
 
         public static DateTime ScrapeLastModifiedOn(IDocument document)
         {
-            var args = document.QuerySelector("div[style='float:left; margin-top:10px;'] > span")?.TextContent.Split(" ");
-            var timeArgs = args[2].Split(":");
+            string query = "div[style='float:left; margin-top:10px;'] > span";
+            var args = document.QuerySelector(query)?.TextContent.Split(Whitespace);
+            var timeArgs = args[2].Split(Colon);
 
             int hour = int.Parse(timeArgs[0]);
             int minute = int.Parse(timeArgs[1]);
@@ -223,76 +234,74 @@
             return new DateTime(year, month, day, hour, minute, 0);
         }
 
-        public static void ParseManufacturingDate(string input, AdvertScrapeModel scrapeModel)
+        public static void ParseManufacturingDate(string input, AdvertScrapeModel model)
         {
             if (input == null)
             {
                 return;
             }
 
-            string rawDateInput = input.Replace("г.", string.Empty);
-            string[] rawDateInputArgs = rawDateInput.Split(" ");
+            string rawDateInput = SanitizeText(input, "г.");
+            string[] rawDateInputArgs = rawDateInput.Split(Whitespace);
 
             int month = DateTime.ParseExact(rawDateInputArgs[0], MonthNameDateFormat, BulgarianCultureInfo).Month;
             int year = int.Parse(rawDateInputArgs[1]);
 
-            scrapeModel.ManufacturingDate = new DateTime(year, month, 1);
+            model.ManufacturingDate = new DateTime(year, month, 1);
         }
 
-        public static void ParseKilometrage(string input, AdvertScrapeModel scrapeModel)
+        public static void ParseKilometrage(string input, AdvertScrapeModel model)
         {
-            if (input == null)
+            try
+            {
+                model.Kilometrage = int.Parse(SanitizeText(input.ToLower(), Whitespace, "км"));
+            }
+            catch (Exception)
             {
                 return;
             }
-
-            scrapeModel.Kilometrage = int.Parse(input
-                                                 .Replace(" ", string.Empty)
-                                                 .ToLower()
-                                                 .Replace("км", string.Empty));
         }
 
-        public static void ParseHorsePowers(string input, AdvertScrapeModel scrapeModel)
+        public static void ParseHorsePowers(string input, AdvertScrapeModel model)
         {
-            if (input == null)
+            try
+            {
+                model.HorsePowers = int.Parse(SanitizeText(input.ToLower(), Whitespace, "к.с."));
+            }
+            catch (Exception)
             {
                 return;
             }
-
-            scrapeModel.HorsePowers = int.Parse(
-                                            input.Replace(" ", string.Empty)
-                                                 .ToLower()
-                                                 .Replace("к.с.", string.Empty));
         }
 
-        public static void ParseEngineType(string input, AdvertScrapeModel scrapeModel)
+        public static void ParseEngineType(string input, AdvertScrapeModel model)
         {
-            scrapeModel.EngineType = input?.Trim();
+            model.EngineType = input?.Trim();
         }
 
-        public static void ParseTransmissionType(string input, AdvertScrapeModel scrapeModel)
+        public static void ParseTransmissionType(string input, AdvertScrapeModel model)
         {
-            scrapeModel.TransmissionType = input?.Trim();
+            model.TransmissionType = input?.Trim();
         }
 
-        public static void ParseBodyStyle(string input, AdvertScrapeModel scrapeModel)
+        public static void ParseBodyStyle(string input, AdvertScrapeModel model)
         {
-            scrapeModel.BodyStyleName = input?.Trim();
+            model.BodyStyleName = input?.Trim();
         }
 
-        public static void ParseColorName(string input, AdvertScrapeModel scrapeModel)
+        public static void ParseColorName(string input, AdvertScrapeModel model)
         {
-            scrapeModel.ColorName = input?.Trim();
+            model.ColorName = input?.Trim();
         }
 
-        public static void ParseEuroStandard(string input, AdvertScrapeModel scrapeModel)
+        public static void ParseEuroStandard(string input, AdvertScrapeModel model)
         {
-            scrapeModel.EuroStandardType = input?.Trim().ToLower();
+            model.EuroStandardType = input?.Trim().ToLower();
         }
 
-        public static void ParseCondition(string input, AdvertScrapeModel scrapeModel)
+        public static void ParseCondition(string input, AdvertScrapeModel model)
         {
-            scrapeModel.Condition = input?.Trim();
+            model.Condition = input?.Trim();
         }
     }
 }
