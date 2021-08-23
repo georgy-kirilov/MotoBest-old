@@ -11,6 +11,7 @@
         public Advert()
         {
             Images = new HashSet<Image>();
+            SavedUsers = new HashSet<ApplicationUser>();
         }
 
         [Required]
@@ -86,5 +87,7 @@
         public virtual Transmission Transmission { get; set; }
 
         public virtual ICollection<Image> Images { get; set; }
+
+        public virtual ICollection<ApplicationUser> SavedUsers { get; set; }
     }
 }
