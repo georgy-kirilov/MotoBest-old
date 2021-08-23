@@ -21,7 +21,7 @@
     {
         public const string MobileBgAdvertProviderName = "mobile.bg";
         public const string MobileBgAdvertUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=4&adv={0}";
-        public const string MobileBgSearchUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=3&slink=l40dr7&f1={0}";
+        public const string MobileBgSearchUrlFormat = "https://www.mobile.bg/pcgi/mobile.cgi?act=3&slink=l88hqn&f1={0}";
 
         private static readonly Dictionary<string, Action<string, AdvertScrapeModel>> KeyValuePairsParsingTable = new()
         {

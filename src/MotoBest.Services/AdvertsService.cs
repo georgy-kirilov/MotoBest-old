@@ -56,6 +56,11 @@
             await dbContext.SaveChangesAsync();
         }
 
+        public Advert GetAdvertById(string id)
+        {
+            return dbContext.Adverts.FirstOrDefault(a => a.Id.ToString() == id);
+        }
+
         private void MapNavigationalProperties(Advert advert, AdvertScrapeModel model)
         {
             advert.Brand = modelFactory.GetOrCreateBrand(model.BrandName);

@@ -1,0 +1,26 @@
+﻿@model MotoBest.Web.ViewModels.AdvertViewModel
+
+<h2>@Model.Title</h2>
+
+<h3>@Model.Price лв.</h3>
+
+<div class="col-6">
+    <img src="@Model.ImageUrls.First()" class="img-fluid rounded" alt="Снимка на обявата" />
+</div>
+
+<div class="p-2">
+    @{
+        int index = 0;
+        foreach (var infoPair in Model.KeyValuePairInfoRows)
+        {
+            string backgroundStyleClass = index % 2 == 0 ? "alert-dark" : "alert-secondary";
+
+            <div class="@backgroundStyleClass p-1 col-5">
+                <span class="font-weight-bolder p-xl-2">@infoPair.Key</span>
+                <span class="col-4 float-right">@infoPair.Value</span>
+            </div>
+
+            index++;
+        }
+    }
+</div>

@@ -8,6 +8,7 @@ namespace MotoBest.Web
 
     using MotoBest.Data;
     using MotoBest.Models;
+    using MotoBest.Services;
 
     public class Startup
     {
@@ -26,6 +27,8 @@ namespace MotoBest.Web
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddTransient<IAdvertsService, AdvertsService>();
 
             services.AddControllersWithViews();
         }

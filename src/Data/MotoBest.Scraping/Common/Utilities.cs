@@ -21,6 +21,7 @@
         {
             public static readonly CultureInfo BulgarianCultureInfo = new("bg-BG");
             public const string MonthNameDateFormat = "MMMM";
+            public const string FullMonthNameAndYearFormat = "MMMM yyyy";
         }
 
         public static class Currency
