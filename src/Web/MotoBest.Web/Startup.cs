@@ -29,6 +29,7 @@ namespace MotoBest.Web
                     .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddTransient<IAdvertsService, AdvertsService>();
+            services.AddTransient<IAdvertsFormatter, AdvertsFormatter>();
 
             services.AddControllersWithViews();
         }
