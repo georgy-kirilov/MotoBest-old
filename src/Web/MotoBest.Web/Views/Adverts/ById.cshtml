@@ -1,14 +1,12 @@
 ﻿@model MotoBest.Web.ViewModels.AdvertViewModel
-<h3 class="h3">@Model.Title</h3>
+<div class="h5 ml-4 my-4">@Model.Title</div>
 
-<h4 class="h4">@Model.Price</h4>
+<div class="alert-danger col-8 ml-4 my-3 p-3 h5 rounded">Цена: @Model.Price</div>
 
-<div class="my-3">
-    <a href="@Model.OriginalAdvertUrl">Разгледай оригиналната обява от @Model.AdvertProviderName</a>
-</div>
-
-<div class="col-6 text-left">
-    <img id="advert-image" src="@Model.ImageUrls.First()" class="img-fluid rounded" alt="Снимка на обявата" />
+<div class="col-8 my-4">
+    <div class="container-fluid">
+        <img id="advert-image" src="@Model.ImageUrls.First()" class="img-fluid rounded" alt="Снимка на обявата" />
+    </div>
     <div class="alert text-center">
         <button id="prev-img" class="rounded alert-primary border-0 px-3 py-1 mr-4">предишна</button>
         <span id="current-img-index" class="font-weight-bold"></span>
@@ -16,7 +14,7 @@
     </div>
 </div>
 
-<div class="mb-3">
+<div class="mb-3 ml-4">
     @{
         int index = 0;
         foreach (var infoPair in Model.InfoPairRows)
@@ -34,7 +32,7 @@
                 blockCornersStyleClass = "rounded-bottom";
             }
 
-            <div class="@backgroundStyleClass @blockCornersStyleClass p-1 col-5">
+            <div class="@backgroundStyleClass @blockCornersStyleClass p-2 col-8">
                 <span class="font-weight-bolder p-xl-3">@infoPair.Key</span>
                 <span class="col-4 float-right">@infoPair.Value</span>
             </div>
@@ -46,7 +44,7 @@
 
 @if (Model.Description != null)
 {
-    <div class="alert-secondary p-3 col-8 rounded">
+    <div class="alert-secondary p-3 col-8 rounded ml-4">
         <h5 class="h5">Допълнителна информация</h5>
         <p>@Model.Description</p>
     </div>
