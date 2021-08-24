@@ -1,26 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using MotoBest.Web.Models;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MotoBest.Web.Controllers
+﻿namespace MotoBest.Web.Controllers
 {
+    using System.Linq;
+    using System.Diagnostics;
+
+    using Microsoft.AspNetCore.Mvc;
+
+    using MotoBest.Data;
+    using MotoBest.Web.Models;
+    
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext dbContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext dbContext)
         {
-            _logger = logger;
+            this.dbContext = dbContext;
         }
 
         public IActionResult Index()
         {
-            return View();
+            int totalAvdertsCount = dbContext.Adverts.Count();
+            return View(totalAvdertsCount);
         }
 
         public IActionResult Privacy()

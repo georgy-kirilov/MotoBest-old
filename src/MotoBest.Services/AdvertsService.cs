@@ -66,6 +66,24 @@
             return dbContext.Adverts.FirstOrDefault(a => a.Id.ToString() == id);
         }
 
+        public IEnumerable<AdvertViewModel> GetLatestAdverts(int pageIndex)
+        {
+            int advertsPerPageCount = 10;
+            int advertsToSkipCount = advertsPerPageCount * pageIndex;
+
+            if (advertsToSkipCount < 0 || advertsToSkipCount > dbContext.Adverts.Count())
+            {
+                return null;
+            }
+
+            return dbContext.Adverts
+                            .OrderBy(a => a.LastModifiedOn)
+                            .Skip(advertsToSkipCount)
+                            .Take(advertsPerPageCount)
+                            .ToList()
+                            .Select(a => MapViewModelFrom(a));
+        }
+
         public AdvertViewModel MapViewModelFrom(Advert advert)
         {
             if (advert == null)
@@ -75,6 +93,7 @@
 
             var viewModel = new AdvertViewModel
             {
+                Id = advert.Id.ToString(),
                 Title = advert.Title,
                 Description = advert.Description,
                 AdvertProviderName = advert.AdvertProvider?.Name,

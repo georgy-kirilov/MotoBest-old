@@ -15,5 +15,7 @@
         string FormatKilometrage(long? kilometrage);
 
         string FormatDoorsCount(bool? hasFourDoors);
+
+        string FormatDescription(string description);
     }
 }

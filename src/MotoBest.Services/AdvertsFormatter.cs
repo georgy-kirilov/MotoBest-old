@@ -11,6 +11,21 @@
 
     public class AdvertsFormatter : IAdvertsFormatter
     {
+        public string FormatDescription(string description)
+        {
+            if (description == null)
+            {
+                return null;
+            }
+
+            if (description.Length > 150)
+            {
+                return description.Substring(0, 150);
+            }
+
+            return description;
+        }
+
         public string FormatDoorsCount(bool? hasFourDoors)
         {
             if (hasFourDoors == null)
