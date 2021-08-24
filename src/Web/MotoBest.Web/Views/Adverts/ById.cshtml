@@ -1,17 +1,22 @@
 ﻿@model MotoBest.Web.ViewModels.AdvertViewModel
-
 <h3 class="h3">@Model.Title</h3>
 
 <h4 class="h4">@Model.Price</h4>
 
-<a href="@Model.OriginalAdvertUrl" class="p-2">Разгледай оригиналната обява от @Model.AdvertProviderName</a>
-
-<div class="col-6">
-    <img src="@Model.ImageUrls.First()" class="img-fluid rounded" alt="Снимка на обявата" />
+<div class="my-3">
+    <a href="@Model.OriginalAdvertUrl">Разгледай оригиналната обява от @Model.AdvertProviderName</a>
 </div>
 
+<div class="col-6 text-left">
+    <img id="advert-image" src="@Model.ImageUrls.First()" class="img-fluid rounded" alt="Снимка на обявата" />
+    <div class="alert text-center">
+        <button id="prev-img" class="rounded alert-primary border-0 px-3 py-1 mr-4">предишна</button>
+        <span id="current-img-index" class="font-weight-bold"></span>
+        <button id="next-img" class="rounded alert-primary border-0 px-3 py-1 ml-4">следваща</button>
+    </div>
+</div>
 
-<div class="p-2">
+<div class="mb-3">
     @{
         int index = 0;
         foreach (var infoPair in Model.InfoPairRows)
@@ -30,8 +35,8 @@
             }
 
             <div class="@backgroundStyleClass @blockCornersStyleClass p-1 col-5">
-                <span class="font-weight-bolder p-xl-2">@infoPair.Key</span>
-                <span class="col-5 float-right">@infoPair.Value</span>
+                <span class="font-weight-bolder p-xl-3">@infoPair.Key</span>
+                <span class="col-4 float-right">@infoPair.Value</span>
             </div>
 
             index++;
@@ -46,3 +51,41 @@
         <p>@Model.Description</p>
     </div>
 }
+
+<script>
+    const imageUrls = [
+        @foreach (string imageUrl in Model.ImageUrls)
+        {
+            <text>"@imageUrl",</text>
+        }
+    ];
+
+    let imageIndex = 0;
+
+    loadCurrentImage();
+
+    function loadCurrentImage() {
+        document.querySelector("#advert-image").src = imageUrls[imageIndex];
+        updateCurrentImageIndexView();
+    }
+
+    function updateCurrentImageIndexView() {
+        document.querySelector("#current-img-index").textContent = `${imageIndex + 1}/${imageUrls.length}`;
+    }
+
+    document.querySelector("#next-img").addEventListener("click", () => {
+        imageIndex++;
+        if (imageIndex >= imageUrls.length) {
+            imageIndex = 0;
+        }
+        loadCurrentImage();
+    });
+
+    document.querySelector("#prev-img").addEventListener("click", () => {
+        imageIndex--;
+        if (imageIndex < 0) {
+            imageIndex = imageUrls.length - 1;
+        }
+        loadCurrentImage();
+    });
+</script>

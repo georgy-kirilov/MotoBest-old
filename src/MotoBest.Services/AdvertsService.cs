@@ -97,7 +97,6 @@
                 new("Мощност",  advertsFormatter.FormatHorsePowers(advert.HorsePowers)),
                 new("Пробег", advertsFormatter.FormatKilometrage(advert.Kilometrage)),
                 new("Цвят", advert.Color?.Name.Capitalize()),
-                new("Металик", advertsFormatter.FormatMetallicExterior(advert.IsExteriorMetallic)),
                 new("Област", advert.Region?.Name),
                 new("Населено място", advert.Town?.Name),
             };
