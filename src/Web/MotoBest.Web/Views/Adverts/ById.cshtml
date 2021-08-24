@@ -1,12 +1,15 @@
 ﻿@model MotoBest.Web.ViewModels.AdvertViewModel
 
-<h2>@Model.Title</h2>
+<h3 class="h3">@Model.Title</h3>
 
-<h3>@Model.Price лв.</h3>
+<h4 class="h4">@Model.Price</h4>
+
+<a href="@Model.OriginalAdvertUrl" class="p-2">Разгледай оригиналната обява от @Model.AdvertProviderName</a>
 
 <div class="col-6">
     <img src="@Model.ImageUrls.First()" class="img-fluid rounded" alt="Снимка на обявата" />
 </div>
+
 
 <div class="p-2">
     @{
@@ -14,8 +17,19 @@
         foreach (var infoPair in Model.InfoPairRows)
         {
             string backgroundStyleClass = index % 2 == 0 ? "alert-dark" : "alert-secondary";
+            string blockCornersStyleClass = string.Empty;
 
-            <div class="@backgroundStyleClass p-1 col-5">
+            if (index == 0)
+            {
+                blockCornersStyleClass = "rounded-top";
+            }
+
+            if (index == Model.InfoPairRows.Count() - 1)
+            {
+                blockCornersStyleClass = "rounded-bottom";
+            }
+
+            <div class="@backgroundStyleClass @blockCornersStyleClass p-1 col-5">
                 <span class="font-weight-bolder p-xl-2">@infoPair.Key</span>
                 <span class="col-5 float-right">@infoPair.Value</span>
             </div>
@@ -24,3 +38,11 @@
         }
     }
 </div>
+
+@if (Model.Description != null)
+{
+    <div class="alert-secondary p-3 col-8 rounded">
+        <h5 class="h5">Допълнителна информация</h5>
+        <p>@Model.Description</p>
+    </div>
+}

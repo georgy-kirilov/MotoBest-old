@@ -34,7 +34,7 @@
 
         public bool IsNewImport { get; set; }
 
-        public bool HasFourDoors { get; set; }
+        public bool? HasFourDoors { get; set; }
 
         public bool IsEuroStandardExact { get; set; }
 

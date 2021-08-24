@@ -11,6 +11,16 @@
 
     public class AdvertsFormatter : IAdvertsFormatter
     {
+        public string FormatDoorsCount(bool? hasFourDoors)
+        {
+            if (hasFourDoors == null)
+            {
+                return null;
+            }
+
+            return hasFourDoors.Value ? "4/5" : "2/3";
+        }
+
         public string FormatEuroStandard(string euroStandard, bool isEuroStandardExact)
         {
             if (euroStandard == null)
@@ -29,7 +39,7 @@
                 return null;
             }
 
-            return $"{horsePowers} конски сили";
+            return $"{horsePowers} к.с.";
         }
 
         public string FormatKilometrage(long? kilometrage)
@@ -47,7 +57,7 @@
             {
                 if (counter > 3)
                 {
-                    builder.Append(Comma);
+                    builder.Append(Whitespace);
                     counter = 0;
                     i++;
                 }

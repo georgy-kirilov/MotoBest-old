@@ -59,7 +59,16 @@
             model.Description = ScrapeDescription(document);
 
             model.IsNewImport = features.Contains("нов внос");
-            model.HasFourDoors = features.Contains("4(5) врати");
+            
+            if (features.Contains("2(3) врати"))
+            {
+                model.HasFourDoors = false;
+            }
+
+            if (features.Contains("4(5) врати"))
+            {
+                model.HasFourDoors = true;
+            }
 
             ScrapeBrandAndModelName(document, model);
             ScrapeTechnicalCharacteristics(document, model);

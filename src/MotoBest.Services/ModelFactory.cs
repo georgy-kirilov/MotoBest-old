@@ -6,7 +6,7 @@
     using MotoBest.Models;
     using MotoBest.Scraping.Common;
 
-    internal class ModelFactory
+    public class ModelFactory : IModelFactory
     {
         private readonly ApplicationDbContext dbContext;
 

@@ -28,6 +28,7 @@ namespace MotoBest.Web
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddTransient<IModelFactory, ModelFactory>();
             services.AddTransient<IAdvertsService, AdvertsService>();
             services.AddTransient<IAdvertsFormatter, AdvertsFormatter>();
 

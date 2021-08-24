@@ -60,7 +60,7 @@
 
         public string TownName { get; set; }
 
-        public bool HasFourDoors { get; set; }
+        public bool? HasFourDoors { get; set; }
 
         public bool IsNewImport { get; set; }
 

@@ -13,5 +13,7 @@
         string FormatMetallicExterior(bool isExteriorMetallic);
 
         string FormatKilometrage(long? kilometrage);
+
+        string FormatDoorsCount(bool? hasFourDoors);
     }
 }

@@ -10,7 +10,7 @@ using MotoBest.Data;
 namespace MotoBest.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210823075354_InitialCreate")]
+    [Migration("20210824082653_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -197,7 +197,7 @@ namespace MotoBest.Data.Migrations
                     b.Property<int?>("EuroStandardId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("HasFourDoors")
+                    b.Property<bool?>("HasFourDoors")
                         .HasColumnType("bit");
 
                     b.Property<int?>("HorsePowers")

@@ -38,13 +38,13 @@
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
-            BaseWebScraper scraper = new MobileBgWebScraper(context);
+            BaseWebScraper scraper = new CarmarketBgWebScraper(context);
             
             await scraper.ScrapeAllAdvertsAsync(async (model) =>
             {
                 Console.WriteLine(model);
                 using var db = new ApplicationDbContext();
-                var service = new AdvertsService(db);
+                var service = new AdvertsService(db, new ModelFactory(db), new AdvertsFormatter());
                 await service.AddOrUpdateAsync(model);
             });
         }

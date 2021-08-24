@@ -324,7 +324,7 @@ namespace MotoBest.Data.Migrations
                     HorsePowers = table.Column<int>(type: "int", nullable: true),
                     Kilometrage = table.Column<long>(type: "bigint", nullable: true),
                     IsNewImport = table.Column<bool>(type: "bit", nullable: false),
-                    HasFourDoors = table.Column<bool>(type: "bit", nullable: false),
+                    HasFourDoors = table.Column<bool>(type: "bit", nullable: true),
                     IsEuroStandardExact = table.Column<bool>(type: "bit", nullable: false),
                     IsExteriorMetallic = table.Column<bool>(type: "bit", nullable: false),
                     Views = table.Column<int>(type: "int", nullable: true),

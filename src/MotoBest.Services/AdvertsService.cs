@@ -3,20 +3,25 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+    using System.Collections.Generic;
 
     using MotoBest.Data;
     using MotoBest.Models;
+    using MotoBest.Common;
+    using MotoBest.Web.ViewModels;
     using MotoBest.Scraping.Common;
 
     public class AdvertsService : IAdvertsService
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly ModelFactory modelFactory;
+        private readonly IModelFactory modelFactory;
+        private readonly IAdvertsFormatter advertsFormatter;
 
-        public AdvertsService(ApplicationDbContext dbContext)
+        public AdvertsService(ApplicationDbContext dbContext, IModelFactory modelFactory, IAdvertsFormatter advertsFormatter)
         {
             this.dbContext = dbContext;
-            modelFactory = new ModelFactory(dbContext);
+            this.modelFactory = modelFactory;
+            this.advertsFormatter = advertsFormatter;
         }
 
         public async Task AddOrUpdateAsync(AdvertScrapeModel model)
@@ -59,6 +64,46 @@
         public Advert GetAdvertById(string id)
         {
             return dbContext.Adverts.FirstOrDefault(a => a.Id.ToString() == id);
+        }
+
+        public AdvertViewModel MapViewModelFrom(Advert advert)
+        {
+            if (advert == null)
+            {
+                return new AdvertViewModel();
+            }
+
+            var viewModel = new AdvertViewModel
+            {
+                Title = advert.Title,
+                Description = advert.Description,
+                AdvertProviderName = advert.AdvertProvider?.Name,
+                OriginalAdvertUrl = string.Format(advert.AdvertProvider.AdvertUrlFormat, advert.RemoteId),
+                Price = advert.Price?.ToString("C", Utilities.Date.BulgarianCultureInfo),
+                ImageUrls = advert.Images.Select(i => i.Url),
+            };
+
+            var infoPairRows = new List<KeyValuePair<string, string>>
+            {
+                new("Марка", advert.Brand?.Name),
+                new("Модел", advert.Model?.Name),
+                new("Дата на производство", advertsFormatter.FormatManufacturingDate(advert.ManufacturingDate)),
+                new("Състояние", advert.Condition?.Type.Capitalize()),
+                new("Скоростна кутия", advert.Transmission?.Type.Capitalize()),
+                new("Двигател", advert.Engine?.Type.Capitalize()),
+                new("Тип", advert.BodyStyle?.Name.Capitalize()),
+                new("Евро стандарт", advertsFormatter.FormatEuroStandard(advert.EuroStandard?.Type, advert.IsEuroStandardExact)),
+                new("Врати", advertsFormatter.FormatDoorsCount(advert.HasFourDoors)),
+                new("Мощност",  advertsFormatter.FormatHorsePowers(advert.HorsePowers)),
+                new("Пробег", advertsFormatter.FormatKilometrage(advert.Kilometrage)),
+                new("Цвят", advert.Color?.Name.Capitalize()),
+                new("Металик", advertsFormatter.FormatMetallicExterior(advert.IsExteriorMetallic)),
+                new("Област", advert.Region?.Name),
+                new("Населено място", advert.Town?.Name),
+            };
+
+            viewModel.InfoPairRows = infoPairRows.Where(pair => pair.Value != null);
+            return viewModel;
         }
 
         private void MapNavigationalProperties(Advert advert, AdvertScrapeModel model)

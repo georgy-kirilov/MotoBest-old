@@ -195,7 +195,7 @@ namespace MotoBest.Data.Migrations
                     b.Property<int?>("EuroStandardId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("HasFourDoors")
+                    b.Property<bool?>("HasFourDoors")
                         .HasColumnType("bit");
 
                     b.Property<int?>("HorsePowers")
