@@ -10,6 +10,7 @@
     using MotoBest.Common;
     using MotoBest.Web.ViewModels;
     using MotoBest.Scraping.Common;
+    using System.Globalization;
 
     public class AdvertsService : IAdvertsService
     {
@@ -98,7 +99,7 @@
                 Description = advert.Description,
                 AdvertProviderName = advert.AdvertProvider?.Name,
                 OriginalAdvertUrl = string.Format(advert.AdvertProvider.AdvertUrlFormat, advert.RemoteId),
-                Price = advert.Price?.ToString("C", Utilities.Date.BulgarianCultureInfo),
+                Price = advertsFormatter.FormatPrice(advert.Price),
                 ImageUrls = advert.Images.Select(i => i.Url),
             };
 

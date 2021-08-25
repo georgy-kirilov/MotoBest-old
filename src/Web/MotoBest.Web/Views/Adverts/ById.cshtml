@@ -1,20 +1,31 @@
 ﻿@model MotoBest.Web.ViewModels.AdvertViewModel
-<div class="h5 ml-4 my-4">@Model.Title</div>
 
-<div class="alert-danger col-8 ml-4 my-3 p-3 h5 rounded">Цена: @Model.Price</div>
+<div class="mb-4">
+    <div class="mt-4 mb-2 text-wrap h4">@Model.Title</div>
+    <a href="@Model.OriginalAdvertUrl">Виж оригиналната обява от @Model.AdvertProviderName</a>
+</div>
 
-<div class="col-8 my-4">
+<div class="mb-3 col-lg-12 mx-auto badge-dark rounded" style="max-height: 500px;">
     <div class="container-fluid">
-        <img id="advert-image" src="@Model.ImageUrls.First()" class="img-fluid rounded" alt="Снимка на обявата" />
-    </div>
-    <div class="alert text-center">
-        <button id="prev-img" class="rounded alert-primary border-0 px-3 py-1 mr-4">предишна</button>
-        <span id="current-img-index" class="font-weight-bold"></span>
-        <button id="next-img" class="rounded alert-primary border-0 px-3 py-1 ml-4">следваща</button>
+        <img id="advert-image" src="@Model.ImageUrls.First()" 
+             class="img-fluid center-block d-block mx-auto d-inline" 
+             style="max-height: 400px; border-left: 3px solid white; border-right: 3px solid white" 
+             alt="Снимка на обявата" />
     </div>
 </div>
 
-<div class="mb-3 ml-4">
+<div class="text-center mb-5">
+    <button id="prev-img" class="rounded badge-secondary border-0 px-3 py-1 mr-3">предишна</button>
+    <span id="current-img-index" class="font-weight-bold"></span>
+    <button id="next-img" class="rounded badge-secondary border-0 px-3 py-1 ml-3">следваща</button>
+</div>
+
+<div class="alert-success my-3 p-3 h5 rounded">
+    <span>Цена</span>
+    <span class="float-right">@Model.Price</span>
+</div>
+
+<div class="mb-3">
     @{
         int index = 0;
         foreach (var infoPair in Model.InfoPairRows)
@@ -32,9 +43,9 @@
                 blockCornersStyleClass = "rounded-bottom";
             }
 
-            <div class="@backgroundStyleClass @blockCornersStyleClass p-2 col-8">
-                <span class="font-weight-bolder p-xl-3">@infoPair.Key</span>
-                <span class="col-4 float-right">@infoPair.Value</span>
+            <div class="@backgroundStyleClass @blockCornersStyleClass p-2 col-12">
+                <span class="font-weight-bolder pl-2">@infoPair.Key</span>
+                <span class="float-right pr-2">@infoPair.Value</span>
             </div>
 
             index++;
@@ -44,14 +55,16 @@
 
 @if (Model.Description != null)
 {
-    <div class="alert-secondary p-3 col-8 rounded ml-4">
-        <h5 class="h5">Допълнителна информация</h5>
+    <div class="alert-secondary p-3 col-12 rounded">
+        <h5 class="h5 font-weight-bold">Допълнителна информация</h5>
         <p>@Model.Description</p>
     </div>
 }
 
 <script>
-    const imageUrls = [
+
+    const imageUrls =
+    [
         @foreach (string imageUrl in Model.ImageUrls)
         {
             <text>"@imageUrl",</text>
@@ -59,8 +72,6 @@
     ];
 
     let imageIndex = 0;
-
-    loadCurrentImage();
 
     function loadCurrentImage() {
         document.querySelector("#advert-image").src = imageUrls[imageIndex];
@@ -86,4 +97,7 @@
         }
         loadCurrentImage();
     });
+
+    loadCurrentImage();
+
 </script>

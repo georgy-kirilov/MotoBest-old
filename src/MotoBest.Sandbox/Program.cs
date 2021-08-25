@@ -19,11 +19,19 @@
     using System.Diagnostics;
     using System.Linq;
     using MotoBest.Models;
+    using System.Globalization;
 
     public class Program
     {
         public static async Task Main()
         {
+            decimal d = 2000000;
+
+            
+
+            var s = d.ToString("n", f); // 2 000 000.00
+            Console.WriteLine(s);
+            /*
             Console.OutputEncoding = Encoding.UTF8;
             
             //await new ApplicationDbContext().Database.EnsureDeletedAsync();
@@ -46,7 +54,7 @@
                 using var db = new ApplicationDbContext();
                 var service = new AdvertsService(db, new ModelFactory(db), new AdvertsFormatter());
                 await service.AddOrUpdateAsync(model);
-            });
+            });*/
         }
     }
 }

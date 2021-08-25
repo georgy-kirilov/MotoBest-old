@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Text;
+    using System.Globalization;
 
     using MotoBest.Common;
 
@@ -90,17 +91,18 @@
 
         public string FormatManufacturingDate(DateTime? manufacturingDate)
         {
-            if (manufacturingDate == null)
-            {
-                return null;
-            }
-
             return manufacturingDate?.ToString(FullMonthNameAndYearFormat, BulgarianCultureInfo).Capitalize();
         }
 
         public string FormatMetallicExterior(bool isExteriorMetallic)
         {
             return isExteriorMetallic ? "Да" : "Не";
+        }
+
+        public string FormatPrice(decimal? price)
+        {
+            var format = new NumberFormatInfo { NumberGroupSeparator = Whitespace };
+            return price?.ToString("N", format).Replace(".", Comma) + "лв." ?? "По Договаряне";
         }
     }
 }

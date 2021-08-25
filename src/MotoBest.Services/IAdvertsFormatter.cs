@@ -17,5 +17,7 @@
         string FormatDoorsCount(bool? hasFourDoors);
 
         string FormatDescription(string description);
+
+        string FormatPrice(decimal? price);
     }
 }
