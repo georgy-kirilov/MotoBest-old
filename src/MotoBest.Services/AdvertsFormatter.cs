@@ -14,7 +14,7 @@
     {
         public string FormatDescription(string description)
         {
-            int symbolsCount = 200;
+            int symbolsCount = 300;
 
             if (description == null)
             {
@@ -104,7 +104,7 @@
         public string FormatPrice(decimal? price)
         {
             var format = new NumberFormatInfo { NumberGroupSeparator = Whitespace };
-            return price?.ToString("N", format).Replace(".", Comma) + "лв." ?? "По Договаряне";
+            return price?.ToString("N", format).Replace(".", Comma) + Whitespace + "лв." ?? "По Договаряне";
         }
     }
 }

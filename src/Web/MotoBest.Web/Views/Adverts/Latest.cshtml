@@ -1,17 +1,25 @@
 ﻿@using MotoBest.Web.ViewModels;
 
-@inject MotoBest.Services.IAdvertsFormatter advertsFormatter
-
 @model IEnumerable<AdvertViewModel>
+
+<h1 class="display-4 mb-5">Последно публикувани обяви</h1>
 
 @foreach (AdvertViewModel advert in Model)
 {
-    <div class="my-2 border p-2 alert-light col-6">
-        <a asp-controller="adverts" asp-action="byid" asp-route-id="@advert.Id" class="m-3">@advert.Title</a>
-        <p class="d-inline float-right">@advert.Price</p>
-        <div class="my-2">
-            <img src="@advert.ImageUrls.First()" class="img-fluid rounded col-4 d-inline" />
-            <span>@advertsFormatter.FormatDescription(advert.Description)</span>
+    <a asp-controller="adverts" asp-action="byid" asp-route-id="@advert.Id" class="text-decoration-none">
+        <div class="my-2 border border-secondary rounded p-3 alert-light col-12">
+            <div class="mb-4">
+                <span class="m-3 text-primary">@advert.Title</span>
+                <span class="d-inline float-right text-success">@advert.Price</span>
+            </div>
+            <div class="my-2 clearfix">
+                <img src="@advert.ImageUrls.First()" class="col-5 img-fluid rounded float-left" />
+                <span>
+                    @string.Join(", ", advert.InfoPairRows.Select(ip => ip.Value))
+                    <br/>
+                    @advert.ShortDescription
+                </span>
+            </div>
         </div>
-    </div>
+    </a>
 }
