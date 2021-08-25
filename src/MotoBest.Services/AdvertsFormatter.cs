@@ -14,14 +14,16 @@
     {
         public string FormatDescription(string description)
         {
+            int symbolsCount = 200;
+
             if (description == null)
             {
                 return null;
             }
 
-            if (description.Length > 150)
+            if (description.Length > symbolsCount)
             {
-                return description.Substring(0, 150);
+                return $"{description.Substring(0, symbolsCount)}...";
             }
 
             return description;

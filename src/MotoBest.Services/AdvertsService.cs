@@ -97,6 +97,7 @@
                 Id = advert.Id.ToString(),
                 Title = advert.Title,
                 Description = advert.Description,
+                ShortDescription = advertsFormatter.FormatDescription(advert.Description),
                 AdvertProviderName = advert.AdvertProvider?.Name,
                 OriginalAdvertUrl = string.Format(advert.AdvertProvider.AdvertUrlFormat, advert.RemoteId),
                 Price = advertsFormatter.FormatPrice(advert.Price),
