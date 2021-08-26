@@ -2,19 +2,16 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
-    using MotoBest.Data;
     using MotoBest.Models;
     using MotoBest.Services;
     using MotoBest.Web.ViewModels;
 
     public class AdvertsController : Controller
     {
-        private readonly ApplicationDbContext dbContext;
         private readonly IAdvertsService advertsService;
 
-        public AdvertsController(ApplicationDbContext dbContext, IAdvertsService advertsService)
+        public AdvertsController(IAdvertsService advertsService)
         {
-            this.dbContext = dbContext;
             this.advertsService = advertsService;
         }
 
@@ -33,16 +30,17 @@
         }
 
         [HttpGet]
-        public IActionResult Latest(int pageIndex)
+        public IActionResult Latest(int id)
         {
-            var adverts = advertsService.GetLatestAdverts(pageIndex);
+            var adverts = advertsService.GetLatestAdverts(id);
 
-            if (adverts == null)
+            var viewModel = new LatestAdvertsViewModel
             {
-                return NotFound();
-            }
-            
-            return View(adverts);
+                Adverts = adverts,
+                PageIndex = id,
+            };
+
+            return View(viewModel);
         }
     }
 }

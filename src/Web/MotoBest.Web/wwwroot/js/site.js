@@ -1,4 +1,9 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿const displayNoneValue = "d-none";
 
-// Write your JavaScript code.
+function show(element) {
+    element?.classList.remove(displayNoneValue);
+}
+
+function hide(element) {
+    element?.classList.add(displayNoneValue);
+}

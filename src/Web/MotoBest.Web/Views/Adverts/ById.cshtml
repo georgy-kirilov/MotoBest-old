@@ -1,26 +1,25 @@
 ﻿@model MotoBest.Web.ViewModels.AdvertViewModel
 
 <div class="mb-4">
-    <div class="mt-4 mb-2 text-wrap h4">@Model.Title</div>
+    <div class="mt-4 mb-2 h4 text-truncate" onclick="manageTruncateClass(this)">@Model.Title</div>
     <a href="@Model.OriginalAdvertUrl">Виж оригиналната обява от @Model.AdvertProviderName</a>
 </div>
 
-<div class="mb-3 col-lg-12 mx-auto badge-dark rounded" style="max-height: 500px;">
+<div class="col-12 mb-3 badge-dark rounded" style="max-height: 500px;">
     <div class="container-fluid">
-        <img id="advert-image" src="@Model.ImageUrls.First()"
-             class="img-fluid center-block d-block mx-auto d-inline"
-             style="max-height: 400px; border-left: 3px solid white; border-right: 3px solid white"
+        <img id="advert-image" src="@Model.ImageUrls.FirstOrDefault()"
+             class="mx-auto img-fluid center-block d-block d-inline"
              alt="Снимка на обявата" />
     </div>
 </div>
 
-<div class="text-center mb-5">
-    <button id="prev-img" class="rounded badge-secondary border-0 px-3 py-1 mr-3">предишна</button>
+<div class="mb-5 text-center">
+    <button class="mr-3 px-3 py-1 badge-dark rounded border-0" onclick="loadPreviousImage()">предишна</button>
     <span id="current-img-index" class="font-weight-bold"></span>
-    <button id="next-img" class="rounded badge-secondary border-0 px-3 py-1 ml-3">следваща</button>
+    <button class="ml-3 px-3 py-1 badge-dark rounded border-0" onclick="loadNextImage()">следваща</button>
 </div>
 
-<div class="alert-success my-3 p-3 h5 rounded">
+<div class="my-3 p-3 h5 alert-success rounded">
     <span>Цена</span>
     <span class="float-right">@Model.Price</span>
 </div>
@@ -43,9 +42,9 @@
                 blockCornersStyleClass = "rounded-bottom";
             }
 
-            <div class="@backgroundStyleClass @blockCornersStyleClass p-2 col-12">
-                <span class="font-weight-bolder pl-2">@infoPair.Key</span>
-                <span class="float-right pr-2">@infoPair.Value</span>
+            <div class="col-12 p-2 @backgroundStyleClass @blockCornersStyleClass">
+                <span class="pl-2 font-weight-bolder">@infoPair.Key</span>
+                <span class="pr-2 float-right">@infoPair.Value</span>
             </div>
 
             index++;
@@ -53,30 +52,40 @@
     }
 </div>
 
-@if (Model.Description != null)
+@if (Model.LongDescription != null)
 {
-    <div class="alert-secondary p-3 col-12 rounded">
+    <div class="col-12 p-3 alert-secondary rounded">
         <h5 class="h5 font-weight-bold">Допълнителна информация</h5>
-        <p id="short-advert-desc" class="mt-3">@Model.ShortDescription</p>
-        <p id="advert-desc" class="text-hide mt-2">@Model.Description</p>
-        <button id="desc-button" class="col-12 btn-dark p-1 rounded mt-2">Покажи повече</button>
+        <p id="short-advert-desc" class="mt-2">@Model.ShortDescription<text>...</text></p>
+        <p id="long-advert-desc" class="mt-2 d-none">@Model.LongDescription</p>
+
+        @if (Model.LongDescription.Length > Model.ShortDescription.Length)
+        {
+            <button class="mt-2 p-1 btn btn-block btn-dark rounded" onclick="toggleDescription()">Покажи повече</button>
+        }
     </div>
 }
 
-<script>
+<style>
+    #advert-image {
+        max-height: 400px;
+        border-left: 3px solid white;
+        border-right: 3px solid white;
+    }
+</style>
 
+<script>
     const showMoreMessage = "Покажи повече";
     const showLessMessage = "Покажи по-малко";
-    let isShortDescShown = true;
 
-    const imageUrls =
-    [
+    const imageUrls = [
         @foreach (string imageUrl in Model.ImageUrls)
         {
             <text>"@imageUrl",</text>
         }
     ];
 
+    let isShortDescViewShown = true
     let imageIndex = 0;
 
     function loadCurrentImage() {
@@ -84,40 +93,51 @@
         updateCurrentImageIndexView();
     }
 
-    function updateCurrentImageIndexView() {
-        document.querySelector("#current-img-index").textContent = `${imageIndex + 1}/${imageUrls.length}`;
-    }
-
-    document.querySelector("#next-img").addEventListener("click", () => {
-        imageIndex++;
-        if (imageIndex >= imageUrls.length) {
-            imageIndex = 0;
-        }
-        loadCurrentImage();
-    });
-
-    document.querySelector("#prev-img").addEventListener("click", () => {
+    function loadPreviousImage() {
         imageIndex--;
         if (imageIndex < 0) {
             imageIndex = imageUrls.length - 1;
         }
         loadCurrentImage();
-    });
+    }
 
-    let descButton = document.querySelector("#desc-button");
+    function loadNextImage() {
+        imageIndex++;
+        if (imageIndex >= imageUrls.length) {
+            imageIndex = 0;
+        }
+        loadCurrentImage();
+    }
 
-    descButton?.addEventListener("click", () => {
-        if (isShortDescShown) {
-            document.querySelector("#advert-desc")?.classList.remove("text-hide");
-            document.querySelector("#short-advert-desc").classList.add("text-hide");
+    function updateCurrentImageIndexView() {
+        document.querySelector("#current-img-index").textContent = `${imageIndex + 1}/${imageUrls.length}`;
+    }
+
+    function manageTruncateClass(element) {
+        const textTruncateClass = "text-truncate";
+        if (element.classList.contains(textTruncateClass)) {
+            element.classList.remove(textTruncateClass);
+        } else {
+            element.classList.add(textTruncateClass);
+        }
+    }
+
+    function toggleDescription() {
+        let longDescriptionView = document.querySelector("#long-advert-desc");
+        let shortDescriptionView = document.querySelector("#short-advert-desc");
+        
+        if (isShortDescViewShown) {
+            show(longDescriptionView);
+            hide(shortDescriptionView);
             descButton.textContent = showLessMessage;
         } else {
-            document.querySelector("#advert-desc")?.classList.add("text-hide");
-            document.querySelector("#short-advert-desc").classList.remove("text-hide");
+            show(shortDescriptionView);
+            hide(longDescriptionView);
             descButton.textContent = showMoreMessage;
         }
-        isShortDescShown = !isShortDescShown;
-    });
+
+        isShortDescViewShown = !isShortDescViewShown;
+    }
 
     loadCurrentImage();
 </script>

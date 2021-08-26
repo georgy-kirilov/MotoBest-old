@@ -12,10 +12,8 @@
 
     public class AdvertsFormatter : IAdvertsFormatter
     {
-        public string FormatDescription(string description)
+        public string FormatDescription(string description, int symbolsCount)
         {
-            int symbolsCount = 300;
-
             if (description == null)
             {
                 return null;
@@ -23,7 +21,7 @@
 
             if (description.Length > symbolsCount)
             {
-                return $"{description.Substring(0, symbolsCount)}...";
+                return description.Substring(0, symbolsCount);
             }
 
             return description;
@@ -103,8 +101,13 @@
 
         public string FormatPrice(decimal? price)
         {
+            if (price == null)
+            {
+                return "По договаряне";
+            }
+
             var format = new NumberFormatInfo { NumberGroupSeparator = Whitespace };
-            return price?.ToString("N", format).Replace(".", Comma) + Whitespace + "лв." ?? "По Договаряне";
+            return price?.ToString("N", format).Replace(".", Comma) + Whitespace + "лв.";
         }
     }
 }

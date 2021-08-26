@@ -10,7 +10,6 @@
     using MotoBest.Common;
     using MotoBest.Web.ViewModels;
     using MotoBest.Scraping.Common;
-    using System.Globalization;
 
     public class AdvertsService : IAdvertsService
     {
@@ -70,15 +69,16 @@
         public IEnumerable<AdvertViewModel> GetLatestAdverts(int pageIndex)
         {
             int advertsPerPageCount = 10;
+
+            if (pageIndex <= 0)
+            {
+                pageIndex = 1;
+            }
+            
             int advertsToSkipCount = advertsPerPageCount * pageIndex;
 
-            if (advertsToSkipCount < 0 || advertsToSkipCount > dbContext.Adverts.Count())
-            {
-                return null;
-            }
-
             return dbContext.Adverts
-                            .OrderBy(a => a.LastModifiedOn)
+                            .OrderByDescending(a => a.LastModifiedOn)
                             .Skip(advertsToSkipCount)
                             .Take(advertsPerPageCount)
                             .ToList()
@@ -96,12 +96,13 @@
             {
                 Id = advert.Id.ToString(),
                 Title = advert.Title,
-                Description = advert.Description,
+                LongDescription = advert.Description,
                 ShortDescription = advertsFormatter.FormatDescription(advert.Description),
                 AdvertProviderName = advert.AdvertProvider?.Name,
                 OriginalAdvertUrl = string.Format(advert.AdvertProvider.AdvertUrlFormat, advert.RemoteId),
                 Price = advertsFormatter.FormatPrice(advert.Price),
-                ImageUrls = advert.Images.Select(i => i.Url),
+                LastModifiedOn = advert.LastModifiedOn,
+                ImageUrls = advert.Images.Select(i => i.Url).ToList(),
             };
 
             var infoPairRows = new List<KeyValuePair<string, string>>
@@ -121,6 +122,11 @@
                 new("Област", advert.Region?.Name),
                 new("Населено място", advert.Town?.Name),
             };
+
+            if (viewModel.ImageUrls.Count == 0)
+            {
+                viewModel.ImageUrls.Add("/img/default-advert-img.jpg");
+            }
 
             viewModel.InfoPairRows = infoPairRows.Where(pair => pair.Value != null);
             return viewModel;

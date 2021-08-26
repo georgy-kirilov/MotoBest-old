@@ -16,7 +16,7 @@
 
         string FormatDoorsCount(bool? hasFourDoors);
 
-        string FormatDescription(string description);
+        string FormatDescription(string description, int symbolsCount = 200);
 
         string FormatPrice(decimal? price);
     }
