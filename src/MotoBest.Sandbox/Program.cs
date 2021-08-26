@@ -25,13 +25,6 @@
     {
         public static async Task Main()
         {
-            decimal d = 2000000;
-
-            
-
-            var s = d.ToString("n", f); // 2 000 000.00
-            Console.WriteLine(s);
-            /*
             Console.OutputEncoding = Encoding.UTF8;
             
             //await new ApplicationDbContext().Database.EnsureDeletedAsync();
@@ -46,8 +39,13 @@
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
 
-            BaseWebScraper scraper = new CarmarketBgWebScraper(context);
-            
+            BaseWebScraper scraper = new MobileBgWebScraper(context);
+
+            var model = await scraper.ScrapeAdvertAsync("11629793965412504");
+            using var db = new ApplicationDbContext();
+            var service = new AdvertsService(db, new ModelFactory(db), new AdvertsFormatter());
+            await service.AddOrUpdateAsync(model);
+            /*
             await scraper.ScrapeAllAdvertsAsync(async (model) =>
             {
                 Console.WriteLine(model);
