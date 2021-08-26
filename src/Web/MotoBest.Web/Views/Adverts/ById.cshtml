@@ -61,7 +61,7 @@
 
         @if (Model.LongDescription.Length > Model.ShortDescription.Length)
         {
-            <button class="mt-2 p-1 btn btn-block btn-dark rounded" onclick="toggleDescription()">Покажи повече</button>
+            <button class="mt-2 p-1 btn btn-block btn-dark rounded" onclick="toggleDescription(this)">Покажи повече</button>
         }
     </div>
 }
@@ -122,18 +122,18 @@
         }
     }
 
-    function toggleDescription() {
+    function toggleDescription(button) {
         let longDescriptionView = document.querySelector("#long-advert-desc");
         let shortDescriptionView = document.querySelector("#short-advert-desc");
         
         if (isShortDescViewShown) {
             show(longDescriptionView);
             hide(shortDescriptionView);
-            descButton.textContent = showLessMessage;
+            button.textContent = showLessMessage;
         } else {
             show(shortDescriptionView);
             hide(longDescriptionView);
-            descButton.textContent = showMoreMessage;
+            button.textContent = showMoreMessage;
         }
 
         isShortDescViewShown = !isShortDescViewShown;
