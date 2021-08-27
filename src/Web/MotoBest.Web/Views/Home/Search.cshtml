@@ -17,7 +17,8 @@
 
 <div class="display-4">Търсене на автомобили</div>
 
-<form method="post" asp-controller="Home" asp-action="Search">
+<form method="get" asp-controller="Home" asp-action="StartSearch">
+
     <div class="my-4 h5 alert-light">
         <label asp-for="Input.Brand" class="mb-3">Марка</label>
         <select asp-for="Input.Brand"
@@ -25,6 +26,7 @@
                 class="custom-select alert-secondary"
                 autocomplete="on"
                 onchange="updateModelsByBrand(this)">
+                
             <option value="">@DefaultSelectListText</option>
         </select>
     </div>
@@ -118,6 +120,10 @@
                 id="towns">
             <option value="">@DefaultSelectListText</option>
         </select>
+    </div>
+
+    <div class="mt-5 text-center">
+        <input type="submit" class="col-6 btn btn-dark" value="Търси"/>
     </div>
 </form>
 

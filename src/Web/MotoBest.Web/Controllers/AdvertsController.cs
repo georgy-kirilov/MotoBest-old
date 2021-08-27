@@ -14,12 +14,14 @@
     public class AdvertsController : Controller
     {
         private readonly IAdvertsService advertsService;
-        private readonly ApplicationDbContext dbContext;
+        private readonly IModelsService modelsService;
+        private readonly ITownsService townsService;
 
-        public AdvertsController(IAdvertsService advertsService, ApplicationDbContext dbContext)
+        public AdvertsController(IAdvertsService advertsService, IModelsService modelsService, ITownsService townsService)
         {
             this.advertsService = advertsService;
-            this.dbContext = dbContext;
+            this.modelsService = modelsService;
+            this.townsService = townsService;
         }
 
         [HttpGet]
@@ -37,11 +39,22 @@
         }
 
         [HttpGet]
+        public IActionResult Search(IEnumerable<AdvertViewModel> adverts)
+        {
+            var viewModel = new SearchResultsViewModel
+            {
+                Adverts = adverts
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
         public IActionResult Latest(int id)
         {
             var adverts = advertsService.GetLatestAdverts(id);
 
-            var viewModel = new LatestAdvertsViewModel
+            var viewModel = new SearchResultsViewModel
             {
                 Adverts = adverts,
                 PageIndex = id,
@@ -53,19 +66,15 @@
         [HttpPost]
         public ActionResult<IEnumerable<string>> GetModelsByBrand([FromBody] GetModelsByBrandInputModel input)
         {
-            return dbContext.Models.Where(model => model.Brand.Name == input.Brand)
-                                         .OrderBy(model => model.Name)
-                                         .Select(model => model.Name)
-                                         .ToList();
+            var models = modelsService.GetAllModelNamesByBrandName(input.Brand);
+            return Ok(models);
         }
 
         [HttpPost]
         public ActionResult<IEnumerable<string>> GetTownsByRegion([FromBody] GetTownsByRegionInputModel input)
         {
-            return dbContext.Towns.Where(town => town.Region.Name == input.Region)
-                                       .OrderBy(town => town.Name)
-                                       .Select(town => town.Name)
-                                       .ToList();
+            var towns = townsService.GetAllTownNamesByRegionName(input.Region);
+            return Ok(towns);
         }
     }
 }

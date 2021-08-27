@@ -6,6 +6,7 @@
     using MotoBest.Web.ViewModels;
     using MotoBest.Scraping.Common;
     using System.Collections.Generic;
+    using MotoBest.Web.InputModels;
 
     public interface IAdvertsService
     {
@@ -16,5 +17,11 @@
         AdvertViewModel MapViewModelFrom(Advert advert);
 
         IEnumerable<AdvertViewModel> GetLatestAdverts(int pageIndex);
+
+        IEnumerable<AdvertViewModel> SearchForAdverts(SearchAdvertsInputModel input);
+
+        SearchAdvertsViewModel CreateSearchAdvertsViewModel();
+
+        int GetAllAdvertsCount();
     }
 }

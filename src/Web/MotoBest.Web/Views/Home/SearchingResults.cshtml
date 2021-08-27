@@ -5,7 +5,7 @@
 
 @model SearchResultsViewModel
 
-<h1 class="mb-5 display-4">Последно публикувани обяви</h1>
+<h1 class="mb-5 display-4">Резултати за обяви</h1>
 
 @foreach (AdvertViewModel advert in Model.Adverts)
 {
@@ -20,7 +20,7 @@
                 }
             </div>
             <div class="my-2 clearfix">
-                <img src="@advert.ImageUrls.FirstOrDefault()" class="col-12 col-sm-7 col-md-6 col-lg-3 mb-4 my-lg-2 img-fluid float-left"/>
+                <img src="@advert.ImageUrls.FirstOrDefault()" class="col-12 col-sm-7 col-md-6 col-lg-3 mb-4 my-lg-2 img-fluid float-left" />
                 <span id="description">
                     @string.Join(" - ", advert.InfoPairRows.Select(ip => ip.Value))
                 </span>
@@ -38,3 +38,4 @@
         font-size: 1.05rem;
     }
 </style>
+

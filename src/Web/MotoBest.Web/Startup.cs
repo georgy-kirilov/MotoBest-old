@@ -31,6 +31,8 @@ namespace MotoBest.Web
             services.AddTransient<IModelFactory, ModelFactory>();
             services.AddTransient<IAdvertsService, AdvertsService>();
             services.AddTransient<IAdvertsFormatter, AdvertsFormatter>();
+            services.AddTransient<IModelsService, ModelsService>();
+            services.AddTransient<ITownsService, TownsService>();
 
             services.AddControllersWithViews();
         }

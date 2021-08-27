@@ -10,6 +10,8 @@
     using MotoBest.Common;
     using MotoBest.Web.ViewModels;
     using MotoBest.Scraping.Common;
+    using MotoBest.Web.InputModels;
+    using MotoBest.Models.Common;
 
     public class AdvertsService : IAdvertsService
     {
@@ -61,6 +63,23 @@
             await dbContext.SaveChangesAsync();
         }
 
+        public SearchAdvertsViewModel CreateSearchAdvertsViewModel()
+        {
+            var viewModel = new SearchAdvertsViewModel
+            {
+                Brands = SelectNameableModels(dbContext.Brands),
+                Engines = SelectTypeableModels(dbContext.Engines),
+                Transmissions = SelectTypeableModels(dbContext.Transmissions),
+                BodyStyles = SelectNameableModels(dbContext.BodyStyles),
+                Conditions = SelectTypeableModels(dbContext.Conditions),
+                Colors = SelectNameableModels(dbContext.Colors),
+                EuroStandards = SelectTypeableModels(dbContext.EuroStandards),
+                Regions = SelectNameableModels(dbContext.Regions),
+            };
+
+            return viewModel;
+        }
+
         public Advert GetAdvertById(string id)
         {
             return dbContext.Adverts.FirstOrDefault(a => a.Id.ToString() == id);
@@ -74,7 +93,7 @@
             {
                 pageIndex = 1;
             }
-            
+
             int advertsToSkipCount = advertsPerPageCount * pageIndex;
 
             return dbContext.Adverts
@@ -82,7 +101,12 @@
                             .Skip(advertsToSkipCount)
                             .Take(advertsPerPageCount)
                             .ToList()
-                            .Select(a => MapViewModelFrom(a));
+                            .Select(MapViewModelFrom);
+        }
+
+        public int GetAllAdvertsCount()
+        {
+            return dbContext.Adverts.Count();
         }
 
         public AdvertViewModel MapViewModelFrom(Advert advert)
@@ -132,6 +156,24 @@
             return viewModel;
         }
 
+        public IEnumerable<AdvertViewModel> SearchForAdverts(SearchAdvertsInputModel input)
+        {
+            var adverts = dbContext.Adverts.Where(advert =>
+                                    (input.Brand == null || advert.Brand.Name == input.Brand) &&
+                                    (input.Model == null || advert.Model.Name == input.Model) &&
+                                    (input.Engine == null || advert.Engine.Type == input.Engine) &&
+                                    (input.BodyStyle == null || advert.BodyStyle.Name == input.BodyStyle) &&
+                                    (input.Color == null || advert.Color.Name == input.Color) &&
+                                    (input.Transmission == null || advert.Transmission.Type == input.Transmission) &&
+                                    (input.Condition == null || advert.Condition.Type == input.Condition) &&
+                                    (input.EuroStandard == null || advert.EuroStandard.Type == input.EuroStandard) &&
+                                    (input.Region == null || advert.Region.Name == input.Region))
+                                    .Take(10)
+                                    .Select(MapViewModelFrom)
+                                    .ToList();
+            return adverts;
+        }
+
         private void MapNavigationalProperties(Advert advert, AdvertScrapeModel model)
         {
             advert.Brand = modelFactory.GetOrCreateBrand(model.BrandName);
@@ -160,6 +202,16 @@
             advert.HasFourDoors = model.HasFourDoors;
             advert.IsEuroStandardExact = model.IsEuroStandardExact;
             advert.IsExteriorMetallic = model.IsExteriorMetallic;
+        }
+
+        private static IEnumerable<string> SelectNameableModels<T>(IQueryable<T> queryable) where T : BaseNameableModel
+        {
+            return queryable.OrderBy(model => model.Name).Select(model => model.Name);
+        }
+
+        private static IEnumerable<string> SelectTypeableModels<T>(IQueryable<T> queryable) where T : BaseTypeableModel
+        {
+            return queryable.OrderBy(model => model.Type).Select(model => model.Type);
         }
     }
 }

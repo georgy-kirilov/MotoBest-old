@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class LatestAdvertsViewModel
+    public class SearchResultsViewModel
     {
         public IEnumerable<AdvertViewModel> Adverts { get; set; }
 

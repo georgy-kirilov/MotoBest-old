@@ -1,31 +1,27 @@
 ﻿namespace MotoBest.Web.Controllers
 {
-    using System.Linq;
     using System.Diagnostics;
-    using System.Collections.Generic;
 
     using Microsoft.AspNetCore.Mvc;
 
-    using MotoBest.Data;
+    using MotoBest.Services;
     using MotoBest.Web.Models;
-    using MotoBest.Models.Common;
     using MotoBest.Web.ViewModels;
     using MotoBest.Web.InputModels;
     using MotoBest.Web.CombinedModels;
 
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly IAdvertsService advertsService;
 
-        public HomeController(ApplicationDbContext dbContext)
+        public HomeController(IAdvertsService advertsService)
         {
-            this.dbContext = dbContext;
+            this.advertsService = advertsService;
         }
 
         public IActionResult Index()
         {
-            int totalAvdertsCount = dbContext.Adverts.Count();
-            return View(totalAvdertsCount);
+            return View(advertsService.GetAllAdvertsCount());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -37,33 +33,19 @@
         [HttpGet]
         public IActionResult Search()
         {
-            var viewModel = new SearchAdvertsViewModel
+            var combinedModel = new SearchAdvertsCombinedModel
             {
-                Brands = SelectNameableModels(dbContext.Brands),
-                Engines = SelectTypeableModels(dbContext.Engines),
-                Transmissions = SelectTypeableModels(dbContext.Transmissions),
-                BodyStyles = SelectNameableModels(dbContext.BodyStyles),
-                Conditions = SelectTypeableModels(dbContext.Conditions),
-                Colors = SelectNameableModels(dbContext.Colors),
-                EuroStandards = SelectTypeableModels(dbContext.EuroStandards),
-                Regions = SelectNameableModels(dbContext.Regions),
+                View = advertsService.CreateSearchAdvertsViewModel(),
+                Input = new SearchAdvertsInputModel(),
             };
 
-            return View(new SearchAdvertsCombinedModel
-            {
-                View = viewModel,
-                Input = new SearchAdvertsInputModel(),
-            });
+            return View(combinedModel);
         }
 
-        public IEnumerable<string> SelectNameableModels<T>(IQueryable<T> queryable) where T : BaseNameableModel
+        [HttpGet]
+        public IActionResult StartSearch(SearchAdvertsCombinedModel model)
         {
-            return queryable.OrderBy(model => model.Name).Select(model => model.Name);
-        }
-
-        public IEnumerable<string> SelectTypeableModels<T>(IQueryable<T> queryable) where T : BaseTypeableModel
-        {
-            return queryable.OrderBy(model => model.Type).Select(model => model.Type);
+            return View("SearchingResults", new SearchResultsViewModel { Adverts = advertsService.SearchForAdverts(model.Input) });
         }
     }
 }
