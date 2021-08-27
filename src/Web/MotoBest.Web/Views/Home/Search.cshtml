@@ -1,52 +1,168 @@
-﻿@model MotoBest.Web.ViewModels.SearchAdvertsViewModel
+﻿@using MotoBest.Common;
+
+@model MotoBest.Web.CombinedModels.SearchAdvertsCombinedModel
+
+@{ 
+    const string DefaultSelectListText = "Без значение";
+
+    var brands = Model.View.Brands.Select(brand => new SelectListItem(brand, brand));
+    var engines = Model.View.Engines.Select(engine => new SelectListItem(engine.Capitalize(), engine));
+    var transmissions = Model.View.Transmissions.Select(transmission => new SelectListItem(transmission.Capitalize(), transmission));
+    var bodyStyles = Model.View.BodyStyles.Select(bodyStyle => new SelectListItem(bodyStyle.Capitalize(), bodyStyle));
+    var conditions = Model.View.Conditions.Select(condition => new SelectListItem(condition.Capitalize(), condition));
+    var colors = Model.View.Colors.Select(color => new SelectListItem(color.Capitalize(), color));
+    var regions = Model.View.Regions.Select(region => new SelectListItem(region.Capitalize(), region));
+    var euroStandards = Model.View.EuroStandards.Select(euroStandard => new SelectListItem(euroStandard.Capitalize(), euroStandard));
+}
 
 <div class="display-4">Търсене на автомобили</div>
 
-@foreach (var pair in Model.KeyValuePairs)
-{
+<form method="post" asp-controller="Home" asp-action="Search">
     <div class="my-4 h5 alert-light">
-        <label>@pair.Key</label>
-
-        @{
-            string callback = pair.Key == "Марка" ? "onchange=updateModelsByBrand(this)" : string.Empty;
-            string modelsId = pair.Key == "Модел" ? "id=models" : string.Empty;
-        }
-
-        <select @modelsId @callback class="custom-select alert-secondary">
-            <option value="ss" selected="selected">Без значение</option>
-            @foreach (string item in pair.Value)
-            {
-                <option value="@item">@item</option>
-            }
+        <label asp-for="Input.Brand" class="mb-3">Марка</label>
+        <select asp-for="Input.Brand"
+                asp-items="brands"
+                class="custom-select alert-secondary"
+                autocomplete="on"
+                onchange="updateModelsByBrand(this)">
+            <option value="">@DefaultSelectListText</option>
         </select>
     </div>
-}
+
+    <div class="my-4 h5 alert-light">
+        <label asp-for="Input.Model" class="mb-3">Модел</label>
+        <select asp-for="Input.Model"
+                class="custom-select alert-secondary"
+                autocomplete="on"
+                id="models">
+            <option value="">@DefaultSelectListText</option>
+        </select>
+    </div>
+
+    <div class="my-4 h5 alert-light">
+        <label asp-for="Input.Engine" class="mb-3">Двигател</label>
+        <select asp-for="Input.Engine"
+                asp-items="engines"
+                class="custom-select alert-secondary"
+                autocomplete="on">
+            <option value="">@DefaultSelectListText</option>
+        </select>
+    </div>
+
+    <div class="my-4 h5 alert-light">
+        <label asp-for="Input.Transmission" class="mb-3">Скоростна кутия</label>
+        <select asp-for="Input.Transmission"
+                asp-items="transmissions"
+                class="custom-select alert-secondary"
+                autocomplete="on">
+            <option value="">@DefaultSelectListText</option>
+        </select>
+    </div>
+
+    <div class="my-4 h5 alert-light">
+        <label asp-for="Input.BodyStyle" class="mb-3">Тип</label>
+        <select asp-for="Input.BodyStyle"
+                asp-items="bodyStyles"
+                class="custom-select alert-secondary"
+                autocomplete="on">
+            <option value="">@DefaultSelectListText</option>
+        </select>
+    </div>
+
+    <div class="my-4 h5 alert-light">
+        <label asp-for="Input.Condition" class="mb-3">Състояние</label>
+        <select asp-for="Input.Condition"
+                asp-items="conditions"
+                class="custom-select alert-secondary"
+                autocomplete="on">
+            <option value="">@DefaultSelectListText</option>
+        </select>
+    </div>
+
+    <div class="my-4 h5 alert-light">
+        <label asp-for="Input.EuroStandard" class="mb-3">Евро стандарт</label>
+        <select asp-for="Input.EuroStandard"
+                asp-items="euroStandards"
+                class="custom-select alert-secondary"
+                autocomplete="on">
+            <option value="">@DefaultSelectListText</option>
+        </select>
+    </div>
+
+    <div class="my-4 h5 alert-light">
+        <label asp-for="Input.Color" class="mb-3">Цвят</label>
+        <select asp-for="Input.Color"
+                asp-items="colors"
+                class="custom-select alert-secondary"
+                autocomplete="on">
+            <option value="">@DefaultSelectListText</option>
+        </select>
+    </div>
+
+    <div class="my-4 h5 alert-light">
+        <label asp-for="Input.Region" class="mb-3">Регион</label>
+        <select asp-for="Input.Region"
+                asp-items="regions"
+                class="custom-select alert-secondary"
+                autocomplete="on"
+                onchange="updateTownsByRegion(this)">
+            <option value="">@DefaultSelectListText</option>
+        </select>
+    </div>
+
+    <div class="my-4 h5 alert-light">
+        <label asp-for="Input.Town" class="mb-3">Населено място</label>
+        <select asp-for="Input.Town"
+                class="custom-select alert-secondary"
+                autocomplete="on"
+                id="towns">
+            <option value="">@DefaultSelectListText</option>
+        </select>
+    </div>
+</form>
+
+<div>
+    <label>Цена</label>
+    <input/>
+</div>
 
 <script>
-    function updateModelsByBrand(sender) {
-        let data = { Brand: sender?.value };
-        let token = "AVHSHIO_JDIAMSKJIOD_HKNEUIBN_SUBDLUS";
+    const defaultOptionName = "@Html.Raw(@DefaultSelectListText)";
+    const token = "AVHSHIO_JDIAMSKJIOD_HKNEUIBN_SUBDLUS";
 
+    function updateModelsByBrand(sender) {
+        const data = { Brand: sender?.value };
+        sendPostRequest("/Adverts/GetModelsByBrand", data, (res) => updateSelectElement("models", res));
+    }
+
+    function updateTownsByRegion(sender) {
+        const data = { Region: sender?.value };
+        sendPostRequest("/Adverts/GetTownsByRegion", data, (res) => updateSelectElement("towns", res));
+        
+    }
+
+    function sendPostRequest(url, data, onSuccess) {
         $.ajax({
-            url: "/Adverts/GetModelsByBrand",
+            url: url,
             type: "POST",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             headers: { "X-CSRF-TOKEN": token },
-            success: (json) => {
-                const defaultOptionName = "Без значение";
-                let models = document.querySelector("#models");
-                models.innerHTML = STRING_EMPTY;
-                json.unshift(defaultOptionName);
-
-                for (let model of json) {
-                    let option = document.createElement("option");
-                    option.textContent = model;
-                    option.value = model === defaultOptionName ? STRING_EMPTY : model;
-                    models.appendChild(option);
-                }
-            }
+            success: (res) => onSuccess(res),
         });
+    }
+
+    function updateSelectElement(id, items) {
+        let models = document.querySelector(`#${id}`);
+        models.innerHTML = STRING_EMPTY;
+        items.unshift(defaultOptionName);
+
+        for (let model of items) {
+            let option = document.createElement("option");
+            option.textContent = model;
+            option.value = model === defaultOptionName ? STRING_EMPTY : model;
+            models.appendChild(option);
+        }
     }
 </script>

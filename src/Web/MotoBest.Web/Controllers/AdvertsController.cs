@@ -1,14 +1,15 @@
 ﻿namespace MotoBest.Web.Controllers
 {
+    using System.Linq;
+    using System.Collections.Generic;
+
     using Microsoft.AspNetCore.Mvc;
+
     using MotoBest.Data;
     using MotoBest.Models;
     using MotoBest.Services;
     using MotoBest.Web.ViewModels;
     using MotoBest.Web.InputModels;
-
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class AdvertsController : Controller
     {
@@ -52,11 +53,19 @@
         [HttpPost]
         public ActionResult<IEnumerable<string>> GetModelsByBrand([FromBody] GetModelsByBrandInputModel input)
         {
-            var models = dbContext.Models.Where(model => model.Brand.Name == input.Brand)
+            return dbContext.Models.Where(model => model.Brand.Name == input.Brand)
                                          .OrderBy(model => model.Name)
                                          .Select(model => model.Name)
                                          .ToList();
-            return models;
+        }
+
+        [HttpPost]
+        public ActionResult<IEnumerable<string>> GetTownsByRegion([FromBody] GetTownsByRegionInputModel input)
+        {
+            return dbContext.Towns.Where(town => town.Region.Name == input.Region)
+                                       .OrderBy(town => town.Name)
+                                       .Select(town => town.Name)
+                                       .ToList();
         }
     }
 }

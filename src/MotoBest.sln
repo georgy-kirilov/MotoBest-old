@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Web.ViewModels", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotoBest.Web.InputModels", "Web\MotoBest.Web.InputModels\MotoBest.Web.InputModels.csproj", "{1BE96FE9-5ECF-4A7B-8C2E-B4022DAE2687}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotoBest.Web.CombinedModels", "Web\MotoBest.Web.CombinedViewModels\MotoBest.Web.CombinedModels.csproj", "{F6EC8AF5-8AE4-4F6F-842D-B9242B3ACA1D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{1BE96FE9-5ECF-4A7B-8C2E-B4022DAE2687}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BE96FE9-5ECF-4A7B-8C2E-B4022DAE2687}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BE96FE9-5ECF-4A7B-8C2E-B4022DAE2687}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6EC8AF5-8AE4-4F6F-842D-B9242B3ACA1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6EC8AF5-8AE4-4F6F-842D-B9242B3ACA1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6EC8AF5-8AE4-4F6F-842D-B9242B3ACA1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6EC8AF5-8AE4-4F6F-842D-B9242B3ACA1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +91,7 @@ Global
 		{32BA7813-613F-4990-8CA3-C84E2F657A4D} = {5307622A-F436-4DB5-A18F-F37A5A6C2866}
 		{B444684E-42CE-4E86-910C-38F83786319C} = {5307622A-F436-4DB5-A18F-F37A5A6C2866}
 		{1BE96FE9-5ECF-4A7B-8C2E-B4022DAE2687} = {5307622A-F436-4DB5-A18F-F37A5A6C2866}
+		{F6EC8AF5-8AE4-4F6F-842D-B9242B3ACA1D} = {5307622A-F436-4DB5-A18F-F37A5A6C2866}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9DFDD4CB-6C79-4AD6-ADAB-641478CDBC2A}

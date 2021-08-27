@@ -8,8 +8,10 @@
 
     using MotoBest.Data;
     using MotoBest.Web.Models;
+    using MotoBest.Models.Common;
     using MotoBest.Web.ViewModels;
-    using MotoBest.Common;
+    using MotoBest.Web.InputModels;
+    using MotoBest.Web.CombinedModels;
 
     public class HomeController : Controller
     {
@@ -37,21 +39,31 @@
         {
             var viewModel = new SearchAdvertsViewModel
             {
-                KeyValuePairs = new List<KeyValuePair<string, IEnumerable<string>>>()
-                {
-                    new("Марка", dbContext.Brands.Select(brand => brand.Name.Capitalize())),
-                    new("Модел", new List<string>()),
-                    new("Двигател", dbContext.Engines.Select(engine => engine.Type.Capitalize())),
-                    new("Евро стандарт", dbContext.EuroStandards.Select(euroStandard => euroStandard.Type.Capitalize())),
-                    new("Тип", dbContext.BodyStyles.Select(bodyStyle => bodyStyle.Name.Capitalize())),
-                    new("Скоростна кутия", dbContext.Transmissions.Select(transmission => transmission.Type.Capitalize())),
-                    new("Цвят", dbContext.Colors.Select(color => color.Name.Capitalize())),
-                    new("Регион", dbContext.Regions.Select(region => region.Name.Capitalize())),
-                    new("Състояние", dbContext.Conditions.Select(condition => condition.Type.Capitalize())),
-                }
+                Brands = SelectNameableModels(dbContext.Brands),
+                Engines = SelectTypeableModels(dbContext.Engines),
+                Transmissions = SelectTypeableModels(dbContext.Transmissions),
+                BodyStyles = SelectNameableModels(dbContext.BodyStyles),
+                Conditions = SelectTypeableModels(dbContext.Conditions),
+                Colors = SelectNameableModels(dbContext.Colors),
+                EuroStandards = SelectTypeableModels(dbContext.EuroStandards),
+                Regions = SelectNameableModels(dbContext.Regions),
             };
 
-            return View(viewModel);
+            return View(new SearchAdvertsCombinedModel
+            {
+                View = viewModel,
+                Input = new SearchAdvertsInputModel(),
+            });
+        }
+
+        public IEnumerable<string> SelectNameableModels<T>(IQueryable<T> queryable) where T : BaseNameableModel
+        {
+            return queryable.OrderBy(model => model.Name).Select(model => model.Name);
+        }
+
+        public IEnumerable<string> SelectTypeableModels<T>(IQueryable<T> queryable) where T : BaseTypeableModel
+        {
+            return queryable.OrderBy(model => model.Type).Select(model => model.Type);
         }
     }
 }

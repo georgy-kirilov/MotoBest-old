@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MotoBest.Web.InputModels\MotoBest.Web.InputModels.csproj" />
+    <ProjectReference Include="..\MotoBest.Web.ViewModels\MotoBest.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
