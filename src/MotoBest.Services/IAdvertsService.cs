@@ -9,7 +9,7 @@
 
     public interface IAdvertsService
     {
-        Task AddOrUpdateAsync(AdvertScrapeModel model);
+        Task AddOrUpdateAdvertAsync(AdvertScrapeModel model);
 
         Advert GetAdvertById(string id);
 

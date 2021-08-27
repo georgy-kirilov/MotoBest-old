@@ -24,7 +24,7 @@
             this.advertsFormatter = advertsFormatter;
         }
 
-        public async Task AddOrUpdateAsync(AdvertScrapeModel model)
+        public async Task AddOrUpdateAdvertAsync(AdvertScrapeModel model)
         {
             if (model == null)
             {
