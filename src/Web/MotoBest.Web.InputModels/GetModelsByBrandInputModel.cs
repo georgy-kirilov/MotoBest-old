@@ -2,6 +2,6 @@
 {
     public class GetModelsByBrandInputModel
     {
-        public string Brand { get; set; }
+        public int BrandId { get; set; }
     }
 }

@@ -2,6 +2,6 @@
 {
     public class GetTownsByRegionInputModel
     {
-        public string Region { get; set; }
+        public int RegionId { get; set; }
     }
 }

@@ -2,28 +2,26 @@
 {
     public class SearchAdvertsInputModel
     {
-        public string Brand { get; set; }
+        public int? BrandId { get; set; }
 
-        public string Model { get; set; }
+        public int? ModelId { get; set; }
 
-        public string Engine { get; set; }
+        public int? EngineId { get; set; }
 
-        public string Transmission { get; set; }
+        public int? TransmissionId { get; set; }
 
-        public string BodyStyle { get; set; }
+        public int? BodyStyleId { get; set; }
 
-        public string Condition { get; set; }
+        public int? ConditionId { get; set; }
 
-        public string EuroStandard { get; set; }
+        public int? EuroStandardId { get; set; }
 
-        public string Color { get; set; }
+        public int? ColorId { get; set; }
 
-        public string Region { get; set; }
+        public int? RegionId { get; set; }
 
-        public string Town { get; set; }
+        public int? TownId { get; set; }
 
-        public decimal? MinPrice { get; set; }
-
-        public decimal? MaxPrice { get; set; }
+        public int Page { get; set; }
     }
 }

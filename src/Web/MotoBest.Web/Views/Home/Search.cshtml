@@ -5,23 +5,23 @@
 @{ 
     const string DefaultSelectListText = "Без значение";
 
-    var brands = Model.View.Brands.Select(brand => new SelectListItem(brand, brand));
-    var engines = Model.View.Engines.Select(engine => new SelectListItem(engine.Capitalize(), engine));
-    var transmissions = Model.View.Transmissions.Select(transmission => new SelectListItem(transmission.Capitalize(), transmission));
-    var bodyStyles = Model.View.BodyStyles.Select(bodyStyle => new SelectListItem(bodyStyle.Capitalize(), bodyStyle));
-    var conditions = Model.View.Conditions.Select(condition => new SelectListItem(condition.Capitalize(), condition));
-    var colors = Model.View.Colors.Select(color => new SelectListItem(color.Capitalize(), color));
-    var regions = Model.View.Regions.Select(region => new SelectListItem(region.Capitalize(), region));
-    var euroStandards = Model.View.EuroStandards.Select(euroStandard => new SelectListItem(euroStandard.Capitalize(), euroStandard));
+    var brands = Model.View.Brands.Select(brand => new SelectListItem(brand.Name, brand.Id.ToString()));
+    var engines = Model.View.Engines.Select(engine => new SelectListItem(engine.Type.Capitalize(), engine.Id.ToString()));
+    var transmissions = Model.View.Transmissions.Select(transmission => new SelectListItem(transmission.Type.Capitalize(), transmission.Id.ToString()));
+    var bodyStyles = Model.View.BodyStyles.Select(bodyStyle => new SelectListItem(bodyStyle.Name.Capitalize(), bodyStyle.Id.ToString()));
+    var conditions = Model.View.Conditions.Select(condition => new SelectListItem(condition.Type.Capitalize(), condition.Id.ToString()));
+    var colors = Model.View.Colors.Select(color => new SelectListItem(color.Name.Capitalize(), color.Id.ToString()));
+    var regions = Model.View.Regions.Select(region => new SelectListItem(region.Name.Capitalize(), region.Id.ToString()));
+    var euroStandards = Model.View.EuroStandards.Select(euroStandard => new SelectListItem(euroStandard.Type.Capitalize(), euroStandard.Id.ToString()));
 }
 
 <div class="display-4">Търсене на автомобили</div>
 
-<form method="get" asp-controller="Home" asp-action="StartSearch">
+<form method="get" asp-controller="Adverts" asp-action="Search">
 
     <div class="my-4 h5 alert-light">
-        <label asp-for="Input.Brand" class="mb-3">Марка</label>
-        <select asp-for="Input.Brand"
+        <label asp-for="Input.BrandId" class="mb-3">Марка</label>
+        <select asp-for="Input.BrandId"
                 asp-items="brands"
                 class="custom-select alert-secondary"
                 autocomplete="on"
@@ -32,8 +32,8 @@
     </div>
 
     <div class="my-4 h5 alert-light">
-        <label asp-for="Input.Model" class="mb-3">Модел</label>
-        <select asp-for="Input.Model"
+        <label asp-for="Input.ModelId" class="mb-3">Модел</label>
+        <select asp-for="Input.ModelId"
                 class="custom-select alert-secondary"
                 autocomplete="on"
                 id="models">
@@ -42,8 +42,8 @@
     </div>
 
     <div class="my-4 h5 alert-light">
-        <label asp-for="Input.Engine" class="mb-3">Двигател</label>
-        <select asp-for="Input.Engine"
+        <label asp-for="Input.EngineId" class="mb-3">Двигател</label>
+        <select asp-for="Input.EngineId"
                 asp-items="engines"
                 class="custom-select alert-secondary"
                 autocomplete="on">
@@ -52,8 +52,8 @@
     </div>
 
     <div class="my-4 h5 alert-light">
-        <label asp-for="Input.Transmission" class="mb-3">Скоростна кутия</label>
-        <select asp-for="Input.Transmission"
+        <label asp-for="Input.TransmissionId" class="mb-3">Скоростна кутия</label>
+        <select asp-for="Input.TransmissionId"
                 asp-items="transmissions"
                 class="custom-select alert-secondary"
                 autocomplete="on">
@@ -62,8 +62,8 @@
     </div>
 
     <div class="my-4 h5 alert-light">
-        <label asp-for="Input.BodyStyle" class="mb-3">Тип</label>
-        <select asp-for="Input.BodyStyle"
+        <label asp-for="Input.BodyStyleId" class="mb-3">Тип</label>
+        <select asp-for="Input.BodyStyleId"
                 asp-items="bodyStyles"
                 class="custom-select alert-secondary"
                 autocomplete="on">
@@ -72,8 +72,8 @@
     </div>
 
     <div class="my-4 h5 alert-light">
-        <label asp-for="Input.Condition" class="mb-3">Състояние</label>
-        <select asp-for="Input.Condition"
+        <label asp-for="Input.ConditionId" class="mb-3">Състояние</label>
+        <select asp-for="Input.ConditionId"
                 asp-items="conditions"
                 class="custom-select alert-secondary"
                 autocomplete="on">
@@ -82,8 +82,8 @@
     </div>
 
     <div class="my-4 h5 alert-light">
-        <label asp-for="Input.EuroStandard" class="mb-3">Евро стандарт</label>
-        <select asp-for="Input.EuroStandard"
+        <label asp-for="Input.EuroStandardId" class="mb-3">Евро стандарт</label>
+        <select asp-for="Input.EuroStandardId"
                 asp-items="euroStandards"
                 class="custom-select alert-secondary"
                 autocomplete="on">
@@ -92,8 +92,8 @@
     </div>
 
     <div class="my-4 h5 alert-light">
-        <label asp-for="Input.Color" class="mb-3">Цвят</label>
-        <select asp-for="Input.Color"
+        <label asp-for="Input.ColorId" class="mb-3">Цвят</label>
+        <select asp-for="Input.ColorId"
                 asp-items="colors"
                 class="custom-select alert-secondary"
                 autocomplete="on">
@@ -102,8 +102,8 @@
     </div>
 
     <div class="my-4 h5 alert-light">
-        <label asp-for="Input.Region" class="mb-3">Регион</label>
-        <select asp-for="Input.Region"
+        <label asp-for="Input.RegionId" class="mb-3">Регион</label>
+        <select asp-for="Input.RegionId"
                 asp-items="regions"
                 class="custom-select alert-secondary"
                 autocomplete="on"
@@ -113,8 +113,8 @@
     </div>
 
     <div class="my-4 h5 alert-light">
-        <label asp-for="Input.Town" class="mb-3">Населено място</label>
-        <select asp-for="Input.Town"
+        <label asp-for="Input.TownId" class="mb-3">Населено място</label>
+        <select asp-for="Input.TownId"
                 class="custom-select alert-secondary"
                 autocomplete="on"
                 id="towns">
@@ -132,12 +132,12 @@
     const token = "XXXXXXXX_XXXXXXXX_XXXXXXXX_XXXXXXX";
 
     function updateModelsByBrand(sender) {
-        const data = { Brand: sender?.value };
+        const data = { BrandId: sender?.value };
         sendPostRequest("/Adverts/GetModelsByBrand", data, (res) => updateSelectElement("models", res));
     }
 
     function updateTownsByRegion(sender) {
-        const data = { Region: sender?.value };
+        const data = { RegionId: sender?.value };
         sendPostRequest("/Adverts/GetTownsByRegion", data, (res) => updateSelectElement("towns", res));
         
     }
@@ -157,12 +157,12 @@
     function updateSelectElement(id, items) {
         let models = document.querySelector(`#${id}`);
         models.innerHTML = STRING_EMPTY;
-        items.unshift(defaultOptionName);
+        items.unshift({ name: defaultOptionName, id: STRING_EMPTY });
 
         for (let model of items) {
             let option = document.createElement("option");
-            option.textContent = model;
-            option.value = model === defaultOptionName ? STRING_EMPTY : model;
+            option.textContent = model.name;
+            option.value = model.name === defaultOptionName ? STRING_EMPTY : model.id;
             models.appendChild(option);
         }
     }

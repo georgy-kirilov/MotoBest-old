@@ -4,6 +4,9 @@
     using System.Collections.Generic;
 
     using MotoBest.Data;
+    using MotoBest.Models;
+    using MotoBest.Services.DTOs;
+    using MotoBest.Services.Contracts;
 
     public class ModelsService : IModelsService
     {
@@ -14,9 +17,23 @@
             this.dbContext = dbContext;
         }
 
-        public IList<string> GetAllModelNamesByBrandName(string brandName)
+        public IList<ModelDto> GetAllModelsByBrandId(int brandId)
         {
-            return dbContext.Models.Where(model => model.Brand.Name == brandName).Select(model => model.Name).OrderBy(model => model).ToList();
+            return dbContext.Models
+                            .Where(model => model.Brand.Id == brandId)
+                            .OrderBy(model => model.Name)
+                            .Select(model => new ModelDto { Id = model.Id, Name = model.Name })
+                            .ToList();
+        }
+
+        public Model GetOrCreate(Brand brand, string modelName)
+        {
+            if (modelName == null)
+            {
+                return null;
+            }
+
+            return brand.Models.FirstOrDefault(model => model.Name == modelName) ?? new Model { Name = modelName };
         }
     }
 }

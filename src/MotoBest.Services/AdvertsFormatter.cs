@@ -6,6 +6,7 @@
     using System.Globalization;
 
     using MotoBest.Common;
+    using MotoBest.Services.Contracts;
 
     using static MotoBest.Scraping.Common.Utilities.Date;
     using static MotoBest.Scraping.Common.Utilities.Characters;

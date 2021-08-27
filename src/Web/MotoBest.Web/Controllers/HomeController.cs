@@ -4,11 +4,10 @@
 
     using Microsoft.AspNetCore.Mvc;
 
-    using MotoBest.Services;
     using MotoBest.Web.Models;
-    using MotoBest.Web.ViewModels;
     using MotoBest.Web.InputModels;
     using MotoBest.Web.CombinedModels;
+    using MotoBest.Services.Contracts;
 
     public class HomeController : Controller
     {
@@ -40,12 +39,6 @@
             };
 
             return View(combinedModel);
-        }
-
-        [HttpGet]
-        public IActionResult StartSearch(SearchAdvertsCombinedModel model)
-        {
-            return View("SearchingResults", new SearchResultsViewModel { Adverts = advertsService.SearchForAdverts(model.Input) });
         }
     }
 }

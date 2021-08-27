@@ -8,22 +8,59 @@
     using MotoBest.Data;
     using MotoBest.Models;
     using MotoBest.Common;
-    using MotoBest.Web.ViewModels;
-    using MotoBest.Scraping.Common;
-    using MotoBest.Web.InputModels;
     using MotoBest.Models.Common;
+    using MotoBest.Web.ViewModels;
+    using MotoBest.Web.InputModels;
+    using MotoBest.Scraping.Common;
+    using MotoBest.Services.Contracts;
 
     public class AdvertsService : IAdvertsService
     {
         private readonly ApplicationDbContext dbContext;
-        private readonly IModelFactory modelFactory;
         private readonly IAdvertsFormatter advertsFormatter;
+        private readonly IBrandsService brandsService;
+        private readonly IModelsService modelsService;
+        private readonly IColorsService colorsService;
+        private readonly IEnginesService enginesService;
+        private readonly ITransmissionsService transmissionsService;
+        private readonly IBodyStylesService bodyStylesService;
+        private readonly IEuroStandardsService euroStandardsService;
+        private readonly IConditionsService conditionsService;
+        private readonly ITownsService townsService;
+        private readonly IRegionsService regionsService;
+        private readonly IImagesService imagesService;
+        private readonly IAdvertProvidersService advertProvidersService;
 
-        public AdvertsService(ApplicationDbContext dbContext, IModelFactory modelFactory, IAdvertsFormatter advertsFormatter)
+        public AdvertsService(
+            ApplicationDbContext dbContext, 
+            IAdvertsFormatter advertsFormatter, 
+            IBrandsService brandsService, 
+            IModelsService modelsService, 
+            IColorsService colorsService, 
+            IEnginesService enginesService, 
+            ITransmissionsService transmissionsService, 
+            IBodyStylesService bodyStylesService, 
+            IEuroStandardsService euroStandardsService, 
+            IConditionsService conditionsService, 
+            ITownsService townsService, 
+            IRegionsService regionsService, 
+            IImagesService imagesService, 
+            IAdvertProvidersService advertProvidersService)
         {
             this.dbContext = dbContext;
-            this.modelFactory = modelFactory;
             this.advertsFormatter = advertsFormatter;
+            this.brandsService = brandsService;
+            this.modelsService = modelsService;
+            this.colorsService = colorsService;
+            this.enginesService = enginesService;
+            this.transmissionsService = transmissionsService;
+            this.bodyStylesService = bodyStylesService;
+            this.euroStandardsService = euroStandardsService;
+            this.conditionsService = conditionsService;
+            this.townsService = townsService;
+            this.regionsService = regionsService;
+            this.imagesService = imagesService;
+            this.advertProvidersService = advertProvidersService;
         }
 
         public async Task AddOrUpdateAdvertAsync(AdvertScrapeModel model)
@@ -33,9 +70,9 @@
                 throw new ArgumentNullException(nameof(model));
             }
 
-            AdvertProvider advertProvider = modelFactory.GetOrCreateAdvertProvider(model);
+            var provider = advertProvidersService.GetOrCreate(model);
 
-            Advert advert = advertProvider.Adverts.FirstOrDefault(a => a.RemoteId == model.RemoteId);
+            Advert advert = provider.Adverts.FirstOrDefault(a => a.RemoteId == model.RemoteId);
             bool isAdvertNew = false;
 
             if (advert == null)
@@ -44,14 +81,14 @@
                 isAdvertNew = true;
             }
 
-            advert.AdvertProvider = advertProvider;
+            advert.AdvertProvider = provider;
 
-            MapNavigationalProperties(advert, model);
-            MapSimpleProperties(advert, model);
+            MapComplexNavigationalProperties(advert, model);
+            MapSimpleSingleProperties(advert, model);
 
             foreach (string imageUrl in model.ImageUrls)
             {
-                Image image = modelFactory.GetOrCreateImage(imageUrl, advert);
+                Image image = imagesService.GetOrCreate(imageUrl, advert);
                 advert.Images.Add(image);
             }
 
@@ -67,14 +104,14 @@
         {
             var viewModel = new SearchAdvertsViewModel
             {
-                Brands = SelectNameableModels(dbContext.Brands),
-                Engines = SelectTypeableModels(dbContext.Engines),
-                Transmissions = SelectTypeableModels(dbContext.Transmissions),
-                BodyStyles = SelectNameableModels(dbContext.BodyStyles),
-                Conditions = SelectTypeableModels(dbContext.Conditions),
-                Colors = SelectNameableModels(dbContext.Colors),
-                EuroStandards = SelectTypeableModels(dbContext.EuroStandards),
-                Regions = SelectNameableModels(dbContext.Regions),
+                Brands = brandsService.GetAll(),
+                Engines = enginesService.GetAll(),
+                Transmissions = transmissionsService.GetAll(),
+                BodyStyles = bodyStylesService.GetAll(),
+                Conditions = conditionsService.GetAll(),
+                Colors = colorsService.GetAll(),
+                EuroStandards = euroStandardsService.GetAll(),
+                Regions = regionsService.GetAll(),
             };
 
             return viewModel;
@@ -82,7 +119,7 @@
 
         public Advert GetAdvertById(string id)
         {
-            return dbContext.Adverts.FirstOrDefault(a => a.Id.ToString() == id);
+            return dbContext.Adverts.FirstOrDefault(advert => advert.Id.ToString() == id);
         }
 
         public IEnumerable<AdvertViewModel> GetLatestAdverts(int pageIndex)
@@ -156,39 +193,46 @@
             return viewModel;
         }
 
-        public IEnumerable<AdvertViewModel> SearchForAdverts(SearchAdvertsInputModel input)
+        public IEnumerable<AdvertViewModel> SearchAdverts(SearchAdvertsInputModel input)
         {
-            var adverts = dbContext.Adverts.Where(advert =>
-                                    (input.Brand == null || advert.Brand.Name == input.Brand) &&
-                                    (input.Model == null || advert.Model.Name == input.Model) &&
-                                    (input.Engine == null || advert.Engine.Type == input.Engine) &&
-                                    (input.BodyStyle == null || advert.BodyStyle.Name == input.BodyStyle) &&
-                                    (input.Color == null || advert.Color.Name == input.Color) &&
-                                    (input.Transmission == null || advert.Transmission.Type == input.Transmission) &&
-                                    (input.Condition == null || advert.Condition.Type == input.Condition) &&
-                                    (input.EuroStandard == null || advert.EuroStandard.Type == input.EuroStandard) &&
-                                    (input.Region == null || advert.Region.Name == input.Region))
-                                    .Take(10)
+            int advertsPerPage = 10, advertsToSkip = advertsPerPage * input.Page;
+
+            return dbContext.Adverts.Where(advert =>
+                                        (input.BrandId == null || advert.BrandId == input.BrandId) &&
+                                        (input.ModelId == null || advert.ModelId == input.ModelId) &&
+                                        (input.EngineId == null || advert.EngineId == input.EngineId) &&
+                                        (input.BodyStyleId == null || advert.BodyStyleId == input.BodyStyleId) &&
+                                        (input.ColorId == null || advert.ColorId == input.ColorId) &&
+                                        (input.TransmissionId == null || advert.TransmissionId == input.TransmissionId) &&
+                                        (input.ConditionId == null || advert.ConditionId == input.ConditionId) &&
+                                        (input.EuroStandardId == null || advert.EuroStandardId == input.EuroStandardId) &&
+                                        (input.RegionId == null || advert.RegionId == input.RegionId) &&
+                                        (input.TownId == null || advert.TownId == input.TownId))
+                                    .Skip(advertsToSkip)
+                                    .Take(advertsPerPage)
                                     .Select(MapViewModelFrom)
                                     .ToList();
-            return adverts;
         }
 
-        private void MapNavigationalProperties(Advert advert, AdvertScrapeModel model)
+        private void MapComplexNavigationalProperties(Advert advert, AdvertScrapeModel model)
         {
-            advert.Brand = modelFactory.GetOrCreateBrand(model.BrandName);
-            advert.Model = modelFactory.GetOrCreateModel(model.ModelName, advert.Brand);
-            advert.Color = modelFactory.GetOrCreateColor(model.ColorName);
-            advert.Engine = modelFactory.GetOrCreateEngine(model.EngineType);
-            advert.Transmission = modelFactory.GetOrCreateTransmission(model.TransmissionType);
-            advert.BodyStyle = modelFactory.GetOrCreateBodyStyle(model.BodyStyleName);
-            advert.Region = modelFactory.GetOrCreateRegion(model.RegionName);
-            advert.Town = modelFactory.GetOrCreateTown(model.TownName, advert.Region);
-            advert.EuroStandard = modelFactory.GetOrCreateEuroStandard(model.EuroStandardType);
-            advert.Condition = modelFactory.GetOrCreateCondition(model.Condition);
+            advert.Brand = brandsService.GetOrCreate(model.BrandName);
+            advert.Model = modelsService.GetOrCreate(advert.Brand, model.ModelName);
+
+            advert.Color = colorsService.GetOrCreate(model.ColorName);
+            advert.Engine = enginesService.GetOrCreate(model.EngineType);
+
+            advert.Transmission = transmissionsService.GetOrCreate(model.TransmissionType);
+            advert.BodyStyle = bodyStylesService.GetOrCreate(model.BodyStyleName);
+
+            advert.EuroStandard = euroStandardsService.GetOrCreate(model.EuroStandardType);
+            advert.Condition = conditionsService.GetOrCreate(model.Condition);
+
+            advert.Region = regionsService.GetOrCreate(model.RegionName);
+            advert.Town = townsService.GetOrCreate(advert.Region, model.TownName);
         }
 
-        private void MapSimpleProperties(Advert advert, AdvertScrapeModel model)
+        private static void MapSimpleSingleProperties(Advert advert, AdvertScrapeModel model)
         {
             advert.Views = model.Views;
             advert.Kilometrage = model.Kilometrage;
@@ -202,16 +246,6 @@
             advert.HasFourDoors = model.HasFourDoors;
             advert.IsEuroStandardExact = model.IsEuroStandardExact;
             advert.IsExteriorMetallic = model.IsExteriorMetallic;
-        }
-
-        private static IEnumerable<string> SelectNameableModels<T>(IQueryable<T> queryable) where T : BaseNameableModel
-        {
-            return queryable.OrderBy(model => model.Name).Select(model => model.Name);
-        }
-
-        private static IEnumerable<string> SelectTypeableModels<T>(IQueryable<T> queryable) where T : BaseTypeableModel
-        {
-            return queryable.OrderBy(model => model.Type).Select(model => model.Type);
         }
     }
 }

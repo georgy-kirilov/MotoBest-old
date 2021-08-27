@@ -9,6 +9,7 @@ namespace MotoBest.Web
     using MotoBest.Data;
     using MotoBest.Models;
     using MotoBest.Services;
+    using MotoBest.Services.Contracts;
 
     public class Startup
     {
@@ -28,11 +29,20 @@ namespace MotoBest.Web
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddTransient<IModelFactory, ModelFactory>();
             services.AddTransient<IAdvertsService, AdvertsService>();
             services.AddTransient<IAdvertsFormatter, AdvertsFormatter>();
+            services.AddTransient<IBrandsService, BrandsService>();
             services.AddTransient<IModelsService, ModelsService>();
+            services.AddTransient<IColorsService, ColorsService>();
+            services.AddTransient<IEnginesService, EnginesService>();
+            services.AddTransient<ITransmissionsService, TransmissionsService>();
+            services.AddTransient<IBodyStylesService, BodyStylesService>();
+            services.AddTransient<IEuroStandardsService, EuroStandardsService>();
+            services.AddTransient<IConditionsService, ConditionsService>();
+            services.AddTransient<IRegionsService, RegionsService>();
             services.AddTransient<ITownsService, TownsService>();
+            services.AddTransient<IImagesService, ImagesService>();
+            services.AddTransient<IAdvertProvidersService, AdvertProvidersService>();
 
             services.AddControllersWithViews();
         }

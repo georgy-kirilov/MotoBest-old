@@ -30,12 +30,12 @@
         {
             await new ApplicationDbContext().Database.EnsureCreatedAsync();
 
-            await scraper.ScrapeAllAdvertsAsync(async model =>
-            {
-                using var dbContext = new ApplicationDbContext();
-                var service = new AdvertsService(dbContext, new ModelFactory(dbContext), new AdvertsFormatter());
-                await service.AddOrUpdateAdvertAsync(model);
-            });
+            //await scraper.ScrapeAllAdvertsAsync(async model =>
+            //{
+            //    using var dbContext = new ApplicationDbContext();
+            //    var service = new AdvertsService(dbContext, new ModelFactory(dbContext), new AdvertsFormatter());
+            //    await service.AddOrUpdateAdvertAsync(model);
+            //});
         }
     }
 }

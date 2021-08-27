@@ -1,22 +1,23 @@
 ﻿@using MotoBest.Web.ViewModels;
 @using static MotoBest.Scraping.Common.Utilities.Date
 
-@inject MotoBest.Services.IAdvertsFormatter advertsFormatter
+@inject MotoBest.Services.Contracts.IAdvertsFormatter advertsFormatter
 
-@model SearchResultsViewModel
-
-<h1 class="mb-5 display-4">Резултати за обяви</h1>
+@model SearchAdvertsResultsViewModel
 
 @foreach (AdvertViewModel advert in Model.Adverts)
 {
-    <a asp-controller="adverts" asp-action="byid" asp-route-id="@advert.Id" class="text-decoration-none">
+    <a asp-controller="Adverts" asp-action="ById" asp-route-id="@advert.Id" class="text-decoration-none">
         <div class="col-12 my-2 p-3 alert-secondary rounded" id="advert">
             <div class="mb-4">
                 <div class="ml-2 float-right d-inline font-weight-bold text-success">@advert.Price</div>
                 <div class="text-primary font-italic text-truncate">@advert.Title</div>
                 @if (advert.LastModifiedOn != null)
                 {
-                    <div class="text-muted font-italic small">Последно променена на @advert.LastModifiedOn?.Date.ToString("dd MMMM yyyy", BulgarianCultureInfo) в @advert.LastModifiedOn?.TimeOfDay.ToString(@"hh\:mm")</div>
+                    string date = advert.LastModifiedOn?.Date.ToString("dd MMMM yyyy", BulgarianCultureInfo);
+                    string time = advert.LastModifiedOn?.TimeOfDay.ToString(@"hh\:mm");
+
+                    <div class="text-muted font-italic small">Последно променена на @date в @time</div>
                 }
             </div>
             <div class="my-2 clearfix">

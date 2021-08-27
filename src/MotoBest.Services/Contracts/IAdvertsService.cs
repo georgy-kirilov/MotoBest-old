@@ -1,12 +1,12 @@
-﻿namespace MotoBest.Services
+﻿namespace MotoBest.Services.Contracts
 {
     using System.Threading.Tasks;
+    using System.Collections.Generic;
 
     using MotoBest.Models;
     using MotoBest.Web.ViewModels;
-    using MotoBest.Scraping.Common;
-    using System.Collections.Generic;
     using MotoBest.Web.InputModels;
+    using MotoBest.Scraping.Common;
 
     public interface IAdvertsService
     {
@@ -18,7 +18,7 @@
 
         IEnumerable<AdvertViewModel> GetLatestAdverts(int pageIndex);
 
-        IEnumerable<AdvertViewModel> SearchForAdverts(SearchAdvertsInputModel input);
+        IEnumerable<AdvertViewModel> SearchAdverts(SearchAdvertsInputModel input);
 
         SearchAdvertsViewModel CreateSearchAdvertsViewModel();
 

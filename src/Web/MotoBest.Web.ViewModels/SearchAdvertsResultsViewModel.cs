@@ -2,10 +2,8 @@
 {
     using System.Collections.Generic;
 
-    public class SearchResultsViewModel
+    public class SearchAdvertsResultsViewModel
     {
         public IEnumerable<AdvertViewModel> Adverts { get; set; }
-
-        public int PageIndex { get; set; }
     }
 }
