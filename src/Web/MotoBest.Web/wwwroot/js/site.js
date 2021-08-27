@@ -1,4 +1,6 @@
 ﻿const displayNoneValue = "d-none";
+const STRING_EMPTY = "";
+
 
 function show(element) {
     element?.classList.remove(displayNoneValue);

@@ -1,18 +1,24 @@
 ﻿namespace MotoBest.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-
+    using MotoBest.Data;
     using MotoBest.Models;
     using MotoBest.Services;
     using MotoBest.Web.ViewModels;
+    using MotoBest.Web.InputModels;
+
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class AdvertsController : Controller
     {
         private readonly IAdvertsService advertsService;
+        private readonly ApplicationDbContext dbContext;
 
-        public AdvertsController(IAdvertsService advertsService)
+        public AdvertsController(IAdvertsService advertsService, ApplicationDbContext dbContext)
         {
             this.advertsService = advertsService;
+            this.dbContext = dbContext;
         }
 
         [HttpGet]
@@ -41,6 +47,16 @@
             };
 
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult<IEnumerable<string>> GetModelsByBrand([FromBody] GetModelsByBrandInputModel input)
+        {
+            var models = dbContext.Models.Where(model => model.Brand.Name == input.Brand)
+                                         .OrderBy(model => model.Name)
+                                         .Select(model => model.Name)
+                                         .ToList();
+            return models;
         }
     }
 }
