@@ -1,40 +1,5 @@
-﻿@using MotoBest.Web.ViewModels;
-@using static MotoBest.Scraping.Common.Utilities.Date
-
-@inject MotoBest.Services.Contracts.IAdvertsFormatter advertsFormatter
-
-@model SearchAdvertsResultsViewModel
+﻿@model MotoBest.Web.ViewModels.SearchAdvertsResultsViewModel
 
 <h1 class="mb-5 display-4">Последно публикувани обяви</h1>
 
-@foreach (AdvertViewModel advert in Model.Adverts)
-{
-    <a asp-controller="adverts" asp-action="byid" asp-route-id="@advert.Id" class="text-decoration-none">
-        <div class="col-12 my-2 p-3 alert-secondary rounded" id="advert">
-            <div class="mb-4">
-                <div class="ml-2 float-right d-inline font-weight-bold text-success">@advert.Price</div>
-                <div class="text-primary font-italic text-truncate">@advert.Title</div>
-                @if (advert.LastModifiedOn != null)
-                {
-                    <div class="text-muted font-italic small">Последно променена на @advert.LastModifiedOn?.Date.ToString("dd MMMM yyyy", BulgarianCultureInfo) в @advert.LastModifiedOn?.TimeOfDay.ToString(@"hh\:mm")</div>
-                }
-            </div>
-            <div class="my-2 clearfix">
-                <img src="@advert.ImageUrls.FirstOrDefault()" class="col-12 col-sm-7 col-md-6 col-lg-3 mb-4 my-lg-2 img-fluid float-left"/>
-                <span id="description">
-                    @string.Join(" - ", advert.InfoPairRows.Select(ip => ip.Value))
-                </span>
-            </div>
-        </div>
-    </a>
-}
-
-<style>
-    #advert {
-        font-size: 1.2rem;
-    }
-
-    #description {
-        font-size: 1.05rem;
-    }
-</style>
+<partial name="_SearchPartial" model="Model"/>

@@ -8,7 +8,6 @@
     using MotoBest.Web.ViewModels;
     using MotoBest.Web.InputModels;
     using MotoBest.Services.Contracts;
-    using System.Linq;
 
     public class AdvertsController : Controller
     {
