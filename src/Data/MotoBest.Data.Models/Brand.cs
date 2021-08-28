@@ -1,8 +1,8 @@
-﻿namespace MotoBest.Models
+﻿namespace MotoBest.Data.Models
 {
     using System.Collections.Generic;
 
-    using MotoBest.Models.Common;
+    using MotoBest.Data.Models.Common;
 
     public class Brand : BaseNameableModel
     {

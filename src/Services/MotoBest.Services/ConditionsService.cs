@@ -4,7 +4,7 @@
     using System.Collections.Generic;
 
     using MotoBest.Data;
-    using MotoBest.Models;
+    using MotoBest.Data.Models;
     using MotoBest.Services.DTOs;
     using MotoBest.Services.Contracts;
 

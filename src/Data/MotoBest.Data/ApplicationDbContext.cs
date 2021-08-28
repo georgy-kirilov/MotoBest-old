@@ -5,8 +5,8 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-    using MotoBest.Models;
-    using MotoBest.Models.Common;
+    using MotoBest.Data.Models;
+    using MotoBest.Data.Models.Common;
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {

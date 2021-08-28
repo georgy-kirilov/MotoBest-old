@@ -3,7 +3,7 @@
     using System.Linq;
 
     using MotoBest.Data;
-    using MotoBest.Models;
+    using MotoBest.Data.Models;
     using MotoBest.Services.Contracts;
     using MotoBest.Data.Scraping.Common;
 

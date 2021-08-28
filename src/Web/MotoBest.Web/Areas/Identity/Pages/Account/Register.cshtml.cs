@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using MotoBest.Models;
+using MotoBest.Data.Models;
 
 namespace MotoBest.Web.Areas.Identity.Pages.Account
 {

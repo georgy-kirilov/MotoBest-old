@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MotoBest.Models;
+using MotoBest.Data.Models;
 
 namespace MotoBest.Web.Areas.Identity.Pages.Account.Manage
 {

@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using MotoBest.Models;
+    using MotoBest.Data.Models;
     using MotoBest.Services.DTOs;
 
     public interface IRegionsService

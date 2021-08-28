@@ -7,7 +7,8 @@ namespace MotoBest.Web
     using Microsoft.Extensions.DependencyInjection;
 
     using MotoBest.Data;
-    using MotoBest.Models;
+    using MotoBest.Data.Models;
+
     using MotoBest.Services;
     using MotoBest.Services.Contracts;
 

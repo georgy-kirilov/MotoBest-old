@@ -6,8 +6,8 @@
     using System.Collections.Generic;
 
     using MotoBest.Data;
-    using MotoBest.Models;
     using MotoBest.Common;
+    using MotoBest.Data.Models;
     using MotoBest.Web.ViewModels;
     using MotoBest.Web.InputModels;
     using MotoBest.Data.Scraping.Common;

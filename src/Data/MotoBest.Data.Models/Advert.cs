@@ -1,10 +1,10 @@
-﻿namespace MotoBest.Models
+﻿namespace MotoBest.Data.Models
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using MotoBest.Models.Common;
+    using MotoBest.Data.Models.Common;
 
     public class Advert : BaseModel<Guid>
     {

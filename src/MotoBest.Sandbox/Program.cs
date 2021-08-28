@@ -9,7 +9,7 @@
     using MotoBest.Data;
     using MotoBest.Services;
     using MotoBest.Seeding.Seeders;
-    using MotoBest.Scraping.Scrapers;
+    using MotoBest.Data.Scraping.Scrapers;
 
     public class Program
     {

@@ -1,6 +1,6 @@
 ﻿namespace MotoBest.Services.Contracts
 {
-    using MotoBest.Models;
+    using MotoBest.Data.Models;
 
     public interface IImagesService
     {

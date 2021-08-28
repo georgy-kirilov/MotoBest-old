@@ -1,4 +1,4 @@
-﻿namespace MotoBest.Models
+﻿namespace MotoBest.Data.Models
 {
     using System.Collections.Generic;
 

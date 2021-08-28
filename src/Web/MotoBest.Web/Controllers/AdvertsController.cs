@@ -4,7 +4,7 @@
 
     using Microsoft.AspNetCore.Mvc;
 
-    using MotoBest.Models;
+    using MotoBest.Data.Models;
     using MotoBest.Web.ViewModels;
     using MotoBest.Web.InputModels;
     using MotoBest.Services.Contracts;

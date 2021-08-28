@@ -1,9 +1,9 @@
-﻿namespace MotoBest.Models
+﻿namespace MotoBest.Data.Models
 {
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    using MotoBest.Models.Common;
+    using MotoBest.Data.Models.Common;
 
     public class Image : BaseModel<int>
     {

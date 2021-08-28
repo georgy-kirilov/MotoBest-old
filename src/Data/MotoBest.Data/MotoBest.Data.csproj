@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MotoBest.Models\MotoBest.Models.csproj" />
+    <ProjectReference Include="..\MotoBest.Data.Models\MotoBest.Data.Models.csproj" />
   </ItemGroup>
 
 </Project>

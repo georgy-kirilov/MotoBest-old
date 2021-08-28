@@ -8,7 +8,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Data\MotoBest.Data.Scraping\MotoBest.Data.Scraping.csproj" />
     <ProjectReference Include="..\Data\MotoBest.Data\MotoBest.Data.csproj" />
-    <ProjectReference Include="..\Data\MotoBest.Models\MotoBest.Models.csproj" />
     <ProjectReference Include="..\Services\MotoBest.Services\MotoBest.Services.csproj" />
   </ItemGroup>
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MotoBest.Data;
-using MotoBest.Models;
+using MotoBest.Data.Models;
 
 [assembly: HostingStartup(typeof(MotoBest.Web.Areas.Identity.IdentityHostingStartup))]
 namespace MotoBest.Web.Areas.Identity

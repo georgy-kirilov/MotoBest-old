@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{BCD174BC-9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Data", "Data\MotoBest.Data\MotoBest.Data.csproj", "{ABBFDB27-9090-4221-911A-C38DBD3EF551}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Models", "Data\MotoBest.Models\MotoBest.Models.csproj", "{0EB601B7-E55F-4D58-90A9-5F5434543A73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Data.Models", "Data\MotoBest.Data.Models\MotoBest.Data.Models.csproj", "{0EB601B7-E55F-4D58-90A9-5F5434543A73}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Data.Scraping", "Data\MotoBest.Data.Scraping\MotoBest.Data.Scraping.csproj", "{9FA34223-568F-4DFA-8902-CEBFFC79E96D}"
 EndProject

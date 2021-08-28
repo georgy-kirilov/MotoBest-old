@@ -4,7 +4,7 @@
     using System.Threading.Tasks;
 
     using MotoBest.Data;
-    using MotoBest.Models;
+    using MotoBest.Data.Models;
     using MotoBest.Seeding.Entities;
 
     public class TransmissionSeeder : ISeeder
