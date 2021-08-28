@@ -8,10 +8,9 @@
     using MotoBest.Data;
     using MotoBest.Models;
     using MotoBest.Common;
-    using MotoBest.Models.Common;
     using MotoBest.Web.ViewModels;
     using MotoBest.Web.InputModels;
-    using MotoBest.Scraping.Common;
+    using MotoBest.Data.Scraping.Common;
     using MotoBest.Services.Contracts;
 
     public class AdvertsService : IAdvertsService

@@ -1,4 +1,4 @@
-﻿namespace MotoBest.Scraping.Common
+﻿namespace MotoBest.Data.Scraping.Common
 {
     using System;
     using System.Collections.Generic;

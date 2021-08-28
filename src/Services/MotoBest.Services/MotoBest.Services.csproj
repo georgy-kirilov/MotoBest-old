@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Data\MotoBest.Data.Scraping\MotoBest.Data.Scraping.csproj" />
     <ProjectReference Include="..\..\Data\MotoBest.Data\MotoBest.Data.csproj" />
     <ProjectReference Include="..\..\Data\MotoBest.Models\MotoBest.Models.csproj" />
-    <ProjectReference Include="..\..\Data\MotoBest.Scraping\MotoBest.Scraping.csproj" />
     <ProjectReference Include="..\..\Web\MotoBest.Web.InputModels\MotoBest.Web.InputModels.csproj" />
     <ProjectReference Include="..\..\Web\MotoBest.Web.ViewModels\MotoBest.Web.ViewModels.csproj" />
     <ProjectReference Include="..\MotoBest.Services.DTOs\MotoBest.Services.DTOs.csproj" />

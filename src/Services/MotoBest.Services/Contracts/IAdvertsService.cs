@@ -6,7 +6,7 @@
     using MotoBest.Models;
     using MotoBest.Web.ViewModels;
     using MotoBest.Web.InputModels;
-    using MotoBest.Scraping.Common;
+    using MotoBest.Data.Scraping.Common;
 
     public interface IAdvertsService
     {

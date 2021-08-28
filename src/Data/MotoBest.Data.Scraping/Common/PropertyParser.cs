@@ -1,10 +1,11 @@
-﻿namespace MotoBest.Scraping.Common
+﻿namespace MotoBest.Data.Scraping.Common
 {
-    using MotoBest.Seeding.Entities;
     using System;
 
-    using static MotoBest.Scraping.Common.Utilities;
-    using static MotoBest.Scraping.Common.Utilities.Date;
+    using MotoBest.Seeding.Entities;
+
+    using static MotoBest.Data.Scraping.Common.Utilities;
+    using static MotoBest.Data.Scraping.Common.Utilities.Date;
 
     public static class PropertyParser
     {

@@ -1,14 +1,14 @@
-﻿namespace MotoBest.Scraping.Scrapers
+﻿namespace MotoBest.Data.Scraping.Scrapers
 {
     using System;
     using System.Threading.Tasks;
 
     using AngleSharp;
 
-    using MotoBest.Scraping.Common;
+    using MotoBest.Data.Scraping.Common;
     using MotoBest.Common;
 
-    using static MotoBest.Scraping.Common.ScrapedDataNormalizer;
+    using static MotoBest.Data.Scraping.Common.ScrapedDataNormalizer;
 
     public abstract class BaseWebScraper : IWebScraper
     {

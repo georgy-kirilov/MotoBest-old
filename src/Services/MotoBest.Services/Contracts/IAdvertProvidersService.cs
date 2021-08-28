@@ -1,7 +1,7 @@
 ﻿namespace MotoBest.Services.Contracts
 {
     using MotoBest.Models;
-    using MotoBest.Scraping.Common;
+    using MotoBest.Data.Scraping.Common;
 
     public interface IAdvertProvidersService
     {

@@ -1,11 +1,10 @@
-﻿namespace MotoBest.Scraping.Common
+﻿namespace MotoBest.Data.Scraping.Common
 {
     using System.Text;
     using System.Net.Http;
     using System.Globalization;
     using System.Threading.Tasks;
     using System.Collections.Generic;
-    using System;
 
     public static class Utilities
     {

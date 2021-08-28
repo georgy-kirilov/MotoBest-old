@@ -1,4 +1,4 @@
-﻿namespace MotoBest.Scraping.Scrapers
+﻿namespace MotoBest.Data.Scraping.Scrapers
 {
     using System;
     using System.Linq;
@@ -8,14 +8,13 @@
     using AngleSharp;
     using AngleSharp.Dom;
 
-    using MotoBest.Scraping.Common;
+    using MotoBest.Data.Scraping.Common;
 
-    using static MotoBest.Scraping.Common.Utilities;
-    using static MotoBest.Scraping.Common.Utilities.Date;
-    using static MotoBest.Scraping.Common.Utilities.Characters;
-    using static MotoBest.Scraping.Common.ScrapedDataNormalizer;
-
-    using static MotoBest.Scraping.Common.PropertyParser;
+    using static MotoBest.Data.Scraping.Common.Utilities;
+    using static MotoBest.Data.Scraping.Common.Utilities.Date;
+    using static MotoBest.Data.Scraping.Common.Utilities.Characters;
+    using static MotoBest.Data.Scraping.Common.ScrapedDataNormalizer;
+    using static MotoBest.Data.Scraping.Common.PropertyParser;
 
     public class MobileBgWebScraper : BaseWebScraper
     {

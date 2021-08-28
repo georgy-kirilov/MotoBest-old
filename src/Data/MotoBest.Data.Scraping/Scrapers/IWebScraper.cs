@@ -1,9 +1,9 @@
-﻿namespace MotoBest.Scraping.Scrapers
+﻿namespace MotoBest.Data.Scraping.Scrapers
 {
     using System;
     using System.Threading.Tasks;
 
-    using MotoBest.Scraping.Common;
+    using MotoBest.Data.Scraping.Common;
 
     public interface IWebScraper
     {

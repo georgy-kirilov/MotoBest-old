@@ -4,8 +4,8 @@
 
     using MotoBest.Data;
     using MotoBest.Models;
-    using MotoBest.Scraping.Common;
     using MotoBest.Services.Contracts;
+    using MotoBest.Data.Scraping.Common;
 
     public class AdvertProvidersService : IAdvertProvidersService
     {
