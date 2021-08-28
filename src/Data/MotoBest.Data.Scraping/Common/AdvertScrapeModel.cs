@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    using MotoBest.Seeding.Entities;
+    using MotoBest.Data.Seeding.Entities;
 
     public class AdvertScrapeModel
     {

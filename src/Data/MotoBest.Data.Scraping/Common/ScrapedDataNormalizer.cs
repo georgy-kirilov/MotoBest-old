@@ -3,16 +3,16 @@
     using System;
     using System.Collections.Generic;
 
-    using MotoBest.Seeding.Entities;
+    using MotoBest.Data.Seeding.Entities;
 
-    using static MotoBest.Seeding.Entities.Engines;
-    using static MotoBest.Seeding.Entities.Conditions;
-    using static MotoBest.Seeding.Entities.Transmissions;
-    using static MotoBest.Seeding.Entities.BodyStyles;
-    using static MotoBest.Seeding.Entities.EuroStandards;
-    using static MotoBest.Seeding.Entities.Colors;
-    using static MotoBest.Seeding.Entities.Regions;
-    using static MotoBest.Seeding.Entities.Brands;
+    using static MotoBest.Data.Seeding.Entities.Engines;
+    using static MotoBest.Data.Seeding.Entities.Conditions;
+    using static MotoBest.Data.Seeding.Entities.Transmissions;
+    using static MotoBest.Data.Seeding.Entities.BodyStyles;
+    using static MotoBest.Data.Seeding.Entities.EuroStandards;
+    using static MotoBest.Data.Seeding.Entities.Colors;
+    using static MotoBest.Data.Seeding.Entities.Regions;
+    using static MotoBest.Data.Seeding.Entities.Brands;
 
     public static class ScrapedDataNormalizer
     {

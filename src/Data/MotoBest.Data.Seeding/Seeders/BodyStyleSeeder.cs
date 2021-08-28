@@ -1,11 +1,11 @@
-﻿namespace MotoBest.Seeding.Seeders
+﻿namespace MotoBest.Data.Seeding.Seeders
 {
     using System.Linq;
     using System.Threading.Tasks;
 
     using MotoBest.Data;
     using MotoBest.Data.Models;
-    using MotoBest.Seeding.Entities;
+    using MotoBest.Data.Seeding.Entities;
 
     public class BodyStyleSeeder : ISeeder
     {

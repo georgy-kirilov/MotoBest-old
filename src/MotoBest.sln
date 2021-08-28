@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Services", "Servic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Common", "MotoBest.Common\MotoBest.Common.csproj", "{E5CB9095-6EF3-4F3E-82C1-725DF947283A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Seeding", "Data\MotoBest.Seeding\MotoBest.Seeding.csproj", "{4E268B60-D5A7-41AD-A050-03DF2558829D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Data.Seeding", "Data\MotoBest.Data.Seeding\MotoBest.Data.Seeding.csproj", "{4E268B60-D5A7-41AD-A050-03DF2558829D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{5307622A-F436-4DB5-A18F-F37A5A6C2866}"
 EndProject
@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Web.ViewModels", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Web.InputModels", "Web\MotoBest.Web.InputModels\MotoBest.Web.InputModels.csproj", "{1BE96FE9-5ECF-4A7B-8C2E-B4022DAE2687}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Web.CombinedModels", "Web\MotoBest.Web.CombinedViewModels\MotoBest.Web.CombinedModels.csproj", "{F6EC8AF5-8AE4-4F6F-842D-B9242B3ACA1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MotoBest.Web.CombinedModels", "Web\MotoBest.Web.CombinedModels\MotoBest.Web.CombinedModels.csproj", "{F6EC8AF5-8AE4-4F6F-842D-B9242B3ACA1D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{313616F3-DE4C-48F1-8574-2D7DAA2400B8}"
 EndProject

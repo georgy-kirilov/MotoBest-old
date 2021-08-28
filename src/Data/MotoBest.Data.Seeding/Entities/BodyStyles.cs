@@ -1,4 +1,4 @@
-﻿namespace MotoBest.Seeding.Entities
+﻿namespace MotoBest.Data.Seeding.Entities
 {
     using System.Collections.Generic;
 

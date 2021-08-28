@@ -2,7 +2,7 @@
 {
     using System;
 
-    using MotoBest.Seeding.Entities;
+    using MotoBest.Data.Seeding.Entities;
 
     using static MotoBest.Data.Scraping.Common.Utilities;
     using static MotoBest.Data.Scraping.Common.Utilities.Date;

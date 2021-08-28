@@ -1,4 +1,4 @@
-﻿namespace MotoBest.Seeding.Seeders
+﻿namespace MotoBest.Data.Seeding.Seeders
 {
     using System.Threading.Tasks;
 

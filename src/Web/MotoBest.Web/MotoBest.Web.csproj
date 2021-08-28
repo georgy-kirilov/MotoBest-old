@@ -28,7 +28,7 @@
     <ProjectReference Include="..\..\Data\MotoBest.Data.Scraping\MotoBest.Data.Scraping.csproj" />
     <ProjectReference Include="..\..\Data\MotoBest.Data\MotoBest.Data.csproj" />
     <ProjectReference Include="..\..\Services\MotoBest.Services\MotoBest.Services.csproj" />
-    <ProjectReference Include="..\MotoBest.Web.CombinedViewModels\MotoBest.Web.CombinedModels.csproj" />
+    <ProjectReference Include="..\MotoBest.Web.CombinedModels\MotoBest.Web.CombinedModels.csproj" />
     <ProjectReference Include="..\MotoBest.Web.InputModels\MotoBest.Web.InputModels.csproj" />
     <ProjectReference Include="..\MotoBest.Web.ViewModels\MotoBest.Web.ViewModels.csproj" />
   </ItemGroup>
