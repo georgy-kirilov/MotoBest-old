@@ -2,7 +2,7 @@
 
 @model MotoBest.Web.CombinedModels.SearchAdvertsCombinedModel
 
-@{ 
+@{
     const string DefaultSelectListText = "Без значение";
 
     var brands = Model.View.Brands.Select(brand => new SelectListItem(brand.Name, brand.Id.ToString()));
@@ -17,22 +17,21 @@
 
 <div class="display-4">Търсене на автомобили</div>
 
-<form method="get" asp-controller="Adverts" asp-action="Search">
+<form class="mt-5 form-inline text-center" method="get" asp-controller="Adverts" asp-action="Search" id="search-form">
 
-    <div class="my-4 h5 alert-light">
-        <label asp-for="Input.BrandId" class="mb-3">Марка</label>
+    <div class="col-6 col-md-4 col-lg-3 my-4 h5 alert-light">
+        <label asp-for="Input.BrandId" class="mb-3"></label>
         <select asp-for="Input.BrandId"
                 asp-items="brands"
                 class="custom-select alert-secondary"
                 autocomplete="on"
                 onchange="updateModelsByBrand(this)">
-                
             <option value="">@DefaultSelectListText</option>
         </select>
     </div>
 
-    <div class="my-4 h5 alert-light">
-        <label asp-for="Input.ModelId" class="mb-3">Модел</label>
+    <div class="col-6 col-md-4 col-lg-3 my-4 h5 alert-light">
+        <label asp-for="Input.ModelId" class="mb-3"></label>
         <select asp-for="Input.ModelId"
                 class="custom-select alert-secondary"
                 autocomplete="on"
@@ -41,8 +40,8 @@
         </select>
     </div>
 
-    <div class="my-4 h5 alert-light">
-        <label asp-for="Input.EngineId" class="mb-3">Двигател</label>
+    <div class="col-6 col-md-4 col-lg-3 my-4 h5 alert-light">
+        <label asp-for="Input.EngineId" class="mb-3"></label>
         <select asp-for="Input.EngineId"
                 asp-items="engines"
                 class="custom-select alert-secondary"
@@ -51,8 +50,8 @@
         </select>
     </div>
 
-    <div class="my-4 h5 alert-light">
-        <label asp-for="Input.TransmissionId" class="mb-3">Скоростна кутия</label>
+    <div class="col-6 col-md-4 col-lg-3 my-4 h5 alert-light">
+        <label asp-for="Input.TransmissionId" class="mb-3"></label>
         <select asp-for="Input.TransmissionId"
                 asp-items="transmissions"
                 class="custom-select alert-secondary"
@@ -61,8 +60,8 @@
         </select>
     </div>
 
-    <div class="my-4 h5 alert-light">
-        <label asp-for="Input.BodyStyleId" class="mb-3">Тип</label>
+    <div class="col-6 col-md-4 col-lg-3 my-4 h5 alert-light">
+        <label asp-for="Input.BodyStyleId" class="mb-3"></label>
         <select asp-for="Input.BodyStyleId"
                 asp-items="bodyStyles"
                 class="custom-select alert-secondary"
@@ -71,8 +70,8 @@
         </select>
     </div>
 
-    <div class="my-4 h5 alert-light">
-        <label asp-for="Input.ConditionId" class="mb-3">Състояние</label>
+    <div class="col-6 col-md-4 col-lg-3 my-4 h5 alert-light">
+        <label asp-for="Input.ConditionId" class="mb-3"></label>
         <select asp-for="Input.ConditionId"
                 asp-items="conditions"
                 class="custom-select alert-secondary"
@@ -81,8 +80,8 @@
         </select>
     </div>
 
-    <div class="my-4 h5 alert-light">
-        <label asp-for="Input.EuroStandardId" class="mb-3">Евро стандарт</label>
+    <div class="col-6 col-md-4 col-lg-3 my-4 h5 alert-light">
+        <label asp-for="Input.EuroStandardId" class="mb-3"></label>
         <select asp-for="Input.EuroStandardId"
                 asp-items="euroStandards"
                 class="custom-select alert-secondary"
@@ -91,8 +90,8 @@
         </select>
     </div>
 
-    <div class="my-4 h5 alert-light">
-        <label asp-for="Input.ColorId" class="mb-3">Цвят</label>
+    <div class="col-6 col-md-4 col-lg-3 my-4 h5 alert-light">
+        <label asp-for="Input.ColorId" class="mb-3"></label>
         <select asp-for="Input.ColorId"
                 asp-items="colors"
                 class="custom-select alert-secondary"
@@ -101,8 +100,8 @@
         </select>
     </div>
 
-    <div class="my-4 h5 alert-light">
-        <label asp-for="Input.RegionId" class="mb-3">Регион</label>
+    <div class="col-6 col-md-4 col-lg-3 my-4 h5 alert-light">
+        <label asp-for="Input.RegionId" class="mb-3"></label>
         <select asp-for="Input.RegionId"
                 asp-items="regions"
                 class="custom-select alert-secondary"
@@ -112,8 +111,8 @@
         </select>
     </div>
 
-    <div class="my-4 h5 alert-light">
-        <label asp-for="Input.TownId" class="mb-3">Населено място</label>
+    <div class="col-6 col-md-4 col-lg-3 my-4 h5 alert-light">
+        <label asp-for="Input.TownId" class="mb-3"></label>
         <select asp-for="Input.TownId"
                 class="custom-select alert-secondary"
                 autocomplete="on"
@@ -122,10 +121,34 @@
         </select>
     </div>
 
-    <div class="mt-5 text-center">
-        <input type="submit" class="col-6 btn btn-dark" value="Търси"/>
+    <div class="col-6 col-md-4 col-lg-3 my-4 h5 alert-light">
+        <div>
+            <label class="mb-3">Цена</label>
+        </div>
+        <div class="mb-3">
+            <input asp-for="Input.MinPrice" class="form-control" placeholder="от" />
+        </div>
+        <div class="mb-3">
+            <input asp-for="Input.MaxPrice" class="form-control" placeholder="до" />
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-3 my-4 h5 alert-light">
+        <div>
+            <label class="mb-3">Пробег</label>
+        </div>
+        <div class="mb-3">
+            <input asp-for="Input.MinKilometrage" class="form-control" placeholder="от" />
+        </div>
+        <div class="mb-3">
+            <input asp-for="Input.MaxKilometrage" class="form-control" placeholder="до" />
+        </div>
     </div>
 </form>
+
+<div class="col-12 mt-3 text-center">
+    <input type="submit" form="search-form" class="col-6 btn btn-dark" value="Търси" />
+</div>
 
 <script>
     const defaultOptionName = "@Html.Raw(@DefaultSelectListText)";
@@ -139,7 +162,7 @@
     function updateTownsByRegion(sender) {
         const data = { RegionId: sender?.value };
         sendPostRequest("/Adverts/GetTownsByRegion", data, (res) => updateSelectElement("towns", res));
-        
+
     }
 
     function sendPostRequest(url, data, onSuccess) {
