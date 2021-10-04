@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MotoBest.Common;
 
 namespace MotoBest.Web.InputModels
 {
@@ -36,8 +37,10 @@ namespace MotoBest.Web.InputModels
 
         public int Page { get; set; }
 
+        [Display(Prompt = "От")]
         public decimal? MinPrice { get; set; }
 
+        [Display(Prompt = "До")]
         public decimal? MaxPrice { get; set; }
 
         public int? MinHorsePowers { get; set; }

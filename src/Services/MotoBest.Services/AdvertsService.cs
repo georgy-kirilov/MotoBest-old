@@ -196,6 +196,9 @@
         {
             int advertsPerPage = 10, advertsToSkip = advertsPerPage * input.Page;
 
+            var inputProperties = input.GetType().GetProperties();
+            var modelProperties = typeof(Advert).GetProperties();
+
             return dbContext.Adverts.Where(advert =>
                                         (input.BrandId == null || advert.BrandId == input.BrandId) &&
                                         (input.ModelId == null || advert.ModelId == input.ModelId) &&
