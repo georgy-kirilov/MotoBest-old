@@ -1,4 +1,3 @@
-How to scrape the websites?
 
 1) cars.bg
    a) newest adverts -> the website loads the latest adverts by making ajax requests with the following url:

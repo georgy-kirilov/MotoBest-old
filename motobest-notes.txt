@@ -1,0 +1,6 @@
+Technologies stack
+Backend: C#, Asp.NET Core, MSSQL Server, Microservices*
+Frontend: Bootstrap/CSS/Material Design, Html/Razor View Engine, JS/Ajax/React*
+Testing: Unit (NUnit), Integration**, Selenium**
+
+ 
